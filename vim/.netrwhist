@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/abhishekkr/ABK/dev/TW/ABRIL/working.everything/boxes/puppet/manifests/nodes'
+let g:netrw_dirhist_2='/home/abhishekkr/ABK/dev/TW/ABRIL/working.everything/specs/lib/tasks'
+let g:netrw_dirhist_3='/home/abhishekkr/Desktop/anonymous/mygit/a-sec-bug-grep/.bundle/ruby/1.9.1/gems/rss-motor-0.0.4/lib/rss-motor'
+let g:netrw_dirhist_4='/home/abhishekkr/Desktop/anonymous/mygit/a-sec-bug-grep/.bundle/ruby/1.9.1/gems/rss-motor-0.0.4/lib'
+let g:netrw_dirhist_5='/home/abhishekkr/Desktop/anonymous/mygit/a-sec-bug-grep/.bundle/ruby/1.9.1/gems/rss-motor-0.0.4/lib/rss-motor'

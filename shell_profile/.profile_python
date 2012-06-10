@@ -1,0 +1,3 @@
+# .bashrc
+
+alias p='/usr/bin/env python'
