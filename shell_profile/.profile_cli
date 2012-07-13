@@ -1,5 +1,9 @@
 # profile for cli
 
+alias grep='grep --color'
+
+alias duh='du -h --max-depth=1'
+
 alias lsz='ls -sh'
 alias lsz1='ls -sh1'
 alias la='ls -lash'
@@ -16,7 +20,7 @@ function du-mb(){
 function surl(){
   if [ $# -eq 1 ];
   then
-    curl -s --head "$@" | grep 'Content-Length' | awk -F ':' '{a=($2/1024)/1024; print a" MB"}'
+    curl -L -s --head "$@" | grep 'Content-Length' | awk -F ':' '{a=($2/1024)/1024; print a" MB"}'
   else
     echo '$ surl <url> ### tells you filesize of URL\'s content in MB'
   fi
