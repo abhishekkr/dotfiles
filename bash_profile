@@ -2,33 +2,33 @@
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
+	source /etc/bashrc
 fi
 
 # Source custom definitions
-if [ -f $HOME/.profile_git ]; then
-	. $HOME/.profile_git
+if [ -f /etc/profile.d/a.git.sh ]; then
+	source /etc/profile.d/a.git.sh
 fi
-if [ -f $HOME/.profile_abril ]; then
-	. $HOME/.profile_abril
+if [ -f /etc/profile.d/a.project.sh ]; then
+	source /etc/profile.d/a.project.sh
 fi
-if [ -f $HOME/.profile_ruby ]; then
-	. $HOME/.profile_ruby
+if [ -f /etc/profile.d/a.ruby.sh ]; then
+	source /etc/profile.d/a.ruby.sh
 fi
-if [ -f $HOME/.profile_golang ]; then
-	. $HOME/.profile_golang
+if [ -f /etc/profile.d/a.golang.sh ]; then
+	source /etc/profile.d/a.golang.sh
 fi
-if [ -f $HOME/.profile_mobile ]; then
-	. $HOME/.profile_mobile
+if [ -f /etc/profile.d/a.mobile.sh ]; then
+	source /etc/profile.d/a.mobile.sh
 fi
-if [ -f $HOME/.profile_python ]; then
-	. $HOME/.profile_python
+if [ -f /etc/profile.d/a.python.sh ]; then
+	source /etc/profile.d/a.python.sh
 fi
-if [ -f $HOME/.profile_cli ]; then
-	. $HOME/.profile_cli
+if [ -f /etc/profile.d/a.cli.sh ]; then
+	source /etc/profile.d/a.cli.sh
 fi
-if [ -f $HOME/.profile_media ]; then
-	. $HOME/.profile_media
+if [ -f /etc/profile.d/a.media.sh ]; then
+	source /etc/profile.d/a.media.sh
 fi
 
 # User specific aliases and functions
@@ -37,6 +37,5 @@ alias reloadbash='. ~/.bash_profile'
 # User specific environment and startup programs
 alias grep='grep --color'
 
-PATH=$PATH:$HOME/bin
+PATH=$PATH:/etc/profile.d/bin:$HOME/bin
 export PATH
-
