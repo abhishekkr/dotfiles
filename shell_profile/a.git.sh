@@ -11,3 +11,4 @@ alias gpr='git pull --rebase'
 alias glp='git log -p'
 alias ggl="git log --graph --pretty=format:'%C(red)%h%Creset %C(bold yellow)%s%n %Cblue%an%Cred %C(green)%cd'"
 alias gglp="git log -p --graph --pretty=format:'%C(red)%h%Creset %C(bold yellow)%s%n %Cblue%an%Cred %C(green)%cd'"
+alias git_reset_author='git commit --amend --reset-author'
