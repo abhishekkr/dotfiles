@@ -88,3 +88,7 @@ alias duh='du -h --max-depth=1'
 alias lsz='ls -sh'
 alias lsz1='ls -sh1'
 alias la='ls -lash'
+
+alias items='ls -1 | wc -l'
+
+export PATH=$PATH:$HOME\bin
