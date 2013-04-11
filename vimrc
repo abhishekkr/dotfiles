@@ -43,6 +43,10 @@ match ExtraWhitespace /\s\+$/    " Trailing Spaces
 
 au BufRead,BufNewFile *.pp       set filetype=puppet
 
+autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
+autocmd BufRead *.py set nocindent
+autocmd BufWritePre *.py normal m`:%s/\s\+$//e ``
+
 autocmd FileType ruby setlocal foldmethod=syntax
 autocmd FileType css  setlocal foldmethod=indent shiftwidth=2 tabstop=2
 
