@@ -90,5 +90,6 @@ alias lsz1='ls -sh1'
 alias la='ls -lash'
 
 alias items='ls -1 | wc -l'
+alias mysize='du -h | grep -e "\.$" | cut -f1'
 
 export PATH=$PATH:$HOME\bin
