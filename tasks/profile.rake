@@ -17,5 +17,8 @@ namespace :profile do
     func_profiles_source = "a.source(){\n\ \ #{profiles_source}\n}"
     %x{ echo "#{func_profiles_source}" | sudo tee /etc/profile.d/a.profiles.sh }
     puts "run : 'source /etc/profile.d/a.profiles.sh'"
+
+    raise '~/.zshrc already exists' if exists_but_symlink? File.join(ENV['HOME'], '.zshrc')
+    ln_sf File.join($repo_root, 'zshrc'), File.join(ENV['HOME'], '.zshrc') unless File.symlink?(File.join(ENV['HOME'], '.zshrc')) && ENV['FORCE'].nil?
   end
 end
