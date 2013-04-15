@@ -19,6 +19,6 @@ namespace :profile do
     puts "run : 'source /etc/profile.d/a.profiles.sh'"
 
     raise '~/.zshrc already exists' if exists_but_symlink? File.join(ENV['HOME'], '.zshrc')
-    ln_sf File.join($repo_root, 'zshrc'), File.join(ENV['HOME'], '.zshrc') unless File.symlink?(File.join(ENV['HOME'], '.zshrc')) && ENV['FORCE'].nil?
+    ln_sf File.join($repo_root, 'rc', 'zshrc'), File.join(ENV['HOME'], '.zshrc') unless File.symlink?(File.join(ENV['HOME'], '.zshrc')) && ENV['FORCE'].nil?
   end
 end
