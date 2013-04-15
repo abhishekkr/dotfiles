@@ -14,7 +14,7 @@ namespace :profile do
       profiles << destination
     end
     profiles_source = profiles.collect{|file| "source #{file}"}.join("\n\ \ ")
-    func_profiles_source = "a.source(){\n\ \ #{profiles_source}\n}"
+    func_profiles_source = "re_source(){\n\ \ #{profiles_source}\n}"
     %x{ echo "#{func_profiles_source}" | sudo tee /etc/profile.d/a.profiles.sh }
     puts "run : 'source /etc/profile.d/a.profiles.sh'"
 

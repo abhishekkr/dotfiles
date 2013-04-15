@@ -2,7 +2,7 @@
 ## $ ddl-rss-media https://www.defcon.org/podcast/defcon-20-slides.rss
 #####
 
-ddl-rss-media(){
+ddl_rss_media(){
   # ddl-rss-media RSS_LINK {would download all media enclosed at current dir}
   enclosures=`curl -k -s -L $@ | cat | grep enclosure | sed 's/.*enclosure\s*url="//' | sed 's/".*//'`
   for url in `echo $enclosures | xargs -L1`;
@@ -22,7 +22,7 @@ ddl-rss-media(){
 ##
 ## currently it checks for lowest resolution video mostly {640x360} and downloads it
 
-ddl-confreaks(){
+ddl_confreaks(){
   if [ $# -ne 2 ];
   then
     echo 'Failed. Syntax: $> ddl-confreaks EVENT_NAME DOWNLOAD_PATH'

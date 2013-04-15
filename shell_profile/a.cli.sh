@@ -25,10 +25,10 @@ function c1024x768(){
 function lswp(){
   ls -lahR $1 | grep '.swp$'
 }
-function du-gb(){
+function du_gb(){
   sudo du --exclude='/proc' --exclude='/dev' --exclude='/media' -h $@ | grep [0-9.\s][0-9]G
 }
-function du-mb(){
+function du_mb(){
   sudo du --exclude='/proc' --exclude='/dev' --exclude='/media' -h $@ | grep [0-9.\s][0-9]M
 }
 function surl(){

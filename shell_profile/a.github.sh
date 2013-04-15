@@ -4,7 +4,7 @@
 # save it as /etc/profiles/a.github.sh
 ##
 
-clone-github(){
+clone_github(){
   GITHUB_ID=$1
   GITHUB_REPO_URI="https://github.com/"$GITHUB_ID"?tab=repositories"
   repos=`curl -skL $GITHUB_REPO_URI | grep 'title="Forks"' | sed "s/.*$GITHUB_ID\///" | sed 's/\/network"\stitle="Forks">//'`
@@ -24,7 +24,7 @@ clone-github(){
   done
 }
 
-clone-github-to-contribute(){
+clone_github_to_contribute(){
   if [ -z $1 ];
   then
     sed -i 's/git\:\/\/github\.com\//git@github.com:/' **/.git/config
@@ -36,7 +36,7 @@ clone-github-to-contribute(){
 #old github style # no contrib
 # usgae:
 #   $ clone-github-private github.private_instance.com mr_x
-clone-github-private(){
+clone_github_private(){
   GITHUB_HOST=$1
   GITHUB_ID=$2
   repos=`curl -skL https://$GITHUB_HOST/$GITHUB_ID | grep 'title="Forks"' | sed "s/.*$GITHUB_ID\///" | sed 's/\/network"\stitle="Forks">//'`
