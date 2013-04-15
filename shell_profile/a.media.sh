@@ -2,12 +2,12 @@
 
 alias music3a='mplayer -shuffle /media/ABK_3a/ABK/_Music/*mp3 /media/ABK_3a/ABK/_Music/*/*mp3 /media/ABK_3a/ABK/_Music/*/*/*mp3 /media/ABK_3a/ABK/_Music/*/*/*/*mp3 /media/ABK_3a/ABK/_Music/*/*/*/*/*mp3 /media/ABK_3b/ABK/_chalchitra/_Music/*/*mp3 /media/ABK_3b/ABK/_chalchitra/_Music/*/*/*mp3 /media/ABK_3b/ABK/_chalchitra/_Music/*/*/*/*mp3'
 
-function mplayeraa(){
+mplayeraa(){
   mplayer -vo aa "$@"
 }
-function mplayernov(){
+mplayernov(){
   mplayer -vo no "$@"
 }
-function mplayernoa(){
+mplayernoa(){
   mplayer -ao no "$@"
 }
