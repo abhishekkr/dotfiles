@@ -29,5 +29,9 @@ namespace :profile do
     # screenrc 
     raise '~/.screenrc already exists' if exists_but_symlink? File.join(ENV['HOME'], '.screenrc')
     ln_sf File.join($repo_root, 'rc', 'screenrc'), File.join(ENV['HOME'], '.screenrc') unless File.symlink?(File.join(ENV['HOME'], '.screenrc')) && ENV['FORCE'].nil?
+
+    # curlrc 
+    raise '~/.curlrc already exists' if exists_but_symlink? File.join(ENV['HOME'], '.curlrc')
+    ln_sf File.join($repo_root, 'rc', 'curlrc'), File.join(ENV['HOME'], '.curlrc') unless File.symlink?(File.join(ENV['HOME'], '.curlrc')) && ENV['FORCE'].nil?
   end
 end
