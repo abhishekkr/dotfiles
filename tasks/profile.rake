@@ -50,8 +50,8 @@ namespace :profile do
     raise '~/.wgetrc already exists' if exists_but_symlink? File.join(ENV['HOME'], '.wgetrc')
     ln_sf File.join($repo_root, 'rc', 'wgetrc'), File.join(ENV['HOME'], '.wgetrc') unless File.symlink?(File.join(ENV['HOME'], '.wgetrc')) && ENV['FORCE'].nil?
 
-    # dircolors
-    raise '~/.dircolors already exists' if exists_but_symlink? File.join(ENV['HOME'], '.dircolors')
-    ln_sf File.join($repo_root, 'rc', 'dircolors'), File.join(ENV['HOME'], '.dircolors') unless File.symlink?(File.join(ENV['HOME'], '.dircolors')) && ENV['FORCE'].nil?
+    # # dircolors
+    # raise '~/.dircolors already exists' if exists_but_symlink? File.join(ENV['HOME'], '.dircolors')
+    # ln_sf File.join($repo_root, 'rc', 'dircolors'), File.join(ENV['HOME'], '.dircolors') unless File.symlink?(File.join(ENV['HOME'], '.dircolors')) && ENV['FORCE'].nil?
   end
 end
