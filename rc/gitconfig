@@ -44,3 +44,5 @@
   uncommit = reset HEAD~1
 
 #unpushed = !"PROJ_BRANCH=$(git symbolic-ref HEAD | sed 's|refs/heads/||') && git log origin/$PROJ_BRANCH..HEAD"
+[push]
+	default = simple
