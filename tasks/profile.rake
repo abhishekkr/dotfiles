@@ -33,5 +33,17 @@ namespace :profile do
     # curlrc 
     raise '~/.curlrc already exists' if exists_but_symlink? File.join(ENV['HOME'], '.curlrc')
     ln_sf File.join($repo_root, 'rc', 'curlrc'), File.join(ENV['HOME'], '.curlrc') unless File.symlink?(File.join(ENV['HOME'], '.curlrc')) && ENV['FORCE'].nil?
+
+    # gemrc
+    raise '~/.gemrc already exists' if exists_but_symlink? File.join(ENV['HOME'], '.gemrc')
+    ln_sf File.join($repo_root, 'rc', 'gemrc'), File.join(ENV['HOME'], '.gemrc') unless File.symlink?(File.join(ENV['HOME'], '.gemrc')) && ENV['FORCE'].nil?
+
+    # rvmrc
+    raise '~/.rvmrc already exists' if exists_but_symlink? File.join(ENV['HOME'], '.rvmrc')
+    ln_sf File.join($repo_root, 'rc', 'rvmrc'), File.join(ENV['HOME'], '.rvmrc') unless File.symlink?(File.join(ENV['HOME'], '.rvmrc')) && ENV['FORCE'].nil?
+
+    # irbrc
+    raise '~/.irbrc already exists' if exists_but_symlink? File.join(ENV['HOME'], '.irbrc')
+    ln_sf File.join($repo_root, 'rc', 'irbrc'), File.join(ENV['HOME'], '.irbrc') unless File.symlink?(File.join(ENV['HOME'], '.irbrc')) && ENV['FORCE'].nil?
   end
 end
