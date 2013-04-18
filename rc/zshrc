@@ -54,7 +54,7 @@ export CDPATH=$CDPATH:$HOME:$HOME/an0n/dev
 hash -d AGIT=$HOME/an0n/dev/abhishekkr/on_github
 
 # use vi mode
-bindkey -v
+#bindkey -v
 
 # use home and end in addition to ^e and ^a
 bindkey -M viins '^A' vi-beginning-of-line
@@ -108,3 +108,8 @@ unsetopt auto_name_dirs
 unset GREP_OPTIONS
 
 typeset -U path cdpath fpath
+
+if [ -e ~/.shorties ];
+then
+  source ~/.shorties  ## will contain all project related stuff
+fi

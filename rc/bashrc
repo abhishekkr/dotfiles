@@ -64,3 +64,8 @@ complete -d cd
 
 alias ls='ls --color=auto'
 # PS1='[\u@\h \W]\$ '
+
+if [ -e ~/.shorties ];
+then
+  source ~/.shorties  ## will contain all project related stuff
+fi
