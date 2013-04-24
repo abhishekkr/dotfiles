@@ -52,3 +52,5 @@ autocmd FileType css  setlocal foldmethod=indent shiftwidth=2 tabstop=2
 
 command! FRB set filetype=ruby
 command! FPY set filetype=python
+
+map <F8> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
