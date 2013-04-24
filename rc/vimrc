@@ -35,7 +35,7 @@ set softtabstop=2                    " Global tab width.
 set shiftwidth=2                 " And again, related.
 set expandtab                    " Use spaces instead of tabs
 
-colorscheme chocolateliquor      " could type ':color <_TAB_>' to weigh options
+colorscheme zenburn " could type ':color <_TAB_>' to weigh options
 highlight LiteralTabs ctermbg=darkgreen guibg=darkgreen
 match LiteralTabs /\s\  /        " Actual TABS
 highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
