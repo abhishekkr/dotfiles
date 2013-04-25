@@ -7,7 +7,7 @@
 augroup AutoReloadVimRC
   au!
   "automatically reload vimrc when it's saved "credits: http://vimbits.com/bits/128
-  au BufWritePost $MYVIMRC so $MYVIMRC
+  au BufWritePost .vimrc so ~/.vimrc
 augroup END
 
 set nocompatible                  " Must come first because it changes other options.
@@ -73,3 +73,6 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
+" select all "credits: http://vimbits.com/bits/82
+map <Leader>a ggVG
