@@ -4,6 +4,8 @@ namespace :profile do
 
   desc 'link all shell profiles'
   task :setup do
+    mkdir_p File.join(ENV['HOME'], 'cache', 'pip') # used in a.python.sh profile
+
     profiles = []
     Dir.glob(File.join $repo_root, 'shell_profile', '*.sh').each do |profile|
       destination = File.join '/etc/profile.d', File.basename(profile)
