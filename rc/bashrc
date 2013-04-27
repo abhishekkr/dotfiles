@@ -50,6 +50,9 @@ export PS1="${GREEN}\u@\h${WHITE}:${CYAN}\w ${NO_COLOR}\$ "
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
 
+# multi-session history
+shopt -s histappend
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
