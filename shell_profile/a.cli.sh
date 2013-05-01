@@ -83,6 +83,13 @@ killgrep(){
 
 alias grep='grep --color'
 
+# don't delete root and prompt if deleting more than 3 files at a time
+alias rm='rm -I --preserve-root'
+# Parenting changing perms on /
+alias chown='chown --preserve-root'
+alias chmod='chmod --preserve-root'
+alias chgrp='chgrp --preserve-root'
+
 alias duh='du -h --max-depth=1'
 
 alias lsz='ls -sh'
@@ -91,5 +98,8 @@ alias la='ls -lash'
 
 alias items='ls -1 | wc -l'
 alias mysize='du -h | grep -e "\.$" | cut -f1'
+
+alias ipaddr="ifconfig | grep 'inet ' | awk '{print $2}'"
+alias ports='netstat -tulanp'
 
 export PATH=$PATH:$HOME\bin
