@@ -81,6 +81,9 @@ nmap <Leader><down> <C-w>j
 nmap <Leader><left> <C-w>h
 nmap <Leader><right> <C-w>l
 
+nmap <Leader>] :tabnext
+nmap <Leader>[ :tabprevious
+
 " select all "credits: http://vimbits.com/bits/82
 map <Leader>a ggVG
 
