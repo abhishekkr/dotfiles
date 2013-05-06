@@ -3,3 +3,5 @@
 *~
 vim/.netrwhist
 tmp
+**.ropeproject
+*pyc
