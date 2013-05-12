@@ -5,3 +5,5 @@ alias server.py='python2 -m SimpleHTTPServer'
 
 # let's you re-use pip downoads between branches
 export PIP_DOWNLOAD_CACHE=$HOME/cache/pip
+
+alias pyibook='ipython2 notebook'
