@@ -5,3 +5,4 @@ vim/.netrwhist
 tmp
 **.ropeproject
 *pyc
+shell_profile/nda.project.sh
