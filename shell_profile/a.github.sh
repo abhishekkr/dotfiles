@@ -44,7 +44,7 @@ clone_github_private(){
   do
     if [ ! -z $line ];
     then
-      repo_git='git://'$GITHUB_HOST'/'$GITHUB_ID'/'$line'.git'
+      repo_git='https://'$GITHUB_HOST'/'$GITHUB_ID'/'$line'.git'
       if [ -e $line ]; then
         echo 'Fetching master latest pull for: '$repo_git
         cd $line ; git pull ; cd -
@@ -54,4 +54,13 @@ clone_github_private(){
       fi
     fi
   done
+}
+
+clone_git_to_https(){
+  if [ -z $1 ];
+  then
+    sed -i 's/git\:\/\/github\.com\//https\:\/\/github.com:/' **/.git/config
+  else
+    sed -i 's/git\:\/\/github\.com\//https\:\/\/github.com:/' $1/.git/config
+  fi
 }
