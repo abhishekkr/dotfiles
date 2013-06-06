@@ -101,5 +101,8 @@ alias mysize='du -h | grep -e "\.$" | cut -f1'
 
 alias ipaddr="ifconfig | grep 'inet ' | awk '{print $2}'"
 alias ports='netstat -tulanp'
+alias check-net='ping 8.8.8.8'
+
+alias espeakf="espeak -ven-us+f2"
 
 export PATH=$PATH:$HOME\bin
