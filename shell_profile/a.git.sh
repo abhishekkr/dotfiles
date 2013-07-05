@@ -14,3 +14,4 @@ alias gglp="git log -p --graph --pretty=format:'%C(red)%h%Creset %C(bold yellow)
 alias git_reset_author='git commit --amend --reset-author'
 
 alias git_upstream_sync_master='git fetch upstream ; git merge upstream/master'
+alias git_authors="git shortlog -sn --all"
