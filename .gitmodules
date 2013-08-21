@@ -253,3 +253,6 @@
 [submodule "vim/bundle/vim-json"]
 	path = vim/bundle/vim-json
 	url = git://github.com/elzr/vim-json.git
+[submodule "vim/bundle/go-vim"]
+	path = vim/bundle/go-vim
+	url = git://github.com/uggedal/go-vim.git
