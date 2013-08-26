@@ -105,4 +105,7 @@ alias check-net='ping 8.8.8.8'
 
 alias espeakf="espeak -ven-us+f2"
 
+## remote controller
+alias 0ssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+
 export PATH=$PATH:$HOME\bin
