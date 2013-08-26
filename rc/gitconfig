@@ -1,6 +1,6 @@
 [user]
-	name  = AbhishekKr
-	email = abhikumar163@gmail.com
+  name  = AbhishekKr
+  email = abhikumar163@gmail.com
 
 [core]
   autocrlf = false
@@ -8,44 +8,45 @@
   editor = vim
 
 [color]
-	diff = auto
-	status = auto
-	log = auto
-	interactive = auto
-	ui = auto
-	branch = auto
-  [color "branch"]
-    current = yellow reverse
-    local = yellow
-    remote = green
-  [color "diff"]
-    meta = yellow bold
-    frag = magenta bold
-    old = red bold
-    new = green bold
-  [color "status"]
-    added = yellow
-    changed = blue
-    untracked = cyan
+  diff = auto
+  status = auto
+  log = auto
+  interactive = auto
+  ui = auto
+  branch = auto
+[color "branch"]
+  current = yellow reverse
+  local = yellow
+  remote = green
+[color "diff"]
+  meta = yellow bold
+  frag = magenta bold
+  old = red bold
+  new = green bold
+[color "status"]
+  added = yellow
+  changed = blue
+  untracked = cyan
 
 [alias]
-	st = status -sb
-	ci = commit
-	br = branch
-	co = checkout
-	df = diff
-	dc = diff --cached
-    dw = diff --word-diff
-	lg = log -p
-    amend = commit --amend
-	svndc = svn dcommit
-	svnrb = svn rebase
-	rhh = reset --hard head
-	cp = cherry-pick
-    fullhashlog = "log --graph --abbrev-commit '--format=format:%H %C(yellow)%ci%Creset %C(bold green)%an%Creset | %s'"
-    uncommit = reset HEAD~1
-    usr = shortlog -sn
+  st = status -sb
+  ci = commit
+  c0 = commit --allow-empty
+  br = branch
+  co = checkout
+  df = diff
+  dc = diff --cached
+  dw = diff --word-diff
+  lg = log -p
+  amend = commit --amend
+  svndc = svn dcommit
+  svnrb = svn rebase
+  rhh = reset --hard head
+  cp = cherry-pick
+  fullhashlog = "log --graph --abbrev-commit '--format=format:%H %C(yellow)%ci%Creset %C(bold green)%an%Creset | %s'"
+  uncommit = reset HEAD~1
+  usr = shortlog -sn
 
 #unpushed = !"PROJ_BRANCH=$(git symbolic-ref HEAD | sed 's|refs/heads/||') && git log origin/$PROJ_BRANCH..HEAD"
 [push]
-	default = simple
+  default = simple

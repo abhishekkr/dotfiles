@@ -3,6 +3,7 @@
 alias gad='git add'
 alias gad='git add -p'
 alias gcm='git commit -m'
+alias gcm0='git commit --allow-empty -m'
 alias gcp='git clone'
 alias gst='git status'
 alias gsb='git status -sb'
