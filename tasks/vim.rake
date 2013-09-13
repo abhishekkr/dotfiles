@@ -6,6 +6,9 @@ namespace :vim do
 
   desc 'setup vim configurations'
   task :setup do
+    puts "Getting all the submodules down"
+    %x{ cd '#{$repo_root}' ; git pull && git submodule init && git submodule update && git submodule status }
+
     raise '~/.vimrc already exists' if exists_but_symlink? File.join(ENV['HOME'], '.vimrc')
     ln_sf File.join($repo_root, 'rc', 'vimrc'), File.join(ENV['HOME'], '.vimrc') unless File.symlink?(File.join(ENV['HOME'], '.vimrc')) && ENV['FORCE'].nil?
 
