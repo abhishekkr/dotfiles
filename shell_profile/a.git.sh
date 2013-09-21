@@ -37,3 +37,19 @@ git_commit_as(){
     git commit --amend --author "${1} <${2}>" -C HEAD
   fi
 }
+
+gitinit(){
+  for REPO_TO_INIT in $@; do
+    echo "initializing git repo: ${PWD}/${REPO_TO_INIT}"
+    git init $REPO_TO_INIT
+    cd $REPO_TO_INIT
+      cat >> ./.gitignore << GITIGNORE
+*swo
+*swp
+*~
+*.tmp
+temp/*
+GITIGNORE
+    cd -
+  done
+}
