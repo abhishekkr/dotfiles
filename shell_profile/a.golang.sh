@@ -1,14 +1,16 @@
 #profile for golang
 
-export GO_HOME=/home/abhishekkr/ABK/applications/google/go
+export GOPATH=$HOME/.go/site
+export GO_HOME=$HOME/.go
 export GOOS=linux
 export GOARCH=amd64
 
+[ -s $GOPATH ] && mkdir -p $GOPATH
+
 go_clr(){
-  $GO_HOME/bin/6g $@.go
-  $GO_HOME/bin/6l $@.6
+  go run "$@"
 }
 go_help(){
   echo 'Go Docs are available at http://localhost:9090'
-  $GO_HOME/bin/godoc -http=:9090
+  godoc -http=:9090
 }
