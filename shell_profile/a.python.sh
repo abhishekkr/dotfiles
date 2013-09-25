@@ -9,7 +9,12 @@ export PIP_DOWNLOAD_CACHE=$HOME/cache/pip
 alias pyibook='ipython2 notebook'
 
 venv_on(){
-  [ ! -s ./.venv ] && virtualenv .venv
+  [ ! -s ./.venv ] && virtualenv2 .venv
+  source .venv/bin/activate
+}
+alias venv2_on="venv_on"
+venv3_on(){
+  [ ! -s ./.venv ] && virtualenv3 .venv
   source .venv/bin/activate
 }
 
