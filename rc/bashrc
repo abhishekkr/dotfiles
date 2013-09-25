@@ -1,9 +1,8 @@
 # .bashrc
 
 # Source global definitions
-if [ -f /etc/bashrc ]; then
-	. /etc/bashrc
-fi
+[ -s $HOME/.profile ] && source $HOME/.profile
+[ -s /etc/bashrc ] && source /etc/bashrc
 
 for a in `ls /etc/profile.d/*.sh`; do
   source $a
