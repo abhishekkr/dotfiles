@@ -107,5 +107,6 @@ alias espeakf="espeak -ven-us+f2"
 
 ## remote controller
 alias 0ssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
+alias 0scp='scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
 export PATH=$PATH:$HOME\bin
