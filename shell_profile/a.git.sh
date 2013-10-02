@@ -5,21 +5,29 @@ alias gad='git add -p'
 alias gcm='git commit -m'
 alias gcm0='git commit --allow-empty -m'
 alias gcp='git clone'
-alias gst='git status'
-alias gsb='git status -sb'
+
 alias gdf='git diff'
 alias gdw='git diff --word-diff'
 alias gdc='git diff --cached'
 alias gpr='git pull --rebase'
+alias gpull='git pull'
+alias gpullo='git pull origin'
+alias gpush='git push'
+alias gpusho='git push origin'
+alias git_upstream_sync_master='git fetch upstream ; git merge upstream/master'
+
+alias gst='git status'
+alias gsb='git status -sb'
+alias gbrr='git branch -r'
 alias glp='git log -p'
 alias ggl="git log --graph --pretty=format:'%C(red)%h%Creset %C(bold yellow)%s%n %Cblue%an%Cred %C(green)%cd'"
 alias gglp="git log -p --graph --pretty=format:'%C(red)%h%Creset %C(bold yellow)%s%n %Cblue%an%Cred %C(green)%cd'"
-alias git_reset_author='git commit --amend --reset-author'
 
-alias git_upstream_sync_master='git fetch upstream ; git merge upstream/master'
 alias git_authors='git shortlog -sn'
 alias git_authors_all="git shortlog -sn --all"
-alias git_undo='git reset --soft HEAD^1'
+
+alias git_undo='git reset --soft HEAD~1'
+alias git_reset_author='git commit --amend --reset-author'
 alias git_amend='git commit --amend'
 
 git_credit(){

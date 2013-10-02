@@ -33,6 +33,7 @@
   ci = commit
   c0 = commit --allow-empty
   br = branch
+  brr = branch -r
   co = checkout
   df = diff
   dc = diff --cached
