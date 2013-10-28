@@ -95,6 +95,7 @@ alias duh='du -h --max-depth=1'
 alias lsz='ls -sh'
 alias lsz1='ls -sh1'
 alias la='ls -lash'
+alias ls-size="ls -lah | grep '^total'"
 
 alias items='ls -1 | wc -l'
 alias mysize='du -h | grep -e "\.$" | cut -f1'
@@ -110,3 +111,7 @@ alias 0ssh='ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 alias 0scp='scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
 export PATH=$PATH:$HOME\bin
+
+alias prompt_time='PROMPT="%K%B%t "'
+
+alias rsync_to="rsync -lavzh  --exclude .git ./"
