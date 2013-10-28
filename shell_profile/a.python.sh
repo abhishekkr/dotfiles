@@ -19,3 +19,5 @@ venv3_on(){
 }
 
 alias venv_off="deactivate"
+
+alias py-profile="time python -m cProfile"
