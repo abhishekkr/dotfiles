@@ -30,6 +30,20 @@ alias git_undo='git reset --soft HEAD~1'
 alias git_reset_author='git commit --amend --reset-author'
 alias git_amend='git commit --amend'
 
+gitviz(){
+  if [ $# -ne 2 ]; then
+    echo "Syntax: gitviz <path_to_gitrepo> (<path_to_mp4>)"
+    return
+  fi
+
+  gource $1/.git/ --stop-at-end --output-ppm-stream -1280x720 -o - | ffmpeg -y -r 60 -f image2pipe -vcodec ppm -i - -vcodec libx264 -preset ultrafast -pix_fmt yuv420p -crf 1 -threads 0 -bf 0 "$2"
+  echo "play $2 to view vizualization"
+}
+
+git_cat_conf(){
+  cat "$1/.git/config"
+}
+
 git_credit(){
   if [ $# -ne 2 ]; then
     echo "Syntax: <cmd> Name id@email"
