@@ -21,9 +21,12 @@ goenv_on(){
   if [ ! -d ./.goenv ]; then
     mkdir -p ./.goenv/site
   fi
-  export GOPATH=$PWD/.goenv/site
+  _OLD_GOPATH=$GOPATH
+  _OLD_PATH=$PATH
+  GOPATH=$PWD/.goenv/site
+  PATH=$PATH:$GOPATH/bin
 }
-alias goenv_off="export GOPATH=$HOME/.go/site"
+goenv_off="GOPATH=$_OLD_GOPATH ; PATH=$_OLD_PATH"
 
 go_get_pkg(){
   if [ $# -eq 0 ]; then
