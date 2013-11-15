@@ -1,5 +1,13 @@
 #!/bin/bash
 
+nspawn-start(){
+  if [ $# -ne 1 ]; then
+    echo "Syntax: nspawn-start <name-of-spawned-instance-to-start>"
+    return
+  fi
+  sudo systemd-nspawn -bD "/srv/subarch/${1}"
+}
+
 nspawn-stop(){
   if [ $# -ne 1 ]; then
     echo "Syntax: nspawn-stop <name-of-spawned-instance-to-stop>"
