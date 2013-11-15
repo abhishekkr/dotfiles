@@ -1,5 +1,14 @@
 #!/bin/bash
 
+nspawn-ls(){
+  echo "List of all nspawn instances..."
+  echo "Archlinux:"
+  for itm in `sudo ls "/srv/subarch/"`; do
+    echo $itm
+  done
+  echo "********************"
+}
+
 nspawn-start(){
   if [ $# -ne 1 ]; then
     echo "Syntax: nspawn-start <name-of-spawned-instance-to-start>"
