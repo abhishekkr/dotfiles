@@ -1,5 +1,13 @@
 #!/bin/bash
 
+nspawn-stop(){
+  if [ $# -ne 1 ]; then
+    echo "Syntax: nspawn-stop <name-of-spawned-instance-to-stop>"
+    return
+  fi
+  sudo systemctl stop machine-${1}.scope
+}
+
 nspawn-arch(){
   NSPAWN_CACHE="$HOME/.nspawn-cache"
   NSPAWN_CACHE_CHILD="${NSPAWN_CACHE}/srv/subarch/child01"
@@ -18,5 +26,5 @@ nspawn-arch(){
 
   sudo cp -ar $NSPAWN_CACHE_CHILD $NSPAWN_NEW_CHILD
   echo "done.\n\nLogging in..."
-  systemd-nspawn -bD $NSPAWN_NEW_CHILD
+  sudo systemd-nspawn -bD $NSPAWN_NEW_CHILD
 }
