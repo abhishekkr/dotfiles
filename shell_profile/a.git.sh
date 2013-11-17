@@ -30,6 +30,14 @@ alias git_undo='git reset --soft HEAD~1'
 alias git_reset_author='git commit --amend --reset-author'
 alias git_amend='git commit --amend'
 
+gpull_all(){
+  for _a in `ls` ; do
+    echo \$_a
+    cd \$_a ; git pull ; cd..
+  done
+  unset _a
+}
+
 gitviz(){
   if [ $# -ne 2 ]; then
     echo "Syntax: gitviz <path_to_gitrepo> (<path_to_mp4>)"
