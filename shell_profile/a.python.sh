@@ -21,3 +21,11 @@ venv3_on(){
 alias venv_off="deactivate"
 
 alias py-profile="time python -m cProfile"
+
+venv_anon(){
+  if [ ! -d $HOME/.virtualenvs ]; then
+    mkdir -p $HOME/.virtualenvs
+  fi
+  [ ! -s $HOME/.virtualenvs/anon ] && virtualenv2 $HOME/.virtualenvs/anon
+  source $HOME/.virtualenvs/anon/bin/activate
+}
