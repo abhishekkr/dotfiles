@@ -6,3 +6,5 @@ tmp
 **.ropeproject
 *pyc
 shell_profile/nda.project.sh
+vim/bundle/*
+temp/*

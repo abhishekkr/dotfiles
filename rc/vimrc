@@ -14,10 +14,8 @@ set nocompatible                  " Must come first because it changes other opt
 set formatoptions-=cro            " Turn AutoComment on next line
 set modeline
 
-call pathogen#infect()            " Giving life to Pathogen for Runtime Path Manipulation
-" call pathogen#infect('acustom')            " Pathogen's Runtime Path Manipulation from custom dir
 syntax enable                     " Turn on syntax highlighting.
-filetype plugin indent on         " Turn on file type detection.
+filetype off                      " required!
 
 set showcmd                       " Display incomplete commands.
 set showmode                      " Display the mode you're in.
@@ -114,3 +112,61 @@ nnoremap <Leader>ack *<C-O>:AckFromSearch!<CR>
 set nobackup
 set nowritebackup
 set noswapfile
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Vundle-ified
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" vim +BundleInstall +qall
+" let Vundle manage Vundle
+" required!
+Bundle 'gmarik/vundle'
+
+" My bundles here:
+"
+" original repos on GitHub
+Bundle 'tpope/vim-fugitive'
+
+
+"Bundle 'Lokaltog/vim-easymotion'
+"Bundle 'rstacruz/sparkup', {'rtp': 'vim/'}
+"Bundle 'tpope/vim-rails.git'
+" vim-scripts repos
+"Bundle 'L9'
+"Bundle 'FuzzyFinder'
+" non-GitHub repos
+"Bundle 'git://git.wincent.com/command-t.git'
+" Git repos on your local machine (i.e. when working on your own plugin)
+"Bundle 'file:///Users/gmarik/path/to/plugin'
+" ...
+"Bundle 'tpope/vim-surround'
+"Bundle 'tpope/vim-git'
+"Bundle 'mileszs/ack.vim'
+"Bundle 'sjl/gundo.vim'
+"Bundle 'vim-scripts/The-NERD-tree'
+"Bundle 'plasticboy/vim-markdown'
+"Bundle 'scrooloose/syntastic'
+"Bundle 'tpope/vim-rvm'
+"Bundle 'vim-ruby/vim-ruby'
+"Bundle 'vim-scripts/VimClojure'
+"Bundle 'vim-scripts/FuzzyFinder'
+"Bundle 'Lokaltog/vim-powerline'
+"Bundle 'mhinz/vim-startify'
+"Bundle 'klen/python-mode'
+"Bundle 'elzr/vim-json'
+"Bundle 'uggedal/go-vim'
+
+
+filetype plugin indent on         " required! Turn on file type detection.
+"
+" Brief help
+" :BundleList          - list configured bundles
+" :BundleInstall(!)    - install (update) bundles
+" :BundleSearch(!) foo - search (or refresh cache first) for foo
+" :BundleClean(!)      - confirm (or auto-approve) removal of unused bundles
+"
+" see :h vundle for more details or wiki for FAQ
+" NOTE: comments after Bundle commands are not allowed.
