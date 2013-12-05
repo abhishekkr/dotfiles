@@ -41,8 +41,9 @@ go_get_pkg(){
     PKG_LISTS=($@)
   fi
   for pkg_list in $PKG_LISTS; do
-    for pkg_path in `cat $pkg_list`; do
-      go get "${pkg_path}"
+    cat $pkg_list | while read pkg_path; do
+        echo "fetching golag package: go get ${pkg_path}";
+        echo $pkg_path | xargs go get
     done
   done
 }
