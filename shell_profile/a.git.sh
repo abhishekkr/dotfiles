@@ -30,6 +30,8 @@ alias git_undo='git reset --soft HEAD~1'
 alias git_reset_author='git commit --amend --reset-author'
 alias git_amend='git commit --amend'
 
+alias git_workdays="git log --date=short --format="%ci"|awk '{print $1}'|uniq"
+
 gpull_all(){
   for _a in `ls` ; do
     echo \$_a
