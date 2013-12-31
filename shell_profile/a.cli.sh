@@ -81,6 +81,15 @@ killgrep(){
   fi
 }
 
+dump-paths(){
+  _mountname=$(basename $1)
+  find $1 > "${_mountname}.log"
+}
+
+alias grep-video="grep -E 'mkv$|avi$|mp4$|wmv$|mov$|ogv$|webm$|mpg$|mpeg$|mov$'"
+alias grep-audio="grep -E 'wav$|flac$|mp3$|ogg$'"
+alias grep-docs="grep -E 'doc$|odp$|pdf$|txt$|log$|htm$|html$|djvu$|epub$'"
+
 alias grep='grep --color'
 
 # don't delete root and prompt if deleting more than 3 files at a time
@@ -112,8 +121,6 @@ alias 0scp='scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 
 alias ls-net-svc="netstat -plut"
 
-export PATH=$PATH:$HOME\bin
-
 alias prompt_time='PROMPT="%K%B%t "'
 
 alias rsync_to="rsync -lavzh  --exclude .git ./"
@@ -123,6 +130,22 @@ alias enable_ip_forwarding="echo 1 > /proc/sys/net/ipv4/ip_forward"
 alias drop_cache="echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null"
 
 alias server.https="python -m SimpleHTTPServer & ncat --ssl -l 8443 --sh-exec \"ncat 127.0.0.1 8000\" --keep-open"
+
+
+xrandr-auto(){
+  IN="LVDS-1"
+  EXT="VGA-1"
+
+  if (xrandr | grep "$EXT disconnected"); then
+    xrandr --output $IN --auto --output $EXT --off
+  else
+    xrandr --output $IN --auto --primary --output $EXT --auto --right-of $IN
+  fi
+}
+
+[ -d $HOME/bin ] && export PATH=$PATH:$HOME/bin
+[ -d $HOME/.cabal/bin ] && export PATH=$PATH:$HOME/.cabal/bin
+
 
 ascii_pacman(){
     if [[ $1 != "" ]]; then
