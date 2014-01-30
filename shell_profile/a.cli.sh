@@ -22,6 +22,8 @@ c1024x768(){
   convert -scale 1024x768 $1 $2
 }
 
+alias ls1="ls -1"
+
 lswp(){
   ls -lahR $1 | grep '.swp$'
 }
@@ -130,6 +132,13 @@ alias enable_ip_forwarding="echo 1 > /proc/sys/net/ipv4/ip_forward"
 alias drop_cache="echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null"
 
 alias server.https="python -m SimpleHTTPServer & ncat --ssl -l 8443 --sh-exec \"ncat 127.0.0.1 8000\" --keep-open"
+
+cddev(){
+  if [ -z $ABK_DEV_DIR ]; then
+    echo "Your Dev dir is not set." ; return 1
+  fi
+  cd $ABK_DEV_DIR/$1
+}
 
 
 xrandr-auto(){
