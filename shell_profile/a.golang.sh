@@ -18,15 +18,20 @@ go_help(){
 }
 
 goenv_on(){
-  if [ ! -d ./.goenv ]; then
-    mkdir -p ./.goenv/site
+  if [ $# -eq 0 ]; then
+    _GOPATH_VALUE="${PWD}/.goenv"
+  else
+    cd $1 ; _GOPATH_VALUE="${PWD}/.goenv" ; cd -
   fi
-  _OLD_GOPATH=$GOPATH
-  _OLD_PATH=$PATH
-  GOPATH=$PWD/.goenv/site
-  PATH=$PATH:$GOPATH/bin
+  if [ ! -d $_GOPATH_VALUE ]; then
+    mkdir -p "${_GOPATH_VALUE}/site"
+  fi
+  export _OLD_GOPATH=$GOPATH
+  export _OLD_PATH=$PATH
+  export GOPATH=$_GOPATH_VALUE/site
+  export PATH=$PATH:$GOPATH/bin
 }
-goenv_off="GOPATH=$_OLD_GOPATH ; PATH=$_OLD_PATH"
+alias goenv_off="export GOPATH=$_OLD_GOPATH ; export PATH=$_OLD_PATH ; unset _OLD_PATH ; unset _OLD_GOPATH"
 
 go_get_pkg(){
   if [ $# -eq 0 ]; then
