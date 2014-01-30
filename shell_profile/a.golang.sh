@@ -59,26 +59,91 @@ goenv_dup(){
 
 goenv_alpha(){
   _TMP_PWD=$PWD
-  if [ $# -ne 1 ]; then
+  if [ $# -ne 2 ]; then
     echo "Provide Alpha changes usable as any other go package."
     echo "Just the import path changes to 'alpha/<project-name>'"
-    echo "SYNTAX: goenv_alpha <path-to-project-dir-with-alpha-changes>"
+    echo "SYNTAX: goenv_alpha <path-to-project-dir-with-alpha-changes> <go-get-import-path-for-it>"
     return 1
   fi
-  PKG_PATH=$1
-  PKG_NAME=`echo $PKG_PATH | sed 's/.*\///g'`
-  GOPATH_SRC_PATH="${GOPATH}/src/alpha/${PKG_NAME}"
-  GOPATH_PKG_PATH="${GOPATH}/pkg/alpha/${PKG_NAME}"
-  mkdir -p $GOPATH_PKG_PATH
-  cp -rudan $PKG_PATH $GOPATH_SRC_PATH
-  cd $GOPATH_SRC_PATH
-  go build
+  _REPO_DIR=$1
+  _REPO_URL=$2
+
+  cd $_REPO_DIR
+  _PKG_PARENT_NAME=$(dirname $PWD)
+  _PKG_NAME=$(basename $PWD)
+
+  _PKG_NAME_IN_REPO=$(basename $_REPO_URL)
+  if [ $_PKG_NAME_IN_REPO != $_PKG_NAME ]; then
+    echo "Path for creating alpha doesn't match the import 'url' for it."
+    return 1
+  fi
+
+  `go build -work . 2> /tmp/$_PKG_NAME`
+  _BUILD_PATH=`cat /tmp/$_PKG_NAME | sed 's/WORK=//'`
+  if [ ! -d $_BUILD_PATH ]; then
+    echo "An error occured while building, it's recorded at /tmp/$_PKG_NAME"
+    return 1
+  fi
+  rm -f /tmp/$_PKG_NAME
+
+  _CURRENT_OBJECT_PATH="${GOPATH}/pkg/${GOOS}_${GOARCH}"
+  _CURRENT_OBJECT="${_CURRENT_OBJECT_PATH}/${_REPO_URL}.a"
+  _NEW_OBJECT="${_BUILD_PATH}/_${_PKG_PARENT_NAME}/${_PKG_NAME}.a"
+
+  echo "Do you wanna backup current object? If yes enter a filename for it: "
+  read GO_ALPHA_BACKUP
+  if [ ! -z $GO_ALPHA_BACKUP ]; then
+    mv $_CURRENT_OBJECT "${_CURRENT_OBJECT_PATH}/${_REPO_URL}/${GO_ALPHA_BACKUP}.backup"
+  fi
+  mv $_NEW_OBJECT $_CURRENT_OBJECT
+
   cd $_TMP_PWD
+  echo "\nAlpha changes have been updated at ${_CURRENT_OBJECT}."
+  echo "${_CURRENT_OBJECT_PATH}/${_REPO_URL}/${GO_ALPHA_BACKUP}.backup"
+}
+
+goenv_alpha_undo(){
+  _TMP_PWD=$PWD
+  if [ $# -ne 2 ]; then
+    echo "Provide Alpha changes usable as any other go package."
+    echo "Just the import path changes to 'alpha/<project-name>'"
+    echo "SYNTAX: goenv_alpha <path-to-project-dir-with-alpha-changes> <go-get-import-path-for-it>"
+    return 1
+  fi
+  _REPO_DIR=$1
+  _REPO_URL=$2
+
+  cd $_REPO_DIR
+  _PKG_PARENT_NAME=$(dirname $PWD)
+  _PKG_NAME=$(basename $PWD)
+
+  _PKG_NAME_IN_REPO=$(basename $_REPO_URL)
+  if [ $_PKG_NAME_IN_REPO != $_PKG_NAME ]; then
+    echo "Path for creating alpha doesn't match the import 'url' for it."
+    return 1
+  fi
+
+  _CURRENT_OBJECT_PATH="${GOPATH}/pkg/${GOOS}_${GOARCH}"
+  _CURRENT_OBJECT="${_CURRENT_OBJECT_PATH}/${_REPO_URL}.a"
+  _BACKUP_OBJECT="${_BUILD_PATH}/_${_PKG_PARENT_NAME}/${_PKG_NAME}.a"
+
+  echo "Available package files are:"
+  ls -1 $_CURRENT_OBJECT_PATH/$_REPO_URL | grep $_PKG_NAME | grep -v grep
+  echo "Enter your backup filename for it: "
+  read GO_ALPHA_BACKUP
+  if [ -z $GO_ALPHA_BACKUP ]; then
+    echo "\nNo Backup file was entered." ; return 1
+  fi
+  mv "${_CURRENT_OBJECT_PATH}/${_REPO_URL}/${GO_ALPHA_BACKUP}" $_CURRENT_OBJECT
+
+  cd $_TMP_PWD
+  echo "\nAlpha changes have been reverted with the provided backup file."
 }
 
 go_reget(){
   GOPATH_PKG_PATH="${GOPATH}/src/$1"
-  if [ $# -ne 1 -o -d $GOPATH_PKG_PATH ]; then
+  echo "Reget to "$GOPATH_PKG_PATH
+  if [ $# -ne 1 -o ! -d $GOPATH_PKG_PATH ]; then
     echo "Cleans up source of Go Pkg from current GOPATH and re-(go get) it."
     echo "It moves it to an announced path, if wanna undo something/anything."
     echo "SYNTAX: go_reget <path-provided-go-get>"
@@ -87,4 +152,5 @@ go_reget(){
   TMP_GOPKG_PATH="/tmp/golang-packages/${GOPATH_PKG_PATH}"
   mkdir -p $TMP_GOPKG_PATH
   mv $GOPATH_PKG_PATH $TMP_GOPKG_PATH
+  go get "$1"
 }
