@@ -99,7 +99,6 @@ goenv_alpha(){
 
   cd $_TMP_PWD
   echo "\nAlpha changes have been updated at ${_CURRENT_OBJECT}."
-  echo "${_CURRENT_OBJECT_PATH}/${_REPO_URL}/${GO_ALPHA_BACKUP}.backup"
 }
 
 goenv_alpha_undo(){
