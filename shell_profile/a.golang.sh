@@ -141,16 +141,25 @@ goenv_alpha_undo(){
 }
 
 go_reget(){
-  GOPATH_PKG_PATH="${GOPATH}/src/$1"
-  echo "Reget to "$GOPATH_PKG_PATH
-  if [ $# -ne 1 -o ! -d $GOPATH_PKG_PATH ]; then
+  if [ $# -ne 1 ]; then
     echo "Cleans up source of Go Pkg from current GOPATH and re-(go get) it."
-    echo "It moves it to an announced path, if wanna undo something/anything."
+    echo "It moves it to /tmp/go/ path, if wanna undo something/anything."
     echo "SYNTAX: go_reget <path-provided-go-get>"
     return 1
   fi
-  TMP_GOPKG_PATH="/tmp/golang-packages/${GOPATH_PKG_PATH}"
-  mkdir -p $TMP_GOPKG_PATH
-  mv $GOPATH_PKG_PATH $TMP_GOPKG_PATH
-  go get "$1"
+  _REPO_URL=$1
+  _PKG_OBJECT_PATH="${GOPATH}/pkg/${GOOS}_${GOARCH}/${_REPO_URL}.a"
+  _PKG_PATH="${GOPATH}/pkg/${GOOS}_${GOARCH}/${_REPO_URL}"
+  _SRC_PATH="${GOPATH}/src/${_REPO_URL}"
+  _TMP_PARENT_PATH="/tmp/go/"$(dirname $_REPO_URL)
+
+  rm -rf $_TMP_PARENT_PATH
+  mkdir -p $_TMP_PARENT_PATH/pkg
+  mkdir -p $_TMP_PARENT_PATH/src
+  mv -f $_PKG_OBJECT_PATH $_TMP_PARENT_PATH/pkg
+  mv -f $_PKG_PATH $_TMP_PARENT_PATH/pkg
+  mv -f $_SRC_PATH $_TMP_PARENT_PATH/src
+
+  go get $_REPO_URL
+  echo "$_REPO_URL as been re-'go get'-ed"
 }
