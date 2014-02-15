@@ -32,6 +32,8 @@ alias git_amend='git commit --amend'
 
 alias git_workdays="git log --date=short --format="%ci"|awk '{print $1}'|uniq"
 
+alias git_submodule_r="git submodule update --init --recursive"
+
 gpull_all(){
   for _a in `ls` ; do
     echo \$_a
@@ -72,16 +74,35 @@ git_commit_as(){
 
 gitinit(){
   for REPO_TO_INIT in $@; do
-    echo "initializing git repo: ${PWD}/${REPO_TO_INIT}"
-    git init $REPO_TO_INIT
-    cd $REPO_TO_INIT
+    if [ -d "${PWD}/${REPO_TO_INIT}/.git" ]; then
+      echo "${PWD}/${REPO_TO_INIT} is already a git repo."
+    else
+      echo "initializing git repo: ${PWD}/${REPO_TO_INIT}"
+      git init $REPO_TO_INIT
+      cd $REPO_TO_INIT
+      cat >> ./README.md << READMEEOF
+##${REPO_TO_INIT}
+---
+
+READMEEOF
       cat >> ./.gitignore << GITIGNORE
 *swo
 *swp
 *~
 *.tmp
 temp/*
+.bundle
+.venv
+.goenv
+.config
+*.lock
 GITIGNORE
-    cd -
+      cd -
+    fi
   done
 }
+
+alias git-fork-of="git remote add forkof"
+alias git-fork-of-pull="git pull forkof"
+
+alias git-fetch-tags="git fetch --tags"
