@@ -13,14 +13,18 @@ alias pyibook='ipython2 notebook'
 venv_on(){
   [ ! -s ./.venv ] && virtualenv2 .venv
   source .venv/bin/activate
+  export _TMP_VENV_PATH=$PATH
+  export PATH=$PATH:$PWD/.venv/bin
 }
 alias venv2_on="venv_on"
 venv3_on(){
   [ ! -s ./.venv ] && virtualenv3 .venv
   source .venv/bin/activate
+  export _TMP_VENV_PATH=$PATH
+  export PATH=$PATH:$PWD/.venv/bin
 }
 
-alias venv_off="deactivate"
+alias venv_off="deactivate ; export PATH=$_TMP_VENV_PATH ; unset $_TMP_VENV_PATH"
 
 alias py-profile="time python -m cProfile"
 
