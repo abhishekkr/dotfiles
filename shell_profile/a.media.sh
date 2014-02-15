@@ -1,6 +1,15 @@
 # .bashrc
 
-alias music3a='mplayer -shuffle /media/ABK_3a/ABK/_Music/*mp3 /media/ABK_3a/ABK/_Music/*/*mp3 /media/ABK_3a/ABK/_Music/*/*/*mp3 /media/ABK_3a/ABK/_Music/*/*/*/*mp3 /media/ABK_3a/ABK/_Music/*/*/*/*/*mp3 /media/ABK_3b/ABK/_chalchitra/_Music/*/*mp3 /media/ABK_3b/ABK/_chalchitra/_Music/*/*/*mp3 /media/ABK_3b/ABK/_chalchitra/_Music/*/*/*/*mp3'
+alias mute="(amixer get Master | grep off > /dev/null && amixer -q set Master unmute) || amixer -q set Master mute"
+alias volumeUp="amixer -c 0 set PCM 5dB+ unmute"
+alias volumeDown="amixer -c 0 set PCM 5dB-"
+
+play-from-log(){
+  if [ $# -eq 0 ]; then
+    echo "SYNTAX: play-from-log <log-file-with-path-entries>" && return 1
+  fi
+  cat $1 | xargs -I {} mplayer -quiet {}
+}
 
 mplayeraa(){
   mplayer -vo aa "$@"
