@@ -124,6 +124,7 @@ alias 0scp='scp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no'
 alias ls-net-svc="netstat -plut"
 
 alias prompt_time='PROMPT="%K%B%t "'
+alias prompt_user='PROMPT="${USER}$ "'
 
 alias rsync_to="rsync -lavzh  --exclude .git ./"
 
@@ -215,3 +216,11 @@ echo $_asciiart_maxpayne
 }
 
 cowsay -f dragon "$USER is here..."
+
+arch-font-install(){
+  _FONTDIR="/usr/share/fonts/$USER"
+  sudo mkdir -p $_FONTDIR
+  cp -ar $1 $_FONTDIR
+  fc-cache -vf
+  unset _FONTDIR
+}
