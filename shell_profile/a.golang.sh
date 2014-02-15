@@ -9,6 +9,8 @@ export GOARCH=amd64
 
 alias gofmt-fix="gofmt -l -w -s"
 
+alias gorun="go run"
+alias gobld="go build"
 go_clr(){
   go run "$@"
 }
@@ -167,3 +169,43 @@ go_reget(){
   go get $_REPO_URL
   echo "$_REPO_URL as been re-'go get'-ed"
 }
+
+goenv_rm(){
+  if [ $# -ne 1 ]; then
+    echo "Removes current given go-get path from GOPATH"
+    echo "SYNTAX: goenv_rm <path-provided-go-get>"
+    return 1
+  fi
+  _REPO_URL=$1
+  rm -rf "${GOPATH}/src/${_REPO_URL}"
+}
+
+goenv_link(){
+  if [ $# -ne 2 ]; then
+    echo "Links up current dir to it's go-get location in GOPATH"
+    echo "SYNTAX: goenv_linkme <local-repo-path> <path-provided-go-get>"
+    return 1
+  fi
+  _REPO_DIR=$1
+  _REPO_URL=$2
+
+  _TMP_PWD=$PWD
+  cd $_REPO_DIR
+
+  if [ -d "${GOPATH}/src/${_REPO_URL}" ]; then
+    echo "$_REPO_URL already exists at GOPATH $GOPATH"
+    go get "${_REPO_URL}"
+    return 1
+  fi
+  _REPO_BASEDIR=$(dirname "${GOPATH}/src/${_REPO_URL}")
+  if [ ! -d "${_REPO_BASEDIR}" ]; then
+    mkdir -p "${_REPO_BASEDIR}/src"
+  fi
+
+  ln -sf "${PWD}" "${GOPATH}/src/${_REPO_URL}"
+  go get "${_REPO_URL}"
+
+  cd $_TMP_PWD
+}
+
+alias goenv_linkme="goenv_link $PWD"
