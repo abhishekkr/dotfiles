@@ -1,5 +1,7 @@
 # profile for cli
 
+alias xstart="startxfce4"
+
 c32x32(){
   convert -scale 600x400 $1 $2
 }
@@ -111,7 +113,7 @@ alias ls-size="ls -lah | grep '^total'"
 alias items='ls -1 | wc -l'
 alias mysize='du -h | grep -e "\.$" | cut -f1'
 
-alias ipaddr="ifconfig | grep 'inet ' | awk '{print $2}'"
+alias ipaddr="ifconfig | grep 'inet ' | awk '{print \$2}'"
 alias ports='netstat -tulanp'
 alias check-net='ping 8.8.8.8'
 
@@ -125,6 +127,7 @@ alias ls-net-svc="netstat -plut"
 
 alias prompt_time='PROMPT="%K%B%t "'
 alias prompt_user='PROMPT="${USER}$ "'
+alias prompt_user_pwd='PROMPT="${USER}:${$(basename $PWD)}$ "'
 
 alias rsync_to="rsync -lavzh  --exclude .git ./"
 
@@ -223,4 +226,30 @@ arch-font-install(){
   cp -ar $1 $_FONTDIR
   fc-cache -vf
   unset _FONTDIR
+}
+
+
+set_proxy(){
+  if [ $# -ne 1 ]; then
+    echo "Wrong Syntax."
+    echo "Syntax: $0 <entire-string-to-set-full-url-with-port-user-password>"
+    return 1
+  fi
+  PROXY_ENV="http_proxy ftp_proxy https_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY NO_PROXY ALL_PROXY"
+  for envar in `echo $PROXY_ENV`
+  do
+    echo $envar
+    export $envar=$1
+  done
+  #export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
+  echo -e "Proxy environment variable set."
+}
+
+unset_proxy(){
+  PROXY_ENV="http_proxy ftp_proxy https_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY NO_PROXY ALL_PROXY"
+  for envar in $PROXY_ENV
+  do
+    unset $envar
+  done
+  echo -e "Proxy environment variable removed."
 }
