@@ -86,6 +86,7 @@ gitinit(){
 
 READMEEOF
       cat >> ./.gitignore << GITIGNORE
+*swn
 *swo
 *swp
 *~
@@ -95,7 +96,9 @@ temp/*
 .venv
 .goenv
 .config
+*.cfg
 *.lock
+*.sock
 GITIGNORE
       cd -
     fi
