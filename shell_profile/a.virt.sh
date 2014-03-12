@@ -1,5 +1,32 @@
 #!/bin/bash
 
+#
+alias vagrant-on="vagrant up && vagrant ssh"
+
+#
+lxc-up(){
+  if [ $# -ne 1 ]; then
+    echo "Syntax: lxc-up <name-of-spawned-instance-to-start>"
+    return
+  else
+    _CONTAINER=$1
+  fi
+  lxc-start -n $_CONTAINER -d -o "/container/${_CONTAINER}/${_CONTAINER}.log"
+}
+
+#
+lxc-cmd(){
+  if [ $# -ne 1 ]; then
+    echo "Syntax: lxc-cmd <name-of-spawned-instance-to-start>"
+    return
+  else
+    _CONTAINER=$1
+  fi
+  echo "once in lxc console, to quit... run: CTRL+D CTRL+A Q"
+  lxc-console -n $_CONTAINER
+}
+
+#
 nspawn-ls(){
   echo "List of all nspawn instances..."
   echo "Archlinux:"
