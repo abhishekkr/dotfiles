@@ -208,4 +208,20 @@ goenv_link(){
   cd $_TMP_PWD
 }
 
-alias goenv_linkme="goenv_link $PWD"
+alias goenv_linkme="goenv_link \$PWD"
+
+goenv_unlink(){
+  _LINK_PATH="${GOPATH}/src/${_REPO_URL}"
+  if [ -L $_LINK_PATH ]; then
+    rm -f $_LINK_PATH
+  else
+    echo "${_LINK_PATH} is not a Link."
+    return 1
+  fi
+}
+
+goenv_mylinks(){
+  if [ -d "${GOPATH}/src/github.com" ]; then
+    ls -l ${GOPATH}/src/github.com/*/ | grep '^l' | awk '{print $9,$10,$11}'
+  fi
+}
