@@ -232,6 +232,50 @@ arch-font-install(){
 }
 
 
+set_ssh_proxy(){
+  _CORKSCREW_BIN=`which corkscrew`
+  if [ ! -x "$_CORKSCREW_BIN" ]; then
+    echo "ERROR: Corkscrew (http://www.agroman.net/corkscrew/) is required for it to work and in system binary path."
+    return 1
+  fi
+
+  _PROXY_HOST=`echo $HTTP_PROXY | sed 's/.*\/\/\(.*\)\:.*/\1/'`
+  _IF_PROXY_AVAILABLE=`nslookup "$_PROXY_HOST" > /dev/null ; echo $?`
+  if [ "$_IF_PROXY_AVAILABLE" != "0" ]; then
+    echo "ERROR: Trying to use '${_PROXY_HOST}' as proxy for ssh. Not accessible."
+    return 1
+  fi
+
+  _SSH_PROXY_CONFIG="ProxyCommand ${_CORKSCREW_BIN} ${_PROXY_HOST} 80 %h %p"
+
+  _SSH_DIR="$HOME/.ssh"
+  if [ ! -d "$_SSH_DIR" ]; then mkdir -p "$_SSH_DIR"; fi
+  _SSH_CONFIG_FILE="$_SSH_DIR/config"
+  if [ ! -f "$_SSH_CONFIG_FILE" ]; then
+    touch "$_SSH_CONFIG_FILE" && chmod 0544 "$_SSH_CONFIG_FILE"
+  fi
+  _IF_SSH_PROXY_EXISTS=`grep "$_SSH_PROXY_CONFIG" "$_SSH_CONFIG_FILE" > /dev/null; echo $?`
+  if [ "$_IF_SSH_PROXY_EXISTS" = "0" ]; then
+    unset_ssh_proxy
+  fi
+
+  echo $_SSH_PROXY_CONFIG | tee -a $_SSH_CONFIG_FILE
+
+  unset _SSH_CONFIG_FILE
+  unset _SSH_DIR
+  unset _PROXY_HOST
+  unset _CORKSCREW_BIN
+}
+
+
+unset_ssh_proxy(){
+  _SSH_CONFIG_FILE="$HOME/.ssh/config"
+  if [ $# -ge 1 ]; then _SSH_CONFIG_FILE=$1 ; fi
+  _SSH_CONFIG=`grep -v 'ProxyCommand.*' $_SSH_CONFIG_FILE`
+  echo $_SSH_CONFIG > $_SSH_CONFIG_FILE
+}
+
+
 set_proxy(){
   if [ $# -ne 1 ]; then
     echo "Wrong Syntax."
@@ -244,6 +288,8 @@ set_proxy(){
     echo $envar
     export $envar=$1
   done
+  set_ssh_proxy
+
   #export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
   echo -e "Proxy environment variable set."
 }
@@ -255,6 +301,8 @@ unset_proxy(){
     echo "Unset $_envar"
     unset "$_envar"
   done
+  unset_ssh_proxy
+
   echo -e "Proxy environment variable removed."
 }
 
