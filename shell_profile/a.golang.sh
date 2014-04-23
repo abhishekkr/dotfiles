@@ -225,3 +225,29 @@ goenv_mylinks(){
     ls -l ${GOPATH}/src/github.com/*/ | grep '^l' | awk '{print $9,$10,$11}'
   fi
 }
+
+go_try_main(){
+  _GO_TRY_FILENAME="go-try"
+  if [[ $# -gt 0 ]]; then
+    _GO_TRY_FILENAME="$1"
+  fi
+  _GO_TRY_FILE_COUNT=`ls $_GO_TRY_FILENAME* | wc -l`
+  _GO_TRY_FILENAME="./${_GO_TRY_FILENAME}-${_GO_TRY_FILE_COUNT}.go"
+  cat >> "${_GO_TRY_FILENAME}" << GOTRYEOF
+package main
+
+import (
+  "fmt"
+)
+
+func main(){
+  fmt.Println("It's a sample test file to quickly try out any Golang confusion.")
+
+  // start here
+
+  fmt.Println("If you don't need it anymore, just delete it.")
+}
+
+GOTRYEOF
+  $EDITOR "${_GO_TRY_FILENAME}" 3>&1 1>&2 2>&3
+}
