@@ -137,6 +137,9 @@ alias drop_cache="echo 3 | sudo tee /proc/sys/vm/drop_caches > /dev/null"
 
 alias server.https="python -m SimpleHTTPServer & ncat --ssl -l 8443 --sh-exec \"ncat 127.0.0.1 8000\" --keep-open"
 
+alias vim-hor="vim -o"
+alias vim-ver="vim -O"
+
 cddev(){
   if [ -z $ABK_DEV_DIR ]; then
     echo "Your Dev dir is not set." ; return 1
@@ -235,7 +238,7 @@ set_proxy(){
     echo "Syntax: $0 <entire-string-to-set-full-url-with-port-user-password>"
     return 1
   fi
-  PROXY_ENV="http_proxy ftp_proxy https_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY NO_PROXY ALL_PROXY"
+  PROXY_ENV="http_proxy ftp_proxy https_proxy rsync_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY NO_PROXY ALL_PROXY"
   for envar in `echo $PROXY_ENV`
   do
     echo $envar
@@ -246,10 +249,16 @@ set_proxy(){
 }
 
 unset_proxy(){
-  PROXY_ENV="http_proxy ftp_proxy https_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY NO_PROXY ALL_PROXY"
-  for envar in $PROXY_ENV
+  PROXY_ENV="http_proxy ftp_proxy https_proxy rsync_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY NO_PROXY ALL_PROXY"
+  for _envar in `echo $PROXY_ENV`
   do
-    unset $envar
+    echo "Unset $_envar"
+    unset "$_envar"
   done
   echo -e "Proxy environment variable removed."
 }
+
+alias es_start="sudo elasticsearch -p /tmp/elasticsearch.pid"
+
+alias fix-fs-fat="fsck.vfat -favrt"
+alias fix-fs-ntfs="ntfsck -favrt"
