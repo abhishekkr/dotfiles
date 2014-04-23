@@ -109,3 +109,16 @@ alias git-fork-of="git remote add forkof"
 alias git-fork-of-pull="git pull forkof"
 
 alias git-fetch-tags="git fetch --tags"
+alias git-push-tags="git push origin --tags"
+
+git-tag-later(){
+  if [[ $# -ne 3 ]]; then
+    echo "Syntax: git-tag-later '<TAG>' '<TAG-MESSAGE>' '<COMMIT-HASH>'"
+    return 1
+  else
+    _GIT_TAG_TEXT="$1"
+    _GIT_TAG_MSG="$2"
+    _GIT_REPO_HASH="$3"
+    git tag -a "${_GIT_TAG_TEXT}" -m "${_GIT_TAG_MSG}" "${_GIT_REPO_HASH}"
+  fi
+}
