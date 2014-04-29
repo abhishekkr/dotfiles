@@ -98,6 +98,7 @@ setopt EXTENDED_HISTORY
 
 setopt EXTENDED_GLOB
 
+source $HOME/.profile
 for a in `ls /etc/profile.d/*.sh`; do
   source $a
 done
