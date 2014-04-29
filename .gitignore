@@ -7,4 +7,5 @@ tmp
 *pyc
 shell_profile/nda.project.sh
 vim/bundle/*
+vim/plugin/*
 temp/*
