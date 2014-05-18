@@ -19,11 +19,12 @@ go_help(){
   godoc -http=:9090
 }
 
-goenv_on(){
+goenv_on_at(){
+  _AT_DIR="$1"
   if [ $# -eq 0 ]; then
-    _GOPATH_VALUE="${PWD}/.goenv"
+    _GOPATH_VALUE="${_AT_DIR}/.goenv"
   else
-    cd $1 ; _GOPATH_VALUE="${PWD}/.goenv" ; cd -
+    cd $1 ; _GOPATH_VALUE="${_AT_DIR}/.goenv" ; cd -
   fi
   if [ ! -d $_GOPATH_VALUE ]; then
     mkdir -p "${_GOPATH_VALUE}/site"
@@ -33,6 +34,9 @@ goenv_on(){
   export GOPATH=$_GOPATH_VALUE/site
   export PATH=$PATH:$GOPATH/bin
 }
+
+alias goenv_home="goenv_on_at '${HOME}'"
+alias goenv_on="goenv_on_at '${PWD}'"
 alias goenv_off="export GOPATH=$_OLD_GOPATH ; export PATH=$_OLD_PATH ; unset _OLD_PATH ; unset _OLD_GOPATH"
 
 go_get_pkg(){
