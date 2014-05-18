@@ -8,3 +8,11 @@ pkg-clean-cache(){
         echo "This distro not suported yet!" && return 1
     fi
 }
+
+func service_log(){
+  if [[ $# -eq 1 ]]; then
+    journalctl -u "$1" -f
+  else
+    echo "This shows service logs for systemd handled service.\nSyntax: 'service_log <service-name>'"
+  fi
+}
