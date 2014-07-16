@@ -1,5 +1,14 @@
 # profile for cli
 
+alias uhoh="xscreensaver-command -lock"
+
+mycd(){
+  if [[ $# -eq 1 ]]; then
+    cd "$1"
+    if [[ -d "$1/.goenv" ]]; then `goenv_on` ; fi
+  fi
+}
+
 alias xstart="startxfce4"
 
 c32x32(){
@@ -116,6 +125,7 @@ alias mysize='du -h | grep -e "\.$" | cut -f1'
 alias ipaddr="ifconfig | grep 'inet ' | awk '{print \$2}'"
 alias ports='netstat -tulanp'
 alias check-net='ping 8.8.8.8'
+alias check-http='curl -LkI www.google.co.in'
 
 alias espeakf="espeak -ven-us+f2"
 
@@ -282,31 +292,45 @@ set_proxy(){
     echo "Syntax: $0 <entire-string-to-set-full-url-with-port-user-password>"
     return 1
   fi
-  PROXY_ENV="http_proxy ftp_proxy https_proxy rsync_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY NO_PROXY ALL_PROXY"
+  PROXY_ENV="http_proxy ftp_proxy https_proxy rsync_proxy all_proxy auto_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY ALL_PROXY AUTO_PROXY NO_PROXY"
   for envar in `echo $PROXY_ENV`
   do
     echo $envar
     export $envar=$1
   done
-  set_ssh_proxy
+  #set_ssh_proxy
 
   #export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
   echo -e "Proxy environment variable set."
 }
 
 unset_proxy(){
-  PROXY_ENV="http_proxy ftp_proxy https_proxy rsync_proxy all_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY NO_PROXY ALL_PROXY"
+  PROXY_ENV="http_proxy ftp_proxy https_proxy rsync_proxy all_proxy auto_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY ALL_PROXY AUTO_PROXY NO_PROXY"
   for _envar in `echo $PROXY_ENV`
   do
     echo "Unset $_envar"
     unset "$_envar"
   done
-  unset_ssh_proxy
+  #unset_ssh_proxy
 
   echo -e "Proxy environment variable removed."
 }
+
+7zip(){
+  7z a -t7z -m0=lzma -mx=9 -mfb=64 -md=32m -ms=on "$1" "$2"
+}
+
+alias 7unzip="7z e"
+
+alias del_vim_swap="find -name *.sw[lmnop] | xargs rm -f"
 
 alias es_start="sudo elasticsearch -p /tmp/elasticsearch.pid"
 
 alias fix-fs-fat="fsck.vfat -favrt"
 alias fix-fs-ntfs="ntfsck -favrt"
+
+alias cinnamon-remove-recent="cat /dev/null > .local/share/recently-used.xbel"
+
+boomark(){
+  echo "$@" | tee -a $HOME/.boomark.abk
+}
