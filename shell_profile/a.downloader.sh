@@ -77,3 +77,31 @@ ddl_gist(){
     fi
   done
 }
+
+# Download HTML converted from provided Markdown, using GitHub API v3
+##
+md2html(){
+  if [[ $# -ne 2 ]]; then
+    echo "ERROR.\nSYNTAX: Markdown_To_HTML <markdown-filepath> <dest-html-filepath>"
+    return
+  fi
+  unset _markdown_filepath
+  unset _html_filepath
+  unset _github_json_filepath
+  unset _markdown_for_github
+
+  _markdown_filepath=$1
+  _html_filepath=$2
+  _github_json_filepath="${_markdown_filepath}.json"
+
+  sed -i 's/$/\\n/g' $_markdown_filepath
+  sed -i 's/"/\\"/g' $_markdown_filepath
+
+  echo "{ \"text\" : \"" > $_github_json_filepath
+  cat $_markdown_filepath >> $_github_json_filepath
+  echo "\" }" >> $_github_json_filepath
+
+  cat $_github_json_filepath | curl -sLk -X POST -d@- https://api.github.com/markdown > $_html_filepath
+  rm $_github_json_filepath
+  echo "Successful conversion of ${_markdown_filepath} to ${_html_filepath}."
+}
