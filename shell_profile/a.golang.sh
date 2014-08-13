@@ -33,10 +33,12 @@ goenv_on_at(){
   export _OLD_PATH=$PATH
   export GOPATH=$_GOPATH_VALUE/site
   export PATH=$PATH:$GOPATH/bin
+
+  echo "your new GOPATH is at $GOPATH"
 }
 
-alias goenv_home="goenv_on_at '${HOME}'"
-alias goenv_on="goenv_on_at '${PWD}'"
+alias goenv_home="goenv_on_at '$HOME'"
+alias goenv_on="goenv_on_at '$PWD'"
 alias goenv_off="export GOPATH=$_OLD_GOPATH ; export PATH=$_OLD_PATH ; unset _OLD_PATH ; unset _OLD_GOPATH"
 
 go_get_pkg(){
@@ -54,7 +56,11 @@ go_get_pkg(){
   for pkg_list in $PKG_LISTS; do
     cat $pkg_list | while read pkg_path; do
         echo "fetching golag package: go get ${pkg_path}";
-        echo $pkg_path | xargs go get
+        if [[ -z GO_UPDATE ]]; then
+          echo $pkg_path | xargs go get
+        else
+          echo $pkg_path | xargs go get -u
+        fi
     done
   done
 }
