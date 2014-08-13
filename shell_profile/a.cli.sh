@@ -303,6 +303,7 @@ set_proxy(){
   #export no_proxy="localhost,127.0.0.1,localaddress,.localdomain.com"
   echo -e "Proxy environment variable set."
 }
+alias set_proxy_polipo="set_proxy 'http://127.0.0.1:8123'"
 
 unset_proxy(){
   PROXY_ENV="http_proxy ftp_proxy https_proxy rsync_proxy all_proxy auto_proxy no_proxy HTTP_PROXY HTTPS_PROXY FTP_PROXY RSYNC_PROXY ALL_PROXY AUTO_PROXY NO_PROXY"
