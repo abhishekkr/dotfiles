@@ -3,6 +3,10 @@
 ## WEB API sorts
 
 x-rates(){
+  if [[ "$1" == "--help" ]]; then
+    echo "USAGE: x-rates <AMOUNT> <FROM-CURRENCY> <TO_CURRENCY>"
+    return
+  fi
   _AMOUNT=$1
   _FROM_CURRENCY=$2
   _TO_CURRENCY=$3
