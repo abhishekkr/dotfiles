@@ -29,12 +29,14 @@
   untracked = cyan
 
 [alias]
+  ec = config --global -e
   st = status -sb
   ci = commit
   c0 = commit --allow-empty
   br = branch
   brr = branch -r
   co = checkout
+  cob = checkout -b
   df = diff
   dc = diff --cached
   dw = diff --word-diff
