@@ -45,3 +45,25 @@ xopen(){
   fi
   return $_TMP_EXITCODE
 }
+
+  #sudo systemctl restart bluetooth
+  #bluetoothctl
+    # power on
+    # agent on
+    # default-agent
+    # scan on
+
+    # for file in *.JPG; do convert -resize 1600x1200 -- "$file" "${file%%.jpg}-resized.jpg"; done
+
+alias resizeJPG="mkdir -p resized ; for file in *.jpg; do convert -resize 1600x1200 -- \"\$file\" \"resized/\${file%%.jpg}-resized.jpg\"; done"
+
+toMP4(){
+  _MEDIAFILE=$1
+  ffmpeg -i "${_MEDIAFILE}" -acodec libmp3lame  -vcodec libx264 -preset slow -flags +aic+mv4 "${_MEDIAFILE}.mp4"
+  unset _MEDIAFILE
+}
+
+uget(){
+  echo "$1" | sed 's/%3A/\:/g' | sed 's/%2F/\//g' | sed 's/%3F/?/g' | sed 's/%3D/\=/g' | sed 's/%26/\&/g' | xargs wget -c
+}
+
