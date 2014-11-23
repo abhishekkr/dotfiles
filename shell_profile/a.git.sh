@@ -147,3 +147,20 @@ git-tag-later(){
     git tag -a "${_GIT_TAG_TEXT}" -m "${_GIT_TAG_MSG}" "${_GIT_REPO_HASH}"
   fi
 }
+
+git_rm_sensitive(){
+  SENSITIVE_MISTAKE="$1"
+  git filter-branch --force --index-filter "git rm --cached --ignore-unmatch $SENSITIVE_MISTAKE" --prune-empty --tag-name-filter cat -- --all
+
+  echo "$SENSITIVE_MISTAKE" >> .gitignore
+  git add .gitignore
+  git commit -m "$SENSITIVE_MISTAKE gitignore-d"
+
+  git push origin --force --all
+  git push origin --force --tags
+
+  git for-each-ref --format='delete %(refname)' refs/original | git update-ref --stdin
+  git reflog expire --expire=now --all
+  git gc --prune=now
+}
+
