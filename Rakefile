@@ -14,4 +14,4 @@ def exists_but_symlink?(path)
 end
 
 desc 'set it all'
-task :default => ["git:setup", "vim:setup", "profile:setup"]
+task :default => ["git:setup", "vim:setup", "profile:setup", "runcom:setup"]
