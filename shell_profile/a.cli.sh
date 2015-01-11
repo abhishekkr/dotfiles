@@ -335,3 +335,12 @@ alias cinnamon-remove-recent="cat /dev/null > .local/share/recently-used.xbel"
 boomark(){
   echo "$@" | tee -a $HOME/.boomark.abk
 }
+
+alias time-brisbane="TZ=Australia/Brisbane date"
+
+nicUp(){
+  sudo ip link set dev $1 up
+}
+nicDown(){
+  sudo ip link set dev $1 down
+}
