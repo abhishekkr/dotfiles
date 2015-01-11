@@ -58,8 +58,11 @@ xopen(){
 alias resizeJPG="mkdir -p resized ; for file in *.jpg; do convert -resize 1600x1200 -- \"\$file\" \"resized/\${file%%.jpg}-resized.jpg\"; done"
 
 toMP4(){
-  _MEDIAFILE=$1
-  ffmpeg -i "${_MEDIAFILE}" -acodec libmp3lame  -vcodec libx264 -preset slow -flags +aic+mv4 "${_MEDIAFILE}.mp4"
+  for _MEDIAFILE in "$@"
+  do
+      echo "converting $_MEDIAFILE"
+      ffmpeg -i "${_MEDIAFILE}" -acodec libmp3lame  -vcodec libx264 -preset slow -flags +aic+mv4 "${_MEDIAFILE}.mp4"
+  done
   unset _MEDIAFILE
 }
 
