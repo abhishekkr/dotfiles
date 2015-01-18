@@ -1,9 +1,24 @@
 #!/bin/bash
 
-#
+### docker# ###################################################################
+alias dckr-svr="sudo docker -d"
+alias dckr-ps="docker ps -a | less -S"
+alias dckr-last-container-running="docker inspect --format '{{.State.Running}}' $(docker ps -lq)"
+alias dckr-pull="docker pull"
+alias dckr-latest="docker ps -l -q"
+alias dckr-stop="docker stop"
+alias dckr-start="docker start"
+alias dckr-restart="docker restart"
+alias dckr-attach="docker attach"
+#alias dckr-latest-stop="dckr-stop `dckr-latest`"
+#alias dckr-latest-start="dckr-start `dckr-latest`"
+#alias dckr-latest-restart="dckr-restart `dckr-latest`"
+#alias dckr-latest-attach="dckr-attach `dckr-latest`"
+
+### vagrant ###################################################################
 alias vagrant-on="vagrant up && vagrant ssh"
 
-#
+### lxc #######################################################################
 lxc-up(){
   if [ $# -ne 1 ]; then
     echo "Syntax: lxc-up <name-of-spawned-instance-to-start>"
@@ -26,7 +41,7 @@ lxc-cmd(){
   lxc-console -n $_CONTAINER
 }
 
-#
+### systemd ###################################################################
 nspawn-ls(){
   echo "List of all nspawn instances..."
   echo "Archlinux:"
