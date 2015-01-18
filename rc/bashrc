@@ -43,7 +43,7 @@ export CDPATH=$CDPATH:$HOME:$HOME/an0n/dev
      NO_COLOR="\[\e[0m\]"
 
 ### PROMPT ###
-export PS1="${GREEN}\u@\h${WHITE}:${CYAN}\w ${NO_COLOR} exitcode:\$? cmd:\!\] \n\$ "
+export PS1="${GREEN}\u@\h${WHITE}:${CYAN}\w ${NO_COLOR} exitcode:\$? ${ORANGE}cmd:\!${NO_COLOR} \n\$ "
 
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
