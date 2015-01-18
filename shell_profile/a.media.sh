@@ -32,6 +32,13 @@ media2avi(){
   ffmpeg -i "$source_media" -qscale 0 "$dest_media"
 }
 
+mergeVdoAdo(){
+  if [[ $# -ne 3 ]]; then
+    echo "USAGE: mergeVdoAdo <video-input> <audio-input> <output-filename>" ; exit 1
+  fi
+  ffmpeg -i "$1" -i "$2" -c:v copy -c:a aac -strict experimental "$3"
+}
+
 xopen(){
   xdg-open "$@" ; _TMP_EXITCODE=$?
   if [ "${_TMP_EXITCODE}" == "1" ]; then
