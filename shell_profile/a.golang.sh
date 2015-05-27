@@ -37,9 +37,9 @@ goenv_on_at(){
   echo "your new GOPATH is at $GOPATH"
 }
 
-alias goenv_home="goenv_on_at '$HOME'"
-alias goenv_on="goenv_on_at '$PWD'"
-alias goenv_off="export GOPATH=$_OLD_GOPATH ; export PATH=$_OLD_PATH ; unset _OLD_PATH ; unset _OLD_GOPATH"
+alias goenv_home="goenv_on_at \$HOME"
+alias goenv_on="goenv_on_at \$PWD"
+alias goenv_off="export GOPATH=\$_OLD_GOPATH ; export PATH=\$_OLD_PATH ; unset _OLD_PATH ; unset _OLD_GOPATH"
 
 go_get_pkg(){
   if [ $# -eq 0 ]; then
