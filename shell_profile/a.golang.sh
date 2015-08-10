@@ -20,11 +20,10 @@ go_help(){
 }
 
 goenv_on_at(){
-  _AT_DIR="$1"
   if [ $# -eq 0 ]; then
-    _GOPATH_VALUE="${_AT_DIR}/.goenv"
+    _GOPATH_VALUE="${PWD}/.goenv"
   else
-    cd $1 ; _GOPATH_VALUE="${_AT_DIR}/.goenv" ; cd -
+    cd "$1" ; _GOPATH_VALUE="${1}/.goenv" ; cd -
   fi
   if [ ! -d $_GOPATH_VALUE ]; then
     mkdir -p "${_GOPATH_VALUE}/site"
@@ -41,29 +40,32 @@ alias goenv_home="goenv_on_at \$HOME"
 alias goenv_on="goenv_on_at \$PWD"
 alias goenv_off="export GOPATH=\$_OLD_GOPATH ; export PATH=\$_OLD_PATH ; unset _OLD_PATH ; unset _OLD_GOPATH"
 
-go_get_pkg(){
-  if [[ "$1" == "help" ]]; then
-    echo "go_get_pkg handles your Golang Project dependencies."
-    echo "* Create new dependency list or install from existing:"
-    echo "  $ go_get_pkg"
-    echo "* Install from existing with updated dependencies"
-    echo "  $ GO_GET_UPDATE=true go_get_pkg"
-    echo "* Install from existing with re-prepared binaries (required on new Golang update or local changed dependency code)"
-    echo "  $ GO_GET_RENEW=true go_get_pkg"
-    echo "* Install from existing with updated dependencies (re-prepared binaries even if no updates)"
-    echo "  $ GO_GET_RENEW=true GO_GET_UPDATE=true go_get_pkg"
-    return
+###########################################BEGIN-PART for go_get_pkg
+##### also depends on 'goenv_on_at'
+
+go_get_pkg_help(){
+  echo "go_get_pkg handles your Golang Project dependencies."
+  echo "* Create new dependency list or install from existing:"
+  echo "  $ go_get_pkg"
+  echo "* Install from existing with updated dependencies"
+  echo "  $ GO_GET_UPDATE=true go_get_pkg"
+  echo "* Install from existing with re-prepared binaries (required on new Golang update or local changed dependency code)"
+  echo "  $ GO_GET_RENEW=true go_get_pkg"
+  echo "* Install from existing with updated dependencies (re-prepared binaries even if no updates)"
+  echo "  $ GO_GET_RENEW=true GO_GET_UPDATE=true go_get_pkg"
+}
+go_get_pkg_list_create(){
+  if [ ! -f "$1" ]; then
+    PKG_LISTS_DIR=$(dirname $PKG_LISTS)
+    mkdir -p "$PKG_LISTS_DIR" && unset PKG_LISTS_DIR
+    touch "${1}"
+    echo "Created GoLang Package empty list ${PKG_LISTS}"
+    echo "Start adding package paths as separate lines."
+    return 0
   fi
-  if [[ $# -eq 0 ]]; then
-    PKG_LISTS="$PWD/go-get-pkg.txt"
-    if [ ! -f "$PWD/go-get-pkg.txt" ]; then
-      touch "$PKG_LISTS"
-      echo "Created GoLang Package empty list $PWD/go-get-pkg.txt"
-      echo "Start adding package paths as separate lines." && return 0
-    fi
-  else
-    PKG_LISTS=($@)
-  fi
+  return 1
+}
+go_get_pkg_install(){
   for pkg_list in $PKG_LISTS; do
     cat $pkg_list | while read pkg_path; do
         echo "fetching golag package: go get ${pkg_path}";
@@ -79,7 +81,40 @@ go_get_pkg(){
         fi
     done
   done
+
+  unset GO_GET_UPDATE GO_GET_RENEW
 }
+go_get_pkg(){
+  if [[ "$1" == "help" ]]; then
+    go_get_pkg_help
+    return 0
+  fi
+
+  if [[ $# -eq 0 ]]; then
+    PKG_LISTS="$PWD/go-get-pkg.txt"
+  else
+    PKG_LISTS=($@)
+    if [[ -d "$PKG_LISTS" ]]; then
+      PKG_LISTS="${PKG_LISTS}/go-get-pkg.txt"
+    fi
+  fi
+  go_get_pkg_list_create $PKG_LISTS
+  if [[ $? -eq 0 ]]; then
+    return 0
+  fi
+
+  if [[ -z $GO_GET_ENV ]]; then
+    _GO_GET_ENV=$(dirname $PKG_LISTS)
+    GO_GET_ENV=$(cd $_GO_GET_ENV ; pwd ; cd - >/dev/null)
+  fi
+  goenv_on_at $GO_GET_ENV
+
+  go_get_pkg_install "$PKG_LISTS"
+
+  unset _GO_GET_ENV GO_GET_ENV PKG_LISTS
+}
+
+###########################################END-PART for go_get_pkg
 
 goenv_dup(){
   if [ $# -ne 1 -o ! -d $1 ]; then
