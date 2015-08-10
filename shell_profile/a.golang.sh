@@ -42,11 +42,22 @@ alias goenv_on="goenv_on_at \$PWD"
 alias goenv_off="export GOPATH=\$_OLD_GOPATH ; export PATH=\$_OLD_PATH ; unset _OLD_PATH ; unset _OLD_GOPATH"
 
 go_get_pkg(){
-  if [ $# -eq 0 ]; then
-    if [ -f "$PWD/go-get-pkg.txt" ]; then
-      PKG_LISTS="$PWD/go-get-pkg.txt"
-    else
-      touch "$PWD/go-get-pkg.txt"
+  if [[ "$1" == "help" ]]; then
+    echo "go_get_pkg handles your Golang Project dependencies."
+    echo "* Create new dependency list or install from existing:"
+    echo "  $ go_get_pkg"
+    echo "* Install from existing with updated dependencies"
+    echo "  $ GO_GET_UPDATE=true go_get_pkg"
+    echo "* Install from existing with re-prepared binaries (required on new Golang update or local changed dependency code)"
+    echo "  $ GO_GET_RENEW=true go_get_pkg"
+    echo "* Install from existing with updated dependencies (re-prepared binaries even if no updates)"
+    echo "  $ GO_GET_RENEW=true GO_GET_UPDATE=true go_get_pkg"
+    return
+  fi
+  if [[ $# -eq 0 ]]; then
+    PKG_LISTS="$PWD/go-get-pkg.txt"
+    if [ ! -f "$PWD/go-get-pkg.txt" ]; then
+      touch "$PKG_LISTS"
       echo "Created GoLang Package empty list $PWD/go-get-pkg.txt"
       echo "Start adding package paths as separate lines." && return 0
     fi
@@ -56,7 +67,12 @@ go_get_pkg(){
   for pkg_list in $PKG_LISTS; do
     cat $pkg_list | while read pkg_path; do
         echo "fetching golag package: go get ${pkg_path}";
-        if [[ -z GO_UPDATE ]]; then
+        pkg_import_path=$(echo $pkg_path | awk '{print $NF}')
+        if [[ ! -z $GO_GET_RENEW ]]; then
+          rm -rf "${GOPATH}/pkg/${GOOS}_${GOARCH}/${pkg_import_path}"
+          echo "cleaning old pkg for ${pkg_import_path}"
+        fi
+        if [[ -z $GO_GET_UPDATE ]]; then
           echo $pkg_path | xargs go get
         else
           echo $pkg_path | xargs go get -u
