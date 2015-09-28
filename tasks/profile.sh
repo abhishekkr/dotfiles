@@ -9,7 +9,7 @@ fi
 
 ## 'link all shell profiles'
 profile_setup(){
-  mkdir -p "{$HOME/cache/pip}"
+  mkdir -p "${HOME}/cache/pip"
 
   # projectrc ## git-ignored
   ProjectRC="${REPO_ROOT}/shell_profile/nda.project.sh"

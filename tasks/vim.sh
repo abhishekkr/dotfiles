@@ -8,11 +8,23 @@ if [ -z $REPO_ROOT ]; then
 fi
 
 setup_gvimrc(){
-  ln -sf "${REPO_ROOT}/rc/vimrc" "${HOME}/.gvimrc"
+  if [[ ! -L "${HOME}/.gvimrc" ]]; then
+    if [[ -f "${HOME}/.gvimrc" ]]; then
+      echo "~/.gvimrc is a file, remove and re-run to override"
+      return
+    fi
+    ln -sf "${REPO_ROOT}/rc/vimrc" "${HOME}/.gvimrc"
+  fi
 }
 
 setup_vim_profile(){
-  ln -sf "${REPO_ROOT}/vim" "${HOME}/.vim"
+  if [[ ! -L "${HOME}/.vim" ]]; then
+    if [[ -f "${HOME}/.vim" ]]; then
+      echo "~/.vim is a file, remove and re-run to override"
+      return
+    fi
+    ln -sf "${REPO_ROOT}/vim" "${HOME}/.vim"
+  fi
 }
 
 setup_vim_bundle(){

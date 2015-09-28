@@ -20,3 +20,7 @@ echo "[ Setting up VIM Home Config ]"
 bash tasks/vim.sh
 
 echo "************************************************************************"
+echo "[ Setting up Portable Binaries ]"
+bash tasks/bin.sh
+
+echo "************************************************************************"
