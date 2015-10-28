@@ -107,7 +107,7 @@ git-readme(){
     _README_FOR=`basename $PWD`
   fi
   cat >> ./README.md << READMEEOF
-##${_README_FOR}
+## ${_README_FOR}
 ---
 
 ${_ABOUT_IT}

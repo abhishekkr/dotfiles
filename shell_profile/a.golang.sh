@@ -127,7 +127,7 @@ goenv_dup(){
 
 goenv_alpha(){
   _TMP_PWD=$PWD
-  if [ $# -ne 2 ]; then
+  if [ $# -lt 2 ]; then
     echo "Provide Alpha changes usable as any other go package."
     echo "Just the import path changes to 'alpha/<project-name>'"
     echo "SYNTAX: goenv_alpha <path-to-project-dir-with-alpha-changes> <go-get-import-path-for-it>"

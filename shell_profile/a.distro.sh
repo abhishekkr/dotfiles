@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+alias pacman-clean="sudo pacman -Sc"
 pkg-clean-cache(){
     if [ -f /etc/arch-release ]; then
         echo "ArchLinux: cleaning  /var/cache/pacman/pkg/ of unused packages and versions."
