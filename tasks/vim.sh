@@ -17,16 +17,6 @@ setup_gvimrc(){
   fi
 }
 
-setup_vim_profile(){
-  if [[ ! -L "${HOME}/.vim" ]]; then
-    if [[ -f "${HOME}/.vim" ]]; then
-      echo "~/.vim is a file, remove and re-run to override"
-      return
-    fi
-    ln -sf "${REPO_ROOT}/vim" "${HOME}/.vim"
-  fi
-}
-
 setup_vim_bundle(){
   echo "Sync up all Vim add-ons {pathogen,}"
   vim_bundle="${REPO_ROOT}/vim/bundle"
@@ -35,6 +25,20 @@ setup_vim_bundle(){
   bash "${tasks_shell_path}/vim-pathogen-plugin-sync.sh"
 }
 
+setup_vim_profile(){
+  if [[ ! -L "${HOME}/.vim" ]]; then
+    if [[ -f "${HOME}/.vim" ]]; then
+      echo "~/.vim is a file, remove and re-run to override"
+      return
+    fi
+    if [[ -d "${HOME}/.vim" ]]; then
+      echo "~/.vim is a directory, remove and re-run to override"
+      return
+    fi
+    ln -sf "${REPO_ROOT}/vim" "${HOME}/.vim"
+    setup_vim_bundle
+  fi
+}
+
 setup_gvimrc
 setup_vim_profile
-setup_vim_bundle
