@@ -2,9 +2,11 @@
 
 ### docker# ###################################################################
 alias dckr-svr="sudo docker -d"
+alias dckr-svr-sock="sudo chown ${USER}:docker /var/run/docker.sock"
 alias dckr-ps="docker ps -a | less -S"
 alias dckr-last-container-running="docker inspect --format '{{.State.Running}}' $(docker ps -lq)"
 alias dckr-pull="docker pull"
+alias dckr-img="docker images"
 alias dckr-latest="docker ps -l -q"
 alias dckr-stop="docker stop"
 alias dckr-start="docker start"
@@ -14,6 +16,10 @@ alias dckr-attach="docker attach"
 #alias dckr-latest-start="dckr-start `dckr-latest`"
 #alias dckr-latest-restart="dckr-restart `dckr-latest`"
 #alias dckr-latest-attach="dckr-attach `dckr-latest`"
+dckr-sh(){
+  _IMG=$1
+  docker run -i -t "${_IMG}" /bin/bash
+}
 
 ### vagrant ###################################################################
 alias vagrant-on="vagrant up && vagrant ssh"
