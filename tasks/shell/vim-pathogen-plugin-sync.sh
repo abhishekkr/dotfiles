@@ -10,6 +10,18 @@ update_pathogen(){
   unset _PATHOGEN_VIM_URL
 }
 
+special_plugins(){
+  case "$1" in
+    YouCompleteMe)
+      echo "**************************** Installation of Plugin: YouCompleteMe"
+      ./install.sh
+      ;;
+    *)
+      echo "No Special Tasks for ${1}"
+      ;;
+    esac
+}
+
 add_vim_plugin() {
   repo="$1"
   basedir="$HOME/.vim/bundle"
@@ -32,10 +44,12 @@ add_vim_plugin() {
           cd $dir
           git fetch
           git reset --hard origin/$(git branch | grep '^\* ' | cut -b 3-)
+          git submodule update --init --recursive
         )
       else
         echo "vim plugin: Cloning $name"
-        (cd $basedir; git clone $repo)
+        (cd $basedir; git clone $repo ; cd $dir ; git submodule update --init --recursive)
+        special_plugins $name
       fi
       ;;
   esac

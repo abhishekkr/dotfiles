@@ -46,12 +46,13 @@ set shiftround
 
 let mapleader="\\"
 
-colorscheme PaperColor " could type ':color <_TAB_>' to weigh options
+set t_Co=256
 "colorscheme zenburn " could type ':color <_TAB_>' to weigh options
 highlight LiteralTabs ctermbg=darkgreen guibg=darkgreen
 match LiteralTabs /\s\  /        " Actual TABS
 highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
 match ExtraWhitespace /\s\+$/    " Trailing Spaces
+set laststatus=2
 
 au BufRead,BufNewFile *.pp       set filetype=puppet
 au BufRead,BufNewFile *.go       set filetype=go
@@ -127,10 +128,11 @@ set noswapfile
 call pathogen#infect()
 """""""</pathogen>
 
+colorscheme PaperColor " could type ':color <_TAB_>' to weigh options
+let g:airline_theme='PaperColor'
+
 """""""<powerline>
 set rtp+=$HOME/.virtualenvs/anon/lib/python2.7/site-packages/powerline/bindings/vim
-set laststatus=2
-set t_Co=256
 """""""</powerline>
 
 """""""<go-vim>
@@ -141,6 +143,15 @@ let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
 au FileType go nmap <Leader>r <Plug>(go-rename)
 """""""</go-vim>
+
+"""""""<haskell-vim>
+let g:haskell_enable_quantification = 1
+let g:haskell_enable_recursivedo = 1
+let g:haskell_enable_arrowsyntax = 1
+let g:haskell_enable_pattern_synonyms = 1
+let g:haskell_enable_typeroles = 1
+let g:haskell_enable_static_pointers = 1
+"""""""</haskell-vim>
 
 filetype plugin indent on         " required! Turn on file type detection.
 syntax on

@@ -36,6 +36,8 @@ setup_vim_profile(){
       return
     fi
     ln -sf "${REPO_ROOT}/vim" "${HOME}/.vim"
+  fi
+  if [[ -L "${HOME}/.vim" ]]; then
     setup_vim_bundle
   fi
 }
