@@ -16,6 +16,7 @@ set modeline
 
 syntax enable                     " Turn on syntax highlighting.
 filetype off                      " required!
+filetype plugin indent off        " required! Turn off file type detection.
 
 set showcmd                       " Display incomplete commands.
 set showmode                      " Display the mode you're in.
@@ -41,10 +42,12 @@ set tabstop=2                    " Global tab width.
 set softtabstop=2                    " Global tab width.
 set shiftwidth=2                 " And again, related.
 set expandtab                    " Use spaces instead of tabs
+set shiftround
 
 let mapleader="\\"
 
-colorscheme zenburn " could type ':color <_TAB_>' to weigh options
+colorscheme PaperColor " could type ':color <_TAB_>' to weigh options
+"colorscheme zenburn " could type ':color <_TAB_>' to weigh options
 highlight LiteralTabs ctermbg=darkgreen guibg=darkgreen
 match LiteralTabs /\s\  /        " Actual TABS
 highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
@@ -131,7 +134,8 @@ set t_Co=256
 """""""</powerline>
 
 """""""<go-vim>
-let g:go_fmt_command = "goimports"
+let g:gofmt_command = "goimports"
+let g:go_fmt_autosave = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
@@ -139,3 +143,4 @@ au FileType go nmap <Leader>r <Plug>(go-rename)
 """""""</go-vim>
 
 filetype plugin indent on         " required! Turn on file type detection.
+syntax on
