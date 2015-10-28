@@ -1,6 +1,7 @@
 # profile for cli
 
-alias uhoh="xscreensaver-command -lock"
+alias uhoh-scr="xscreensaver-command -lock"
+alias uhoh="xlock"
 
 mycd(){
   if [[ $# -eq 1 ]]; then
@@ -344,3 +345,46 @@ nicUp(){
 nicDown(){
   sudo ip link set dev $1 down
 }
+
+xtrakt () {
+  if [ -f $1 ] ; then
+    case $1 in
+    *.tar.bz2)   tar xvjf $1    ;;
+    *.tar.gz)    tar xvzf $1    ;;
+    *.bz2)       bunzip2 $1     ;;
+    *.rar)       rar x $1       ;;
+    *.gz)        gunzip $1      ;;
+    *.tar)       tar xvf $1     ;;
+    *.tbz2)      tar xvjf $1    ;;
+    *.tgz)       tar xvzf $1    ;;
+    *.zip)       unzip $1       ;;
+    *.Z)         uncompress $1  ;;
+    *.7z)        7z x $1        ;;
+    *)           echo "don't know '$1'..." ;;
+    esac
+  else
+    echo "'$1' is not a valid file!"
+  fi
+}
+
+mount-iso(){
+  _ISOFILE="$1"
+  _MOUNTPOINT="$2"
+  mount -o loop $_ISOFILE $_MOUNTPOINT
+}
+
+exectime(){
+  time -f '%Uu %Ss %er %MkB %C' "$@"
+}
+
+dug(){
+  dig +short -x $(dig +short $1)
+}
+
+### fixing common typos to work
+alias cdd="cd"
+
+### cli command history
+export HISTFILE=$HOME/.cli_history
+export HISTSIZE=1000000
+export SAVEHIST=1000000
