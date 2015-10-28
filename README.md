@@ -1,4 +1,6 @@
-## tux-svc-mux
+## dotfiles
+
+* tux-svc-mux
 
 ```ASCII
 
@@ -15,8 +17,13 @@
 
 ***
 
-"tux-svc-mux" is Linux Service Multiplexer.
-
 My tux ease utility set of Dotfiles, Shell Profiles, Vim Profile, Toolbox.
 
 ***
+
+Any POSIX with Bash shall be able to make it work with:
+```
+./setup.sh
+```
+
+
