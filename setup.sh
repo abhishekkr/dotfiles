@@ -1,26 +1,56 @@
 #!/bin/bash
 
-if [ -z $REPO_ROOT ]; then
+_action="all"
+if [[ $# -ne 0 ]]; then
+  _action=$1
+fi
+
+if [ -z "${REPO_ROOT}" ]; then
   REPO_ROOT=$(dirname $0)
-  cd $REPO_ROOT
-  REPO_ROOT=${PWD}
+  cd "${REPO_ROOT}"
+  REPO_ROOT="${PWD}"
   cd -
 fi
 
-echo "************************************************************************"
-echo "[ Setting up PROFILE.d links ]"
-bash tasks/profile.sh
+case $_action in
+  "all")
+    echo "***********************************************[ Setup Everything ]***"
+    for task in "profile" "rc" "vim" "bin"; do
+      $0 $task
+    done
+    echo "**********************************************************************"
+  ;;
+  "profile")
+    echo "***********************************************[ Setup Profile ]******"
+    bash tasks/profile.sh
+    echo "**********************************************************************"
+  ;;
+  "rc")
+    echo "***********************************************[ Setup RC-Config ]****"
+    bash tasks/rc.sh
+    echo "**********************************************************************"
+  ;;
+  "vim")
+    echo "***********************************************[ Setup Vim ]**********"
+    bash tasks/vim.sh
+    echo "**********************************************************************"
+  ;;
+  "bin")
+    echo "***********************************************[ Setup Binaries ]*****"
+    bash tasks/bin.sh
+    echo "**********************************************************************"
+  ;;
+  *)
+    echo "***********************************************[ HELP ]***************"
+    echo " To set-up everything following, run       ' ./setup.sh '"
+    echo " To set-up /etc/profile.d/<profiles>, run  ' ./setup.sh profile '"
+    echo " To set-up RC Scripts, run                 ' ./setup.sh rc '"
+    echo " To set-up \$HOME/.vim, run                 ' ./setup.sh vim '"
+    echo " To set-up binaries at \$HOME/bin, run      ' ./setup.sh bin '"
+    echo "**********************************************************************"
+  ;;
+esac
+exit
 
-echo "************************************************************************"
-echo "[ Setting up RC config links ]"
-bash tasks/rc.sh
+unset _action
 
-echo "************************************************************************"
-echo "[ Setting up VIM Home Config ]"
-bash tasks/vim.sh
-
-echo "************************************************************************"
-echo "[ Setting up Portable Binaries ]"
-bash tasks/bin.sh
-
-echo "************************************************************************"
