@@ -1,9 +1,12 @@
+https://github.com/Shougo/vimproc.vim.git
+https://github.com/eagletmt/ghcmod-vim.git
 https://github.com/mileszs/ack.vim.git
-https://github.com/bling/vim-airline.git
 https://github.com/fatih/vim-go.git
 https://github.com/Blackrush/vim-gocode.git
 https://github.com/neovimhaskell/haskell-vim.git
 https://github.com/alfredodeza/posero.vim.git
-https://github.com/NLKNguyen/papercolor-theme.git
+https://github.com/scrooloose/syntastic.git
 https://github.com/Valloric/YouCompleteMe.git
-
+https://github.com/sjl/gundo.vim.git
+https://github.com/NLKNguyen/papercolor-theme.git
+https://github.com/bling/vim-airline.git

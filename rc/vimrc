@@ -56,6 +56,10 @@ set laststatus=2
 
 au BufRead,BufNewFile *.pp       set filetype=puppet
 au BufRead,BufNewFile *.go       set filetype=go
+au BufRead,BufNewFile *.rb       set filetype=ruby
+au BufRead,BufNewFile *.py       set filetype=python
+au BufRead,BufNewFile *.hs       set filetype=haskell
+au BufRead,BufNewFile *.js       set filetype=javascript
 
 autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd BufRead *.py set nocindent

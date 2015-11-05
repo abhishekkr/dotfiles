@@ -16,6 +16,14 @@ special_plugins(){
       echo "**************************** Installation of Plugin: YouCompleteMe"
       ./install.sh
       ;;
+    vimproc.vim)
+      echo "**************************** Installation of Plugin: VimProc"
+      make
+      ;;
+    ghcmod-vim)
+      echo "**************************** Installation of Plugin: GHC-Mod"
+      cabal install ghc-mod
+      ;;
     *)
       echo "No Special Tasks for ${1}"
       ;;
@@ -32,7 +40,7 @@ add_vim_plugin() {
     */scripts/download_script.php\?src_id=*)
       name="${repo##*src_id=}"
       dir="$basedir/$name"
-      mkdir -p $dir/plugin/
+      mkdir -p "${dir}/plugin/"
       wget -O "$dir/plugin/$name.vim" "$repo"
       ;;
     *.git)
@@ -41,15 +49,18 @@ add_vim_plugin() {
       if [ -d "$dir/.git" ] ; then
         echo "vim plugin: Updating $name"
         (
-          cd $dir
+          cd "${dir}"
           git fetch
           git reset --hard origin/$(git branch | grep '^\* ' | cut -b 3-)
           git submodule update --init --recursive
         )
       else
         echo "vim plugin: Cloning $name"
-        (cd $basedir; git clone $repo ; cd $dir ; git submodule update --init --recursive)
-        special_plugins $name
+        (
+          cd "${basedir}" ; git clone "${repo}"
+          cd "${dir}" ; git submodule update --init --recursive
+          special_plugins "${name}"
+        )
       fi
       ;;
   esac
