@@ -10,6 +10,8 @@ alias pydoc8080="pydoc2 -p 8080"
 
 alias pyibook='ipython2 notebook'
 
+alias py-profile="time python -m cProfile"
+
 venv_on(){
   [ ! -s ./.venv ] && virtualenv2 .venv
   source .venv/bin/activate
@@ -24,14 +26,22 @@ venv3_on(){
   PATH=$PATH:$PWD/.venv/bin
 }
 
-alias venv_off="deactivate"
-
-alias py-profile="time python -m cProfile"
+venv_off(){
+  deactivate
+  if [[ ! -z $_TMP_VENV_PATH ]]; then
+    PATH=${_TMP_VENV_PATH}
+  fi
+}
 
 venv_anon(){
-  if [ ! -d $HOME/.virtualenvs ]; then
-    mkdir -p $HOME/.virtualenvs
+  HOME_VIRTUALENV="${HOME}/.virtualenvs"
+  ANON_VIRTUALENV="${HOME_VIRTUALENV}/anon"
+  if [ ! -d ${HOME_VIRTUALENV} ]; then
+    mkdir -p ${HOME_VIRTUALENV}
   fi
-  [ ! -s $HOME/.virtualenvs/anon ] && virtualenv2 $HOME/.virtualenvs/anon
-  source $HOME/.virtualenvs/anon/bin/activate
+  [ ! -s ${ANON_VIRTUALENV} ] && virtualenv2 ${ANON_VIRTUALENV}
+  source ${ANON_VIRTUALENV}/bin/activate
+  export _TMP_VENV_PATH=$PATH
+  export PATH=${ANON_VIRTUALENV}/bin:$PATH
 }
+
