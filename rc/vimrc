@@ -39,12 +39,36 @@ set title                         " Set the terminal's title
 set visualbell                    " No beeping.
 
 set tabstop=2                    " Global tab width.
-set softtabstop=2                    " Global tab width.
+set softtabstop=2                " Global tab width.
 set shiftwidth=2                 " And again, related.
 set expandtab                    " Use spaces instead of tabs
-set shiftround
+set shiftround                   "Round spaces to nearest shiftwidth multiple
+set nojoinspaces                 "Don't convert spaces to tabs
 
 let mapleader="\\"
+
+" \y to copy to system clipboard
+vnoremap <Leader>y y:call system("xclip -i -selection c", getreg("\""))<CR>
+
+set autochdir
+
+" setting spell
+set spell spelllang=en_us
+" turn spell off by default
+set spell!
+set complete+=kspell "use currently active spell checking for completion
+"set complete-=t "don't complete tags as 'tags' might grow real large
+
+" set breakat=\
+
+set wildignore+=*.o,*.obj,*.bak,*.exe,*.so,*.dll
+set wildignore+=*.zip,*.tar,*.tgz,*.tar.gz,*.gz,*.bzip2,*.7z,*.bz2  "ignore archives
+set wildignore+=*.jar,*.war,*.ear,*.sar,*.mar,*.class  "ignore java-isc
+set wildignore+=*.swp,*.swo,*~  "ignore temp files
+set wildignore+=*.pyc,*.pex       "ignore python-isc
+set wildignore+=*.aux,*.out,*.toc "ignore LaTeX intermediate files
+set wildignore+=*.jpg,*.bmp,*.gif "ignore binary images
+set wildignore+=*.luac            "ignore Lua bytecode
 
 set t_Co=256
 "colorscheme zenburn " could type ':color <_TAB_>' to weigh options
@@ -54,35 +78,59 @@ highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
 match ExtraWhitespace /\s\+$/    " Trailing Spaces
 set laststatus=2
 
-au BufRead,BufNewFile *.pp       set filetype=puppet
-au BufRead,BufNewFile *.go       set filetype=go
-au BufRead,BufNewFile *.rb       set filetype=ruby
-au BufRead,BufNewFile *.py       set filetype=python
-au BufRead,BufNewFile *.hs       set filetype=haskell
-au BufRead,BufNewFile *.js       set filetype=javascript
+augroup filetypedetect
+  "au BufNewFile,BufRead .vimrc set filetype=vim
+  au BufNewFile,BufRead *.rs set filetype=rust syntax=rust
+  au BufNewFile,BufRead *.pig set filetype=pig syntax=pig
+  au BufNewFile,BufRead Capfile set filetype=ruby syntax=ruby
+  au BufNewFile,BufRead *.thrift set filetype=thrift syntax=thrift
+  au BufNewFile,BufRead *.mesos set filetype=python syntax=python
+  au BufNewFile,BufRead *BUILD* set filetype=python syntax=python
+  au BufRead,BufNewFile *.md set filetype=markdown syntax=markdown
+  au BufRead,BufNewFile README set filetype=markdown syntax=markdown
+  au BufRead,BufNewFile *.proto set filetype=proto
 
-autocmd BufRead *.py set smartindent cinwords=if,elif,else,for,while,try,except,finally,def,class
-autocmd BufRead *.py set nocindent
+  au BufRead,BufNewFile *.ml       set filetype=ocaml
+  au BufRead,BufNewFile *.hs       set filetype=haskell
+  au BufRead,BufNewFile *.pp       set filetype=puppet syntax=puppet
+  au BufRead,BufNewFile *.rb       set filetype=ruby syntax=ruby
+  au BufRead,BufNewFile *.py       set filetype=python syntax=python
+  au BufNewFile,BufRead *.go       set filetype=go syntax=go
+  au BufNewFile,BufRead *.sbt      set filetype=scala syntax=scala
+  au BufNewFile,BufRead *.js       set filetype=javascript syntax=javascript
+augroup EN
+
+autocmd FileType cpp,c,go,haskell,python setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4
+autocmd FileType java,js,ruby,scala setlocal expandtab list! tabstop=2 shiftwidth=2 softtabstop=2
+autocmd FileType python setlocal commentstring=#%s "foldmethod=syntax
+autocmd FileType css  setlocal shiftwidth=2 tabstop=2 foldmethod=indent
+
+autocmd FileType go setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4 "foldmethod=syntax
+autocmd BufRead *.go set smartindent autoindent
+"autocmd BufRead *.go let g:easytags_cmd='/tmp/gotags'
+
+autocmd BufRead *.py set cinwords=if,elif,else,for,while,try,except,finally,def,class
+autocmd BufRead *.py set nocindent smartindent autoindent
 autocmd BufWritePre *.py normal m`:%s/\s\+$//e ``
 
-au! BufRead,BufNewFile *.json set filetype=json
-augroup json_autocmd
-  autocmd!
-  autocmd FileType json set autoindent
-  autocmd FileType json set formatoptions=tcq2l
-  autocmd FileType json set textwidth=78 shiftwidth=2
-  autocmd FileType json set softtabstop=2 tabstop=8
-  autocmd FileType json set expandtab
-  autocmd FileType json set foldmethod=syntax
-augroup END
-
-autocmd FileType ruby setlocal foldmethod=syntax
-autocmd FileType css  setlocal foldmethod=indent shiftwidth=2 tabstop=2
+autocmd BufRead,BufNewFile *.json set filetype=json
+autocmd FileType json setlocal expandtab autoindent formatoptions=tcq2l
+autocmd FileType json setlocal textwidth=78 shiftwidth=2 softtabstop=2 tabstop=8 foldmethod=syntax
 
 command! FRB set filetype=ruby
 command! FPY set filetype=python
 
+"" ctags supports: Ant Assembler ASP Awk BASIC BETA C C++ C# COBOL DOS Batch Eiffel
+"" Erlang Flex Fortran HTML Java JavaScript Lisp Lua Make MATLAB Objective Caml Pascal
+"" Perl PHP PL/SQL Python (Pyrex/Cython) REXX Ruby Scheme Shell scripts (Bourne/Korn/Z)
+"" S-Lang SML (Standard ML) Tcl TeX Vera Verilog VHDL Vim YACC
 map <F8> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+au BufWritePost *.go silent! !~/.vim/bin/gotags .
+au BufWritePost *.cpp,*.c,*.h,*.hpp silent! !ctags -R --fields=+iaS --extra=+q .
+au BufWritePost *.java,*.xml silent! !ctags -R --fields=+iaS --extra=+q .
+au BufWritePost *.py,*.rb silent! !ctags -R --fields=+iaS --extra=+q .
+au BufWritePost *.asm,*.awk,*.sh silent! !ctags -R --fields=+iaS --extra=+q .
+au BufWritePost *.html,*.js silent! !ctags -R --fields=+iaS --extra=+q .
 
 "reselect visual block after indent/outdent "credits: http://vimbits.com/bits/20
 vnoremap < <gv
@@ -132,6 +180,22 @@ set noswapfile
 call pathogen#infect()
 """""""</pathogen>
 
+"""""""<neocomplete>>
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+
+"" vim-marching for Clang
+let g:marching_clang_command = "/usr/bin/env clang"
+let g:marching_enable_neocomplete = 1
+
+"" necoghc for Haskell " Disable haskell-vim omnifunc
+let g:haskellmode_completion_ghc = 0
+autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+"""""""</neocomplete>>
+
 colorscheme PaperColor " could type ':color <_TAB_>' to weigh options
 let g:airline_theme='PaperColor'
 
@@ -155,7 +219,39 @@ let g:haskell_enable_arrowsyntax = 1
 let g:haskell_enable_pattern_synonyms = 1
 let g:haskell_enable_typeroles = 1
 let g:haskell_enable_static_pointers = 1
+
+au BufWritePost *.hs GhcModCheck
 """""""</haskell-vim>
+
+"""""""<easytags>
+" moving tags to project location, from where vim started to control file size
+set tags=./.tags;,~/.vimtags
+"""""""</easytags>
+
+"""""""<tagbar>
+" moving tags to project location, from where vim started to control file size
+nmap <Leader><F8> :TagbarToggle<CR>
+"""""""</tagbar>
 
 filetype plugin indent on         " required! Turn on file type detection.
 syntax on
+
+""""" CHEATSHEET (keep revising full : http://vim.wikia.com/wiki/Best_Vim_Tips)
+"" :Ex     : file explorer note capital Ex
+"" \be     : show buffer explorer (requires plugin)
+"" :ls     : list of buffers(eg following)
+"" :cd ..  : move to parent directory
+"" guu     : lowercase line
+"" gUU     : uppercase line
+"" ~       : invert case (upper->lower; lower->upper) of current character
+"" gf      : open file name under cursor (SUPER)
+"" ga      : display hex, ascii value of character under cursor
+"" g8      : display hex value of utf-8 character under cursor
+"" ggg?G   : rot13 whole file
+"" xp      : swap next two characters around
+"" CTRL-A,CTRL-X : increment, decrement next number on same line as the cursor
+"" CTRL-R=5*5    : insert 25 into text
+"" =             : (re)indent the text on the current line or on the area selected (SUPER)
+"" =%            : (re)indent the current braces { ... }
+"" G=gg          : auto (re)indent entire document
+

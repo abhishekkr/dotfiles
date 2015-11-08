@@ -10,6 +10,14 @@ update_pathogen(){
   unset _PATHOGEN_VIM_URL
 }
 
+error_msg(){
+  _ERROR_MSG="$1"
+  echo -e '\e[7m\e[4m\e[31m\e[1m'
+  echo "[ERROR] ${_ERROR_MSG}"
+  echo -e '\e[0m\e[0m\e[0m\e[0m'
+  unset _ERROR_MSG
+}
+
 special_plugins(){
   case "$1" in
     YouCompleteMe)
@@ -24,6 +32,13 @@ special_plugins(){
       echo "**************************** Installation of Plugin: GHC-Mod"
       cabal install ghc-mod
       ;;
+    vim-easytags)
+      echo "**************************** Installation of Plugin: Checking Ctags"
+      ctags --version
+      if [[ $? -ne 0 ]]; then
+        error_msg "Exuberant Ctags (http://ctags.sourceforge.net/) 'exuberant-ctags', need to be installed manually."
+      fi
+    ;;
     *)
       echo "No Special Tasks for ${1}"
       ;;
@@ -91,4 +106,11 @@ add_vim_plugin_from_file_list "$_VIM_PLUGIN_LIST"
 
 unset _VIM_PLUGIN_LIST
 unset _VIM_DIR
+
+##### META-INFO of Plug-in Dependencies
+
+easytags : vim-misc; ctags
+tagbar : easytags; ctags
+vim-marching : neocomplete
+ghcmod-vim : vimproc.vim
 
