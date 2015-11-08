@@ -107,7 +107,6 @@ autocmd FileType css  setlocal shiftwidth=2 tabstop=2 foldmethod=indent
 
 autocmd FileType go setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4 "foldmethod=syntax
 autocmd BufRead *.go set smartindent autoindent
-"autocmd BufRead *.go let g:easytags_cmd='/tmp/gotags'
 
 autocmd BufRead *.py set cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd BufRead *.py set nocindent smartindent autoindent
@@ -125,7 +124,7 @@ command! FPY set filetype=python
 "" Perl PHP PL/SQL Python (Pyrex/Cython) REXX Ruby Scheme Shell scripts (Bourne/Korn/Z)
 "" S-Lang SML (Standard ML) Tcl TeX Vera Verilog VHDL Vim YACC
 map <F8> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-au BufWritePost *.go silent! !~/.vim/bin/gotags .
+au BufWritePost *.go silent! !ctags -R --fields=+iaS --extra=+q --go-types=fvt .
 au BufWritePost *.cpp,*.c,*.h,*.hpp silent! !ctags -R --fields=+iaS --extra=+q .
 au BufWritePost *.java,*.xml silent! !ctags -R --fields=+iaS --extra=+q .
 au BufWritePost *.py,*.rb silent! !ctags -R --fields=+iaS --extra=+q .
@@ -224,13 +223,20 @@ au BufWritePost *.hs GhcModCheck
 """""""</haskell-vim>
 
 """""""<easytags>
+"" to jump to tag CTRL+] also LEADER\+]
+
 " moving tags to project location, from where vim started to control file size
-set tags=./.tags;,~/.vimtags
+set tags=./tags,tags;$HOME
 """""""</easytags>
 
 """""""<tagbar>
 " moving tags to project location, from where vim started to control file size
 nmap <Leader><F8> :TagbarToggle<CR>
+
+" open all files tagged in project as list
+" Netrw Style Listing
+let g:netrw_liststyle = 3
+nnoremap <Leader><F9> :Tlist<CR><C-W>h<C-W>s:e .<CR><C-W>l:let g:netrw_chgwin=winnr()<CR><C-W>h
 """""""</tagbar>
 
 filetype plugin indent on         " required! Turn on file type detection.
