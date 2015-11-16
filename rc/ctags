@@ -3,7 +3,7 @@
 --regex-Go=/func([ \t]+\([^)]+\))?[ \t]+([a-zA-Z0-9_]+)/\2/f,func/
 --regex-Go=/var[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\1/v,var/
 --regex-Go=/type[ \t]+([a-zA-Z_][a-zA-Z0-9_]+)/\1/t,type/
---regex-Scala=/^[ \t]*import[ \t ]*([a-zA-Z0-9_{}., \t=>]+$)/\1/i,includes/
+--regex-Go=/^[ \t]*import[ \t ]*([a-zA-Z0-9_{}., \t=>]+$)/\1/i,includes/
 --regex-Go=/^[ \t]*package[ \t ]*([a-zA-Z0-9_.]+$)/\1/p,packages/
 
 --langdef=Scala

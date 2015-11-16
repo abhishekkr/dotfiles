@@ -224,8 +224,14 @@ au BufWritePost *.hs GhcModCheck
 """""""</haskell-vim>
 
 """""""<easytags>
-"" to jump to tag CTRL+]
+"" to jump to tag 'CTRL+]', open definition in a horizontal tab 'Ctrl+W Ctrl+]'
 "" to jump back CTRL+t
+"" goto next,previous,list-all definition of last tag ':tn', ':tp', ':ts'
+" open definition in a new tab
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+" open definition in a vertical tab
+map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
 
 " moving tags to project location, from where vim started to control file size
 set tags=./tags,tags;$HOME
@@ -272,6 +278,14 @@ nnoremap <Leader><F9> :Tlist<CR><C-W>h<C-W>s:e .<CR><C-W>l:let g:netrw_chgwin=wi
 
 filetype plugin indent on         " required! Turn on file type detection.
 syntax on
+
+"" http://stackoverflow.com/questions/1218390/what-is-your-most-productive-shortcut-with-vim
+""""" CHEATSHEET FOR SELECTION (http://stackoverflow.com/a/1218429)
+"" v%, vib  : if cursor is on starting/ending parenthesis and if inside block
+"" vi", vi' : for double quotes and for single quotes
+"" viB, vi{ : to select a curly brace block
+"" ggVG     : entire file
+"" 
 
 """"" CHEATSHEET (keep revising full : http://vim.wikia.com/wiki/Best_Vim_Tips)
 "" :Ex     : file explorer note capital Ex
