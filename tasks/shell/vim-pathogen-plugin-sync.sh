@@ -108,9 +108,8 @@ unset _VIM_PLUGIN_LIST
 unset _VIM_DIR
 
 ##### META-INFO of Plug-in Dependencies
-
-easytags : vim-misc; ctags
-tagbar : easytags; ctags
-vim-marching : neocomplete
-ghcmod-vim : vimproc.vim
+# easytags : vim-misc; ctags
+# tagbar : easytags; ctags
+# vim-marching : neocomplete
+# ghcmod-vim : vimproc.vim
 
