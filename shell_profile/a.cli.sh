@@ -385,6 +385,12 @@ dug(){
 alias cdd="cd"
 
 ### cli command history
-export HISTFILE=$HOME/.cli_history
+if [[ "$BASH" != "" ]]; then
+  export HISTFILE=$HOME/.bash_history
+elif [[ "$ZSH_NAME" != "" ]]; then
+  export HISTFILE=$HOME/.zsh_history
+else
+  export HISTFILE=$HOME/.cli_history
+fi
 export HISTSIZE=1000000
 export SAVEHIST=1000000
