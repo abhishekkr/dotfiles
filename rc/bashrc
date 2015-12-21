@@ -1,4 +1,11 @@
-# .bashrc
+## .bashrc
+## executed by bash(1) for non-login shells.
+
+# not-interactive, exit
+case $- in
+    *i*) ;;
+    *) return;;
+esac
 
 # Source global definitions
 [ -s $HOME/.profile ] && source $HOME/.profile
@@ -52,11 +59,25 @@ shopt -s checkwinsize
 # multi-session history
 shopt -s histappend
 
+# Autocorrect typos in path names when using `cd`
+shopt -s cdspell
+
+# Case-insensitive globbing (used in pathname expansion)
+shopt -s nocaseglob
+
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(lesspipe)"
 
 # tab completion only for directories when using 'cd'
 complete -d cd
+
+# Add tab completion for SSH hostnames based on ~/.ssh/config
+# ignoring wildcards
+[[ -e "$HOME/.ssh/config"  ]] && complete -o "default" \
+        -o "nospace" \
+        -W "$(grep "^Host" $HOME/.ssh/config | \
+    grep -v "[?*]" | cut -d " " -f2 | \
+    tr ' ' '\n')" scp sftp ssh
 
 # RVM
 [[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
