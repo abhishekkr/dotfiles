@@ -20,6 +20,25 @@ dckr-sh(){
   _IMG=$1
   docker run -i -t "${_IMG}" /bin/bash
 }
+dckr-img-grep(){
+  docker images | grep "$@"
+}
+
+### from: github.com/jfrazelle [start]
+dckr-cleanup(){
+  docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
+  docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
+}
+dckr-del-stopped(){
+  local name=$1
+  local state=$(docker inspect --format "{{.State.Running}}" $name 2>/dev/null)
+
+  if [[ "$state" == "false"  ]]; then
+    docker rm $name
+  fi
+
+}
+### from: github.com/jfrazelle [end]
 
 ### vagrant ###################################################################
 alias vagrant-on="vagrant up && vagrant ssh"
