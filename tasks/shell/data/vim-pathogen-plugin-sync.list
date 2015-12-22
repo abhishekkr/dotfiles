@@ -9,6 +9,8 @@ https://github.com/fatih/vim-go.git
 https://github.com/Blackrush/vim-gocode.git
 https://github.com/elixir-lang/vim-elixir.git
 https://github.com/tpope/vim-markdown.git
+https://github.com/tpope/vim-surround.git
+https://github.com/tpope/vim-commentary.git
 https://github.com/alfredodeza/posero.vim.git
 https://github.com/scrooloose/syntastic.git
 https://github.com/sjl/gundo.vim.git
