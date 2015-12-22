@@ -45,6 +45,9 @@ set expandtab                    " Use spaces instead of tabs
 set shiftround                   "Round spaces to nearest shiftwidth multiple
 set nojoinspaces                 "Don't convert spaces to tabs
 
+set relativenumber
+command! NOREL set norelativenumber
+
 let mapleader="\\"
 
 " \y to copy to system clipboard
@@ -102,7 +105,7 @@ augroup EN
 
 autocmd FileType cpp,c,go,haskell,python setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType java,js,ruby,scala setlocal expandtab list! tabstop=2 shiftwidth=2 softtabstop=2
-autocmd FileType python setlocal commentstring=#%s "foldmethod=syntax
+autocmd FileType python,apache setlocal commentstring=#\ %s "foldmethod=syntax
 autocmd FileType css  setlocal shiftwidth=2 tabstop=2 foldmethod=indent
 
 autocmd FileType go setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4 "foldmethod=syntax
@@ -124,13 +127,13 @@ command! FPY set filetype=python
 "" Perl PHP PL/SQL Python (Pyrex/Cython) REXX Ruby Scheme Shell scripts (Bourne/Korn/Z)
 "" S-Lang SML (Standard ML) Tcl TeX Vera Verilog VHDL Vim YACC
 map <F8> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
-au BufWritePost *.go silent! !~/.vim/bin/gotags -sort -silent . > /dev/null
-"au BufWritePost *.go silent! !ctags -R --fields=+iaS --extra=+q --go-types=fvt .
-au BufWritePost *.cpp,*.c,*.h,*.hpp silent! !ctags -R --fields=+iaS --extra=+q .
-au BufWritePost *.java,*.xml silent! !ctags -R --fields=+iaS --extra=+q .
-au BufWritePost *.py,*.rb silent! !ctags -R --fields=+iaS --extra=+q .
-au BufWritePost *.asm,*.awk,*.sh silent! !ctags -R --fields=+iaS --extra=+q .
-au BufWritePost *.html,*.js silent! !ctags -R --fields=+iaS --extra=+q .
+""au BufWritePost *.go silent! !~/.vim/bin/gotags -sort -silent . > /dev/null
+"" "au BufWritePost *.go silent! !ctags -R --fields=+iaS --extra=+q --go-types=fvt .
+""au BufWritePost *.cpp,*.c,*.h,*.hpp silent! !ctags -R --fields=+iaS --extra=+q .
+""au BufWritePost *.java,*.xml silent! !ctags -R --fields=+iaS --extra=+q .
+""au BufWritePost *.py,*.rb silent! !ctags -R --fields=+iaS --extra=+q .
+""au BufWritePost *.asm,*.awk,*.sh silent! !ctags -R --fields=+iaS --extra=+q .
+""au BufWritePost *.html,*.js silent! !ctags -R --fields=+iaS --extra=+q .
 
 "reselect visual block after indent/outdent "credits: http://vimbits.com/bits/20
 vnoremap < <gv
@@ -306,3 +309,52 @@ syntax on
 "" =%            : (re)indent the current braces { ... }
 "" G=gg          : auto (re)indent entire document
 
+""""" CHEATSHEET (verbs)
+"" d : Delete
+"" c : Change
+"" > : Indent
+"" < : Outdent
+"" v : Visually Select
+"" y : Yank
+""
+
+""""" CHEATSHEET (motion), these can be paired with verbs
+"" f<char>       : takes cursor to occurence
+"" t<char>       : takes cursor before occurence
+"" /<string>     : find a string
+"" H             : High, move cursor to top of current page
+"" M             : Medium, move cursor to middle of current page
+"" L             : Low, move cursor to bottom of current page
+"" w,b           : ahead a word, back a word
+"" h,j,k,l       : left,down,up,right (so 2j means 2 lines down)
+""
+
+""""" CHEATSHEET (nouns), these can be paired with verbs
+"" iw : inner word (works from anywhere in word); so 'diw' will delete a word
+"" it : inner tag (HTML Tag contents)
+"" i" : inner quotes
+"" ip : inner paragraph
+"" as : a sentence
+""
+
+""""" CHEATSHEET (speed-up)
+"" . : (dot) repeat previous command
+"" cf<char>      : removes text to occurence
+"" ct<char>      : removes text upto occurence
+"" ct/<string>   : removes text upto occurence of search string
+"" :-16,-14co.   : copy from line -16 to -14 to current
+""
+
+""""" CHEATSHEET (plugin-verbs)
+"" ds<NOUN|MOTION> : delete surround
+"" cs<NOUN|MOTION> : change surround
+"" cm<NOUN|MOTION> : commentary
+""
+
+""""" CHEATSHEET (custom nouns)
+"" ii : inner indent
+"" ai : all indent
+"" ae : all entire
+"" il : inner line
+"" al : including text without new-line char
+"" ar : ruby block
