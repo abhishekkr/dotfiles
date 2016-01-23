@@ -159,8 +159,7 @@ nmap <Leader>[ :tabprevious
 map <Leader>a ggVG
 
 " remove trailing whitespace :NOTRAIL
-command! -range=% NOTRAIL mark ` | execute <line1> . ',' . <line2> . 's/\s\+$//' |
-normal! ``
+command! -range=% NOTRAIL mark ` | execute <line1> . ',' . <line2> . 's/\s\+$//' | normal! ``
 
 " 80 characters line coloring "credits: http://vimbits.com/bits/13
 if exists('+colorcolumn')
@@ -329,20 +328,14 @@ syntax on
 "" h,j,k,l       : left,down,up,right (so 2j means 2 lines down)
 ""
 
-""""" CHEATSHEET (nouns), these can be paired with verbs
-"" iw : inner word (works from anywhere in word); so 'diw' will delete a word
-"" it : inner tag (HTML Tag contents)
-"" i" : inner quotes
-"" ip : inner paragraph
-"" as : a sentence
-""
-
 """"" CHEATSHEET (speed-up)
 "" . : (dot) repeat previous command
 "" cf<char>      : removes text to occurence
 "" ct<char>      : removes text upto occurence
 "" ct/<string>   : removes text upto occurence of search string
 "" :-16,-14co.   : copy from line -16 to -14 to current
+""
+"" ys2w"         : surround 2 words with "\""; ys motion or text-object; 2w & "\""
 ""
 
 """"" CHEATSHEET (plugin-verbs)
@@ -351,10 +344,51 @@ syntax on
 "" cm<NOUN|MOTION> : commentary
 ""
 
-""""" CHEATSHEET (custom nouns)
-"" ii : inner indent
-"" ai : all indent
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""" Vim Text Objects
+""""" CHEATSHEET (nouns), these can be paired with verbs
+"" aw : a word including whitespaces surrounding it; (daw) deleting a word with space
+"" iw : inner word (works from anywhere in word); so 'diw' will delete a word
+""
+"" as : a sentence
+"" is : inner sentence; (cis) del+insert inner sentence
+""
+"" ap : a paragraph
+"" ip : inner paragraph
+""
+"" " if cursor is not within, applies 'verb' on first instance of 'text object'
+"" a" : a double quoted string
+"" i" : inner double quoted string
+"" a' : a single quoted string
+"" i' : inner single quoted string
+"" a` : a back quoted string
+"" i` : inner back quoted string
+""
+"" a) : a parenthesized string; also 'ab'
+"" i) : inner parenthesized string; also 'ib'
+"" a} : a curly braced string
+"" i} : inner curly braced string
+"" a] : a bracketed string; also 'aB'
+"" i] : inner bracketed string; also 'iB'
+"" 'c%' = 'ca?'; ? can be '),},]' when cursor on opening/closing paranthesis
+""
+"" a> : a single tag (HTML Tag contents); also 'at'
+"" i> : inner single tag (HTML Tag contents); also 'it'
+""
+"" a,w : a CamelCaseMotion to move by words within a camel or snake cased word
+"" i,w : a CamelCaseMotion to move by words within a camel or snake cased word
+""
+"" aa : an argument
+"" ia : inner argument
+""
+"" ai : all indent, current indetation and line above
+"" ii : inner indent, current indetation excluding line above
+""
 "" ae : all entire
+""
 "" il : inner line
 "" al : including text without new-line char
-"" ar : ruby block
+""
+"" ar : a ruby block, any expression closed with 'end'
+"" ir : inner ruby block
+""
