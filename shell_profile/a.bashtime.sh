@@ -20,6 +20,19 @@
 # IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 # CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+alias hardware-time="sudo /usr/bin/hwclock --localtime"
+alias hardware-time-to-distro="sudo /usr/bin/hwclock --hctosys --localtime"
+alias hardware-time-from-distro="sudo /usr/bin/hwclock --systohc --localtime"
+
+alias epoch-now="date +%s"
+epoch-to-time(){
+  local _EPOCH=$1
+  local EPOCH=$_EPOCH
+  if [[ $_EPOCH -gt 10000000000 ]]; then # some have *1000
+    EPOCH=$(($_EPOCH/1000)) ## will stop working post 2286
+  fi
+ date -d @${EPOCH} +"%d-%m-%Y %T %z"
+}
 
 time=`date +%I%M`;
 if [ "$time" -lt 115 ]
