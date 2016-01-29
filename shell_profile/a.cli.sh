@@ -1,5 +1,8 @@
 # profile for cli
 
+alias ls='ls --color=auto'
+alias rdp="rdesktop-vrdp -u administrator -p -"
+
 alias uhoh-scr="xscreensaver-command -lock"
 alias uhoh="xlock"
 
@@ -114,6 +117,7 @@ alias chmod='chmod --preserve-root'
 alias chgrp='chgrp --preserve-root'
 
 alias duh='du -h --max-depth=1'
+alias dfroot="df -h | grep '\s*/$'"
 
 alias lsz='ls -sh'
 alias lsz1='ls -sh1'
@@ -157,6 +161,8 @@ cddev(){
   fi
   cd $ABK_DEV_DIR/$1
 }
+
+alias cddev-local="cddev ../on_local"
 
 
 xrandr-auto(){
@@ -394,3 +400,10 @@ else
 fi
 export HISTSIZE=1000000
 export SAVEHIST=1000000
+
+### empty buffers cache
+free_buffer_cache(){
+  free && sync
+  sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
+  free
+}
