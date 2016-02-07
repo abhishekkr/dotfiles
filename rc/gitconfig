@@ -38,6 +38,7 @@
   co = checkout
   cob = checkout -b
   df = diff
+  dff = diff --color-words --ignore-all-space --patience
   dc = diff --cached
   dw = diff --word-diff
   lg = log -p
@@ -49,6 +50,8 @@
   fullhashlog = "log --graph --abbrev-commit '--format=format:%H %C(yellow)%ci%Creset %C(bold green)%an%Creset | %s'"
   uncommit = reset HEAD~1
   usr = shortlog -sn
+  blast = for-each-ref --sort=-committerdate refs/heads/ --format="%(committerdate:relative)%09%(refname:short)"
+  serve = daemon --reuseaddr --base-path=. --export-all --verbose --enable=receive-pack --listen=0.0.0.0
 
 #unpushed = !"PROJ_BRANCH=$(git symbolic-ref HEAD | sed 's|refs/heads/||') && git log origin/$PROJ_BRANCH..HEAD"
 [push]
