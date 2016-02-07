@@ -353,7 +353,7 @@ nicDown(){
 }
 
 xtrakt () {
-  if [ -f $1 ] ; then
+  if [[ -f $1 ]]; then
     case $1 in
     *.tar.bz2)   tar xvjf $1    ;;
     *.tar.gz)    tar xvzf $1    ;;
@@ -389,6 +389,41 @@ dug(){
 
 ### fixing common typos to work
 alias cdd="cd"
+
+#################### from github.com/shazow :: begin
+### Find file in cwd
+function f () {
+  find . -name "*$**"
+}
+### Find directory under cwd and cd into it
+function fcd() {
+  target=$(find . -name "*$**" -type d | head -n1)
+  if [[ "$target"  ]]; then
+    cd "$target"
+  else
+    echo "Directory not found: $*"; return
+  fi
+}
+### bak to backup target as target.bak
+function bak() {
+  t=$1;
+  if [[ "${t:0-1}" == "/"  ]]; then
+    t=${t%%/}; # Strip trailing / of directories
+  fi
+  mv -v $t{,.bak}
+}
+function unbak() { # Revert previously bak'd target
+  t=$1;
+  if [[ "${t:0-1}" == "/"  ]]; then
+    t="${t%%/}"; # Strip trailing / of directories
+  fi
+  if [[ "${t:0-4}" == ".bak"  ]]; then
+    mv -v "$t" "${t%%.bak}"
+  else
+    echo "No .bak extension, ignoring: $t"
+  fi
+}
+#################### from github.com/shazow :: end
 
 ### cli command history
 if [[ "$BASH" != "" ]]; then
