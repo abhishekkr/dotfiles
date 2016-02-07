@@ -108,8 +108,10 @@ autocmd FileType java,js,ruby,scala setlocal expandtab list! tabstop=2 shiftwidt
 autocmd FileType python,apache setlocal commentstring=#\ %s "foldmethod=syntax
 autocmd FileType css  setlocal shiftwidth=2 tabstop=2 foldmethod=indent
 
-autocmd FileType go setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4 "foldmethod=syntax
+autocmd BufRead,BufNewFile *.go set filetype=go
 autocmd BufRead *.go set smartindent autoindent
+autocmd BufRead *.go set commentstring=//\ %s
+autocmd FileType go setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4 "foldmethod=syntax
 
 autocmd BufRead *.py set cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd BufRead *.py set nocindent smartindent autoindent
@@ -278,8 +280,13 @@ let g:netrw_liststyle = 3
 nnoremap <Leader><F9> :Tlist<CR><C-W>h<C-W>s:e .<CR><C-W>l:let g:netrw_chgwin=winnr()<CR><C-W>h
 """""""</tagbar>
 
+filetype on
 filetype plugin indent on         " required! Turn on file type detection.
 syntax on
+scriptencoding utf-8
+
+command! W write " Write on :W, too.
+command! E edit " Edit on :E, too.
 
 "" http://stackoverflow.com/questions/1218390/what-is-your-most-productive-shortcut-with-vim
 """"" CHEATSHEET FOR SELECTION (http://stackoverflow.com/a/1218429)
