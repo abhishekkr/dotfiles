@@ -19,6 +19,7 @@ source_if_present_else_echo /etc/profile.d/a.profiles.sh "Don't have profiles fr
 ## to load JRE defaults
 source_if_present_else_echo /etc/profile.d/a.nda.sh "Can create '/etc/profile.d/a.nda.sh' for non-tracked dotfile config."
 ## to load JRE defaults
+export _JAVA_AWT_WM_NONREPARENTING=1
 source_if_present_else_echo /etc/profile.d/jre.sh
 
 #### at last
@@ -28,9 +29,9 @@ xstart(){
 }
 
 if [ -n "$BASH_VERSION" ] || [ -n "$ZSH_VERSION" ]; then
-  if [[ -f /usr/local/opt/chruby/share/chruby/chruby.sh  ]]; then
-    source /usr/local/opt/chruby/share/chruby/chruby.sh
-    source /usr/local/opt/chruby/share/chruby/auto.sh
+  if [[ -f /usr/local/share/chruby/chruby.sh  ]]; then
+    source /usr/local/share/chruby/chruby.sh
+    source /usr/local/share/chruby/auto.sh
   else
     echo "Ain't got no chruby"
   fi
