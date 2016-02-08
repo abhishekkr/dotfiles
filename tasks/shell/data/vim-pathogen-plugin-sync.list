@@ -3,6 +3,7 @@ https://github.com/Shougo/vimproc.vim.git
 https://github.com/eagletmt/ghcmod-vim.git
 https://github.com/neovimhaskell/haskell-vim.git
 https://github.com/eagletmt/neco-ghc.git
+file:///https://raw.githubusercontent.com/chrisdone/hindent/master/vim/hindent.vim
 https://github.com/dag/vim2hs.git
 https://github.com/mileszs/ack.vim.git
 https://github.com/fatih/vim-go.git
@@ -17,6 +18,8 @@ https://github.com/sjl/gundo.vim.git
 https://github.com/NLKNguyen/papercolor-theme.git
 https://github.com/bling/vim-airline.git
 https://github.com/Shougo/neocomplete.vim.git
+https://github.com/Shougo/neosnippet-snippets.git
+https://github.com/Shougo/neosnippet.vim.git
 https://github.com/osyo-manga/vim-marching.git
 https://github.com/xolox/vim-misc.git
 https://github.com/xolox/vim-easytags.git

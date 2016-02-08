@@ -32,6 +32,10 @@ special_plugins(){
       echo "**************************** Installation of Plugin: GHC-Mod"
       cabal install ghc-mod
       ;;
+    hindent.vim)
+      echo "**************************** Installation of Plugin: Hindent"
+      cabal install hindent
+      ;;
     vim-easytags)
       echo "**************************** Installation of Plugin: Checking Ctags"
       ctags --version
@@ -52,22 +56,41 @@ add_vim_plugin() {
   [ ! -d "$basedir" ] && mkdir -p "$basedir"
 
   case $repo in
+    file:///*)
+      local file_uri="${repo##*file:///}"
+      local name=$(basename ${file_uri})
+      local name_dir=${name%%\.[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]}
+      local file_dir="${basedir}/${name_dir}/plugin"
+      local file_path="${file_dir}/${name}"
+      echo "downloading vim plug-in to '${file_dir}': ${file_uri}"
+      if [[ ! -d "${file_path}" ]] ; then
+        mkdir -p "${file_dir}"
+        wget -c -O "${file_path}" "${file_uri}"
+        special_plugins "${name}"
+      fi
+      ;;
     */scripts/download_script.php\?src_id=*)
-      name="${repo##*src_id=}"
-      dir="$basedir/$name"
-      mkdir -p "${dir}/plugin/"
-      wget -O "$dir/plugin/$name.vim" "$repo"
+      local name="${repo##*src_id=}"
+      local dir="$basedir/$name"
+      if [[ ! -d "${dir}" ]] ; then
+        mkdir -p "${dir}/plugin/"
+        wget -c -O "$dir/plugin/$name.vim" "$repo"
+        special_plugins "${name}"
+      fi
       ;;
     *.git)
-      name="$(basename ${repo%%.git})"
-      dir="$basedir/$name"
-      if [ -d "$dir/.git" ] ; then
+      local name="$(basename ${repo%%.git})"
+      local dir="$basedir/$name"
+      if [[ -d "$dir/.git" ]] ; then
         echo "vim plugin: Updating $name"
         (
           cd "${dir}"
-          git fetch
+          local fetch_output=$(  git fetch )
           git reset --hard origin/$(git branch | grep '^\* ' | cut -b 3-)
           git submodule update --init --recursive
+          if [[ $fetch_output != "" ]]; then
+            special_plugins "${name}"
+          fi
         )
       else
         echo "vim plugin: Cloning $name"
