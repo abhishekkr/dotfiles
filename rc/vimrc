@@ -30,6 +30,7 @@ set smartcase                     " But case-sensitive if expression contains a 
 
 set number                        " Show line numbers.
 set ruler                         " Show cursor position.
+set nocursorcolumn                " speed up syntax highlighting
 
 set incsearch                     " Highlight matches as you type.
 set hlsearch                      " Highlight matches.
@@ -101,16 +102,15 @@ augroup filetypedetect
   au BufNewFile,BufRead *.go       set filetype=go syntax=go
   au BufNewFile,BufRead *.sbt      set filetype=scala syntax=scala
   au BufNewFile,BufRead *.js       set filetype=javascript syntax=javascript
-augroup EN
+augroup END
 
 autocmd FileType cpp,c,go,haskell,python setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType java,js,ruby,scala setlocal expandtab list! tabstop=2 shiftwidth=2 softtabstop=2
 autocmd FileType python,apache setlocal commentstring=#\ %s "foldmethod=syntax
 autocmd FileType css  setlocal shiftwidth=2 tabstop=2 foldmethod=indent
 
-autocmd BufRead,BufNewFile *.go set filetype=go
-autocmd BufRead *.go set smartindent autoindent
-autocmd BufRead *.go set commentstring=//\ %s
+autocmd FileType go set smartindent autoindent
+au BufNewFile,BufRead *.go setlocal commentstring=//\ %s
 autocmd FileType go setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4 "foldmethod=syntax
 
 autocmd BufRead *.py set cinwords=if,elif,else,for,while,try,except,finally,def,class
@@ -217,19 +217,26 @@ let g:go_fmt_autosave = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
-au FileType go nmap <Leader>gm <Plug>(go-rename)
 
+au FileType go nmap <Leader>gm <Plug>(go-rename)
 au FileType go nmap <Leader>gs <Plug>(go-def-split)
 au FileType go nmap <Leader>gv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>gi <Plug>(go-info)
 au FileType go nmap <Leader>gl <Plug>(go-metalinter)
-
 au FileType go nmap <leader>gr  <Plug>(go-run)
-
 au FileType go nmap <leader>gb  <Plug>(go-build)
 au FileType go nmap <leader>gt  <Plug>(go-test)
 au FileType go nmap <leader>gdt  <Plug>(go-test-compile)
 au FileType go nmap <Leader>gd <Plug>(go-doc)
+
+
+" I like these more!
+augroup go
+  autocmd!
+  autocmd Filetype go command! -bang A call go#alternate#Switch(<bang>0, 'edit')
+  autocmd Filetype go command! -bang AV call go#alternate#Switch(<bang>0, 'vsplit')
+  autocmd Filetype go command! -bang AS call go#alternate#Switch(<bang>0, 'split')
+augroup END
 """""""</go-vim>
 
 """""""<haskell-vim>
@@ -296,6 +303,35 @@ let g:netrw_liststyle = 3
 nnoremap <Leader><F9> :Tlist<CR><C-W>h<C-W>s:e .<CR><C-W>l:let g:netrw_chgwin=winnr()<CR><C-W>h
 """""""</tagbar>
 
+"""""""<github.com:fatih>
+
+" Fast saving
+nnoremap <leader>w :w!<cr>
+nnoremap <silent> <leader>q :q!<CR>
+
+" Remove search highlight
+nnoremap <leader><space> :nohlsearch<CR>
+
+" Time out on key codes but not mappings.
+" Basically this makes terminal Vim work sanely.
+if !has('gui_running')
+  set notimeout
+  set ttimeout
+  set ttimeoutlen=10
+  augroup FastEscape
+    autocmd!
+    au InsertEnter * set timeoutlen=0
+    au InsertLeave * set timeoutlen=1000
+  augroup END
+endif
+"""""""</github.com:fatih>
+
+" Do not show stupid :wq window
+map q: :q
+map :qw :wq
+map :Wq :wq
+map :WQ :wq
+
 filetype on
 filetype plugin indent on         " required! Turn on file type detection.
 syntax on
@@ -333,6 +369,11 @@ function! s:tab_complete()
   return "\<tab>"
 endfunction
 imap <silent><expr><TAB> <SID>tab_complete()
+
+" Plugin key-mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
 
 smap <expr><tab> neosnippet#expandable_or_jumpable() ?
       \ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
