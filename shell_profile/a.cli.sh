@@ -16,37 +16,37 @@ mycd(){
 alias xstart="startxfce4"
 
 c32x32(){
-  convert -scale 600x400 $1 $2
+  convert -scale 32x32 "$1" "$2"
 }
 c60x60(){
-  convert -scale 600x400 $1 $2
+  convert -scale 60x60 "$1" "$2"
 }
 c120x120(){
-  convert -scale 600x400 $1 $2
+  convert -scale 120x120 "$1" "$2"
 }
 c300x200(){
-  convert -scale 600x400 $1 $2
+  convert -scale 300x200 "$1" "$2"
 }
 c600x400(){
-  convert -scale 600x400 $1 $2
+  convert -scale 600x400 "$1" "$2"
 }
 c800x600(){
-  convert -scale 800x600 $1 $2
+  convert -scale 800x600 "$1" "$2"
 }
 c1024x768(){
-  convert -scale 1024x768 $1 $2
+  convert -scale 1024x768 "$1" "$2"
 }
 
 alias ls1="ls -1"
 
 lswp(){
-  ls -lahR $1 | grep '.swp$'
+  ls -lahR "$1" | grep '.swp$'
 }
 du_gb(){
-  sudo du --exclude='/proc' --exclude='/dev' --exclude='/media' -h $@ | grep [0-9.\s][0-9]G
+  sudo du --exclude='/proc' --exclude='/dev' --exclude='/media' -h "$@" | grep [0-9.\s][0-9]G
 }
 du_mb(){
-  sudo du --exclude='/proc' --exclude='/dev' --exclude='/media' -h $@ | grep [0-9.\s][0-9]M
+  sudo du --exclude='/proc' --exclude='/dev' --exclude='/media' -h "$@" | grep [0-9.\s][0-9]M
 }
 surl(){
   if [ $# -eq 1 ];
@@ -59,7 +59,7 @@ surl(){
 wurl(){
   if [ $# -eq 2 ];
   then
-    curl -L -o $1 $2
+    curl -L -o "$1" "$2"
   else
     echo '$ wurl <saveAsFile> <url> ### downloads url as saveAsFile'
   fi
@@ -67,19 +67,19 @@ wurl(){
 wddl(){
   if [ $# -eq 2 ];
   then
-    wget -c -O $1 $2
+    wget -c -O "$1" "$2"
   else
     echo '$ wddl <saveAsFile> <url> ### downloads url as saveAsFile'
   fi
 }
 mdcd(){
-  mkdir -p $@ ; cd $@
+  mkdir -p "$@" ; cd "$@"
 }
 anet(){
-  echo $@ | awk '{ system("google-chrome \""$0"\" 2> /dev/null"); }'
+  echo "$@" | awk '{ system("google-chrome \""$0"\" 2> /dev/null"); }'
 }
 alook(){
-  echo $@ | awk '{ system("google-chrome \"? "$0"\" 2> /dev/null"); }'
+  echo "$@" | awk '{ system("google-chrome \"? "$0"\" 2> /dev/null"); }'
 }
 psgrep(){
   ps aux | grep "$@" | grep -v grep
@@ -99,8 +99,8 @@ killgrep(){
 }
 
 dump-paths(){
-  _mountname=$(basename $1)
-  find $1 > "${_mountname}.log"
+  _mountname=$(basename "$1")
+  find "$1" > "${_mountname}.log"
 }
 
 alias grep-video="grep -E 'mkv$|avi$|mp4$|wmv$|mov$|ogv$|webm$|mpg$|mpeg$|mov$'"
@@ -156,10 +156,10 @@ alias vim-hor="vim -o"
 alias vim-ver="vim -O"
 
 cddev(){
-  if [ -z $ABK_DEV_DIR ]; then
+  if [ -z "$ABK_DEV_DIR" ]; then
     echo "Your Dev dir is not set." ; return 1
   fi
-  cd $ABK_DEV_DIR/$1
+  cd "$ABK_DEV_DIR/$1"
 }
 
 alias cddev-local="cddev ../on_local"
@@ -181,8 +181,8 @@ xrandr-auto(){
 
 
 ascii_pacman(){
-    if [[ $1 != "" ]]; then
-      _msg=$1
+    if [[ "$1" != "" ]]; then
+      _msg="$1"
     else
       _msg=`date`
     fi
@@ -197,8 +197,8 @@ ascii_pacman(){
 }
 
 ascii_maxpayne(){
-    if [[ $1 != "" ]]; then
-      _msg=$1
+    if [[ "$1" != "" ]]; then
+      _msg="$1"
     else
       _msg=`date`
     fi
@@ -243,7 +243,7 @@ cowsay -f dragon "$USER is here..."
 arch-font-install(){
   _FONTDIR="/usr/share/fonts/$USER"
   sudo mkdir -p $_FONTDIR
-  cp -ar $1 $_FONTDIR
+  cp -ar "$1" $_FONTDIR
   fc-cache -vf
   unset _FONTDIR
 }
@@ -287,7 +287,7 @@ set_ssh_proxy(){
 
 unset_ssh_proxy(){
   _SSH_CONFIG_FILE="$HOME/.ssh/config"
-  if [ $# -ge 1 ]; then _SSH_CONFIG_FILE=$1 ; fi
+  if [ $# -ge 1 ]; then _SSH_CONFIG_FILE="$1" ; fi
   _SSH_CONFIG=`grep -v 'ProxyCommand.*' $_SSH_CONFIG_FILE`
   echo $_SSH_CONFIG > $_SSH_CONFIG_FILE
 }
@@ -303,7 +303,7 @@ set_proxy(){
   for envar in `echo $PROXY_ENV`
   do
     echo $envar
-    export $envar=$1
+    export $envar="$1"
   done
   #set_ssh_proxy
 
@@ -353,23 +353,25 @@ nicDown(){
 }
 
 xtrakt () {
-  if [[ -f $1 ]]; then
-    case $1 in
-    *.tar.bz2)   tar xvjf $1    ;;
-    *.tar.gz)    tar xvzf $1    ;;
-    *.bz2)       bunzip2 $1     ;;
-    *.rar)       rar x $1       ;;
-    *.gz)        gunzip $1      ;;
-    *.tar)       tar xvf $1     ;;
-    *.tbz2)      tar xvjf $1    ;;
-    *.tgz)       tar xvzf $1    ;;
-    *.zip)       unzip $1       ;;
-    *.Z)         uncompress $1  ;;
-    *.7z)        7z x $1        ;;
-    *)           echo "don't know '$1'..." ;;
+  local _COMPRESSED_FILE="$1"
+
+  if [[ -f "$_COMPRESSED_FILE" ]]; then
+    case "$_COMPRESSED_FILE" in
+    *.tar.bz2)   tar xvjf "$_COMPRESSED_FILE"    ;;
+    *.tar.gz)    tar xvzf "$_COMPRESSED_FILE"    ;;
+    *.bz2)       bunzip2 "$_COMPRESSED_FILE"     ;;
+    *.rar)       rar x "$_COMPRESSED_FILE"       ;;
+    *.gz)        gunzip "$_COMPRESSED_FILE"      ;;
+    *.tar)       tar xvf "$_COMPRESSED_FILE"     ;;
+    *.tbz2)      tar xvjf "$_COMPRESSED_FILE"    ;;
+    *.tgz)       tar xvzf "$_COMPRESSED_FILE"    ;;
+    *.zip)       unzip "$_COMPRESSED_FILE"       ;;
+    *.Z)         uncompress "$_COMPRESSED_FILE"  ;;
+    *.7z)        7z x "$_COMPRESSED_FILE"        ;;
+    *)           echo "don't know how to uncompress '$_COMPRESSED_FILE'..." ;;
     esac
   else
-    echo "'$1' is not a valid file!"
+    echo "'$_COMPRESSED_FILE' is not a valid file!"
   fi
 }
 
@@ -406,14 +408,14 @@ function fcd() {
 }
 ### bak to backup target as target.bak
 function bak() {
-  t=$1;
+  t="$1";
   if [[ "${t:0-1}" == "/"  ]]; then
     t=${t%%/}; # Strip trailing / of directories
   fi
   mv -v $t{,.bak}
 }
 function unbak() { # Revert previously bak'd target
-  t=$1;
+  t="$1";
   if [[ "${t:0-1}" == "/"  ]]; then
     t="${t%%/}"; # Strip trailing / of directories
   fi
