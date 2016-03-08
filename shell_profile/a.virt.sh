@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ### docker# ###################################################################
-alias dckr-svr="sudo docker -d"
+alias dckr-svr="sudo docker daemon"
 alias dckr-svr-sock="sudo chown ${USER}:docker /var/run/docker.sock"
 alias dckr-ps="docker ps -a | less -S"
 alias dckr-last-container-running="docker inspect --format '{{.State.Running}}' $(docker ps -lq)"
@@ -9,6 +9,7 @@ alias dckr-pull="docker pull"
 alias dckr-img="docker images"
 alias dckr-latest="docker ps -l -q"
 alias dckr-stop="docker stop"
+alias dckr-stop-all="docker ps -q | xargs docker stop"
 alias dckr-start="docker start"
 alias dckr-restart="docker restart"
 alias dckr-attach="docker attach"
@@ -42,8 +43,20 @@ dckr-del-stopped(){
 
 ### vagrant ###################################################################
 alias vagrant-on="vagrant up && vagrant ssh"
+alias vagrant-recreate="vagrant destroy --force && vagrant up"
+alias vargant-update="vagrant reload --provision"
 
 ### lxc #######################################################################
+lxc-stop-destroy(){
+  if [ $# -ne 1 ]; then
+    echo "Syntax: lxc-stop-destroy <name-of-spawned-instance-to-destroy>"
+    return
+  else
+    _CONTAINER=$1
+  fi
+  lxc-stop -n $_CONTAINER && lxc-destroy $_CONTAINER
+}
+
 lxc-up(){
   if [ $# -ne 1 ]; then
     echo "Syntax: lxc-up <name-of-spawned-instance-to-start>"
