@@ -14,7 +14,7 @@ profile_setup(){
   # projectrc ## git-ignored
   ProjectRC="${REPO_ROOT}/shell_profile/nda.project.sh"
   echo "#!/bin/bash" | tee $ProjectRC > /dev/null
-  echo "#non git config" | tee -a $ProjectRC > /dev/null
+  echo "source /etc/profile.d/a.nda.sh" | tee -a $ProjectRC > /dev/null
 
   ALLRC="/etc/profile.d/a.profiles.sh"
   echo "#!/bin/bash" | sudo tee $ALLRC > /dev/null
