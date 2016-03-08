@@ -3,6 +3,16 @@
 
 ###################################
 
+if [[ -n "$BASH_VERSION" ]]; then
+  export THIS_SHELL="bash"
+elif [[ -n "$ZSH_VERSION" ]]; then
+  export THIS_SHELL="zsh"
+else
+  echo "neither bash, nor zsh, add check for this SHELL"
+fi
+
+alias poweroff-now="systemctl poweroff -i"
+
 source_if_present_else_echo(){
   local file_to_source="$1"
   local msg_on_missing="${@:2}"
@@ -28,7 +38,7 @@ xstart(){
   [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
 }
 
-if [ -n "$BASH_VERSION" ] || [ -n "$ZSH_VERSION" ]; then
+if [[ -n "$BASH_VERSION" ]] || [[ -n "$ZSH_VERSION" ]]; then
   if [[ -f /usr/local/share/chruby/chruby.sh  ]]; then
     source /usr/local/share/chruby/chruby.sh
     source /usr/local/share/chruby/auto.sh
