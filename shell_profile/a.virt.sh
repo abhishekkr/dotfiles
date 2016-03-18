@@ -1,5 +1,14 @@
 #!/bin/bash
 
+### lxc# ######################################################################
+alias lxc-ls-lah="sudo lxc-ls -f --nesting -F name,state,interfaces,ipv4,ipv6,autostart,pid,memory,ram,swap,groups"
+alias lxc-ls-running="sudo lxc-ls -f --nesting -F name,state,interfaces,ipv4,ipv6,autostart,pid,memory,ram,swap,groups --running"
+alias lxc-ls-frozen="sudo lxc-ls -f --nesting -F name,state,interfaces,ipv4,ipv6,autostart,pid,memory,ram,swap,groups --frozen"
+alias lxc-ls-active="sudo lxc-ls -f --nesting -F name,state,interfaces,ipv4,ipv6,autostart,pid,memory,ram,swap,groups --active"
+alias lxc-ls-stopped="sudo lxc-ls -f --nesting --stopped"
+alias lxc-ls-templates="sudo ls -1 /usr/share/lxc/templates/ | sed 's/lxc-/+ /'"
+
+
 ### docker# ###################################################################
 alias dckr-svr="sudo docker daemon"
 alias dckr-svr-sock="sudo chown ${USER}:docker /var/run/docker.sock"
