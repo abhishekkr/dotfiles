@@ -1,0 +1,14 @@
+##################### sysdig ##################################################
+
+alias sysdig-topcontainers-net='sudo sysdig -c topcontainers_net'
+alias sysdig-htop='sudo csysdig -pc'
+
+sysdig-k8(){
+  if [[ $# -eq 0 ]]; then
+    echo "USAGE: sysdig-k8 <KUBERNETES_URI>"
+    echo "KUBERNETES_URI need to be K8 API URI similar to 'http://admin:password@127.0.0.1:8080'"
+    return
+  fi
+  local _KUBERNETES_URI="$1"
+  sudo csysdig -pc -k "${_KUBERNETES_URI}"
+}
