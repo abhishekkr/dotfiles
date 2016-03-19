@@ -352,22 +352,48 @@ nicDown(){
   sudo ip link set dev $1 down
 }
 
+xtrakt-size(){
+  local _COMPRESSED_FILE="$1"
+  local _COMPRESSED_FILE_LIST=". . ERROR:No-FileList"
+
+  if [[ -f "$_COMPRESSED_FILE" ]]; then
+    case "$_COMPRESSED_FILE" in
+    *.tar.bz2) _COMPRESSED_FILE_LIST="tar tvjf '$_COMPRESSED_FILE'"              ;;
+    *.tar.gz)  _COMPRESSED_FILE_LIST="tar tvzf '$_COMPRESSED_FILE'"              ;;
+    *.bz2)     _COMPRESSED_FILE_LIST="bunzip2 -cd '$_COMPRESSED_FILE' | wc -c"   ;;
+    *.rar)     echo "WIP"                                         ;;
+    *.gz)      _COMPRESSED_FILE_LIST="gunzip -l '$_COMPRESSED_FILE' | awk '{print $3,$1,$2,$NF}' | tail -n +2"  ;;
+    *.tar)     _COMPRESSED_FILE_LIST="tar tvf '$_COMPRESSED_FILE'"               ;;
+    *.tbz2)    _COMPRESSED_FILE_LIST="tar tvjf ''$_COMPRESSED_FILE'"             ;;
+    *.tgz)     _COMPRESSED_FILE_LIST="tar tvzf '$_COMPRESSED_FILE'"              ;;
+    *.zip)     _COMPRESSED_FILE_LIST="unzip -l '$_COMPRESSED_FILE' | tail -1 | awk '{print \$3,\$2,\$1}'"       ;;
+    *.Z)       echo "WIP"                                         ;;
+    *.7z)      _COMPRESSED_FILE_LIST="7z l '$_COMPRESSED_FILE' | tail -1"        ;;
+    *)         echo "don't know how to uncompress '$_COMPRESSED_FILE'..."        ;;
+    esac
+  else
+    echo "'$_COMPRESSED_FILE' is not a valid file!"
+  fi
+
+  eval "$_COMPRESSED_FILE_LIST" | awk '{s+=$3} END{print (s/1024/1024),"MB"}'
+}
+
 xtrakt () {
   local _COMPRESSED_FILE="$1"
 
   if [[ -f "$_COMPRESSED_FILE" ]]; then
     case "$_COMPRESSED_FILE" in
-    *.tar.bz2)   tar xvjf "$_COMPRESSED_FILE"    ;;
-    *.tar.gz)    tar xvzf "$_COMPRESSED_FILE"    ;;
-    *.bz2)       bunzip2 "$_COMPRESSED_FILE"     ;;
-    *.rar)       rar x "$_COMPRESSED_FILE"       ;;
-    *.gz)        gunzip "$_COMPRESSED_FILE"      ;;
-    *.tar)       tar xvf "$_COMPRESSED_FILE"     ;;
-    *.tbz2)      tar xvjf "$_COMPRESSED_FILE"    ;;
-    *.tgz)       tar xvzf "$_COMPRESSED_FILE"    ;;
-    *.zip)       unzip "$_COMPRESSED_FILE"       ;;
-    *.Z)         uncompress "$_COMPRESSED_FILE"  ;;
-    *.7z)        7z x "$_COMPRESSED_FILE"        ;;
+    *.tar.bz2)   tar xvjf "$_COMPRESSED_FILE"          ;;
+    *.tar.gz)    tar xvzf "$_COMPRESSED_FILE"          ;;
+    *.bz2)       bunzip2 -k -d "$_COMPRESSED_FILE"     ;;
+    *.rar)       unrar x "$_COMPRESSED_FILE"           ;;
+    *.gz)        gunzip "$_COMPRESSED_FILE"            ;;
+    *.tar)       tar xvf "$_COMPRESSED_FILE"           ;;
+    *.tbz2)      tar xvjf "$_COMPRESSED_FILE"          ;;
+    *.tgz)       tar xvzf "$_COMPRESSED_FILE"          ;;
+    *.zip)       unzip "$_COMPRESSED_FILE"             ;;
+    *.Z)         uncompress "$_COMPRESSED_FILE"        ;;
+    *.7z)        7z x "$_COMPRESSED_FILE"              ;;
     *)           echo "don't know how to uncompress '$_COMPRESSED_FILE'..." ;;
     esac
   else
