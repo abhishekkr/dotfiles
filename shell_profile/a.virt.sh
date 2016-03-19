@@ -6,7 +6,13 @@ alias lxc-ls-running="sudo lxc-ls -f --nesting -F name,state,interfaces,ipv4,ipv
 alias lxc-ls-frozen="sudo lxc-ls -f --nesting -F name,state,interfaces,ipv4,ipv6,autostart,pid,memory,ram,swap,groups --frozen"
 alias lxc-ls-active="sudo lxc-ls -f --nesting -F name,state,interfaces,ipv4,ipv6,autostart,pid,memory,ram,swap,groups --active"
 alias lxc-ls-stopped="sudo lxc-ls -f --nesting --stopped"
-alias lxc-ls-templates="sudo ls -1 /usr/share/lxc/templates/ | sed 's/lxc-/+ /'"
+alias lxc-ls-templates="ls -1 /usr/share/lxc/templates/ | sed 's/lxc-/+ /'"
+lxc-create-from-config(){
+  local _LXC_CONFIG="$1"
+  local _LXC_NAME=$(grep 'container-name:' "$_LXC_CONFIG" | cut -d' ' -f3)
+  local _LXC_TYPE=$(grep 'container-template:' "$_LXC_CONFIG" | cut -d' ' -f3)
+  sudo lxc-create -f "$_LXC_CONFIG" -n "$_LXC_NAME" -t "$_LXC_TYPE"
+}
 
 
 ### docker# ###################################################################
@@ -98,11 +104,14 @@ nspawn-ls(){
   echo "********************"
 }
 
+#
 nspawn-start(){
   if [ $# -ne 1 ]; then
     echo "Syntax: nspawn-start <name-of-spawned-instance-to-start>"
     return
   fi
+  sudo systemctl start machine-${1}
+  sudo systemctl start machine-${1}.scope
   sudo systemd-nspawn -bD "/srv/subarch/${1}"
 }
 
@@ -112,6 +121,28 @@ nspawn-stop(){
     return
   fi
   sudo systemctl stop machine-${1}.scope
+}
+
+nspawn-del(){
+  if [ $# -ne 1 ]; then
+    echo "Syntax: nspawn-del <name-of-spawned-instance-to-stop>"
+    return
+  fi
+
+  _SUB_WORK_DIR="/srv/subarch/${1}"
+  if [ ! -d $_SUB_WORK_DIR ]; then
+    echo "given vm wasn't found in system slices at sys/fs"
+    return
+  fi
+
+  sudo systemctl stop machine-${1}.scope
+  sudo systemctl disable machine-${1}.scope
+  sudo systemctl disable machine-${1}
+
+  sudo rm -rf /sys/fs/cgroup/systemd/system.slice/machine-${1}.scope
+  sudo rm -rf /run/systemd/system/machine-${1}.scope.d
+  sudo rm -f /run/systemd/system/machine-${1}.scope
+  echo "can now delete ${_SUB_WORK_DIR} dir"
 }
 
 nspawn-arch(){
