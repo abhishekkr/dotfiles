@@ -6,6 +6,7 @@
   autocrlf = false
   excludesfile = ~/.gitignore
   editor = vim
+  quotepath = false
 
 [color]
   diff = auto

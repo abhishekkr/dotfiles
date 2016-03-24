@@ -7,6 +7,12 @@ alias lxc-ls-frozen="sudo lxc-ls -f --nesting -F name,state,interfaces,ipv4,ipv6
 alias lxc-ls-active="sudo lxc-ls -f --nesting -F name,state,interfaces,ipv4,ipv6,autostart,pid,memory,ram,swap,groups --active"
 alias lxc-ls-stopped="sudo lxc-ls -f --nesting --stopped"
 alias lxc-ls-templates="ls -1 /usr/share/lxc/templates/ | sed 's/lxc-/+ /'"
+lxc-start-and-console(){
+  local _LXC_NAME="$1"
+  local _LXC_LOG_FILE="/tmp/lxc.${_LXC_NAME}.log"
+  truncate -s 0 "$_LXC_LOG_FILE"
+  sudo lxc-start -n ${_LXC_NAME} --logfile=${_LXC_LOG_FILE} --logpriority=DEBUG && sudo lxc-console -n ${_LXC_NAME}
+}
 lxc-create-from-config(){
   local _LXC_CONFIG="$1"
   local _LXC_NAME=$(grep 'container-name:' "$_LXC_CONFIG" | cut -d' ' -f3)
@@ -28,6 +34,7 @@ alias dckr-stop-all="docker ps -q | xargs docker stop"
 alias dckr-start="docker start"
 alias dckr-restart="docker restart"
 alias dckr-attach="docker attach"
+alias dckr-search="docker search"
 #alias dckr-latest-stop="dckr-stop `dckr-latest`"
 #alias dckr-latest-start="dckr-start `dckr-latest`"
 #alias dckr-latest-restart="dckr-restart `dckr-latest`"
