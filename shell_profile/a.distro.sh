@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+alias journalctl-clean-but-a-day="journalctl --vacuum-time=1d"
+
 alias pacman-clean="sudo pacman -Sc"
 pkg-clean-cache(){
     if [ -f /etc/arch-release ]; then
@@ -17,3 +19,18 @@ service_log(){
     echo "This shows service logs for systemd handled service.\nSyntax: 'service_log <service-name>'"
   fi
 }
+
+copy-file-path(){
+  find . -type f -name "*$1*" | clipit
+}
+
+pkg-versions(){
+  [[ $# -ne 1 ]] && echo "Usage: pkg-versions <pkg-name>" && return 1
+  local pkg_name="$1"
+  if [ -f '/etc/debian_version' ]; then
+    apt-cache madison $pkg_name
+  else
+    echo "This distro not suported yet!" && return 1
+  fi
+}
+
