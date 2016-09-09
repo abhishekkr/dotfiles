@@ -7,6 +7,33 @@ cookbook-nu(){
   chef generate cookbook "${COOKBOOK_NAME}"
 }
 
+## chef-generate special
+alias chef-ckbk-nu=cookbook-nu
+chef-nu-attr(){
+  local ATTRIBUTE_NAME="$1"
+  chef generate attribute . "${ATTRIBUTE_NAME}"
+}
+chef-nu-tmpl(){
+  local TEMPLATE_NAME="$1"
+  chef generate template . "${TEMPLATE_NAME}"
+}
+chef-nu-recp(){
+  local RECIPE_NAME="$1"
+  chef generate recipe . "${RECIPE_NAME}"
+}
+chef-nu-file(){
+  local FILE_NAME="$1"
+  chef generate file . "${FILE_NAME}"
+}
+chef-nu-lwrp(){
+  local LWRP_NAME="$1"
+  chef generate file . "${LWRP_NAME}"
+}
+chef-nu-plcy(){
+  local POLICYFILE_NAME="$1"
+  chef generate file "${POLICYFILE_NAME}"
+}
+
 ## generate $cookbook/.chef/... structure for vendor-ized shalreable structure
 dot-chef(){
   mkdir -p .chef/{cookbooks,nodes,roles,data_bags}
