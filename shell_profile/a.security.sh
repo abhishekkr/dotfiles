@@ -1,5 +1,10 @@
 ## net/sec
 
+check-https-cert(){
+  local _HTTPS_URI=$1
+  openssl s_client -connect "$_HTTPS_URI" # localhost:8443
+}
+
 gen-secure(){
   openssl rand -base64 512 | tr -d '\r\n' | tee "$1"
 }
