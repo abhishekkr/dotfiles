@@ -133,7 +133,7 @@ gitinit(){
 }
 
 alias git-fork-of="git remote add forkof"
-alias git-fork-of-pull="git pull forkof"
+alias git-fork-of-pull="git pull forkof master"
 
 alias git-fetch-tags="git fetch --tags"
 alias git-push-tags="git push origin --tags"
