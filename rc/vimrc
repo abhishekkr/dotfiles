@@ -48,6 +48,7 @@ set nojoinspaces                 "Don't convert spaces to tabs
 
 set relativenumber
 command! NOREL set norelativenumber
+command! NORELNO set relativenumber
 
 let mapleader="\\"
 
