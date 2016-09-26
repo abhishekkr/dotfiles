@@ -22,8 +22,11 @@ lxc-create-from-config(){
 
 
 ### docker# ###################################################################
+export DOCKER_SOCK="/var/run/docker.sock"
+export DOCKER_USER=$(ls -lah ${DOCKER_SOCK} | awk '{print $3}')
+export DOCKER_GROUP=$(ls -lah $DOCKER_SOCK | awk '{print $4}')
 alias dckr-svr="sudo docker daemon"
-alias dckr-svr-sock="sudo chown ${USER}:docker /var/run/docker.sock"
+alias dckr-svr-sock="sudo chown ${USER}:${DOCKER_GROUP} /var/run/docker.sock"
 alias dckr-ps="docker ps -a | less -S"
 alias dckr-last-container-running="docker inspect --format '{{.State.Running}}' $(docker ps -lq)"
 alias dckr-pull="docker pull"
@@ -48,6 +51,10 @@ dckr-img-grep(){
 }
 
 ### from: github.com/jfrazelle [start]
+su-dckr-cleanup(){
+  sudo docker rm -v $(sudo docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
+  sudo docker rmi $(sudo docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
+}
 dckr-cleanup(){
   docker rm -v $(docker ps --filter status=exited -q 2>/dev/null) 2>/dev/null
   docker rmi $(docker images --filter dangling=true -q 2>/dev/null) 2>/dev/null
@@ -76,7 +83,7 @@ lxc-stop-destroy(){
   else
     _CONTAINER=$1
   fi
-  lxc-stop -n $_CONTAINER && lxc-destroy $_CONTAINER
+  sudo lxc-stop --name $_CONTAINER && sudo lxc-destroy --name $_CONTAINER
 }
 
 lxc-up(){
@@ -86,7 +93,7 @@ lxc-up(){
   else
     _CONTAINER=$1
   fi
-  lxc-start -n $_CONTAINER -d -o "/container/${_CONTAINER}/${_CONTAINER}.log"
+  sudo lxc-start -n $_CONTAINER -d -o "/container/${_CONTAINER}/${_CONTAINER}.log"
 }
 
 #
@@ -98,7 +105,7 @@ lxc-cmd(){
     _CONTAINER=$1
   fi
   echo "once in lxc console, to quit... run: CTRL+D CTRL+A Q"
-  lxc-console -n $_CONTAINER
+  sudo lxc-console -n $_CONTAINER
 }
 
 ### systemd ###################################################################
