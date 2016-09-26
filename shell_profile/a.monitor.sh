@@ -15,7 +15,7 @@ sysdig-k8(){
 
 acpi-status(){
   local at_time battery temp adapter
-  at_time=$(date)
+  at_time=$(date --rfc-3339='seconds')
   battery=$(acpi -b | awk '{print $4}')
   temp=$(acpi -t | awk '{print $3,$4}')
   adapter=$(acpi -a | awk '{print $3}')

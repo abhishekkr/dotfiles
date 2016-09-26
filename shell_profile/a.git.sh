@@ -41,8 +41,8 @@ alias git_amend='git commit --amend'
 
 gpull_all(){
   for _a in `ls` ; do
-    echo \$_a
-    cd \$_a ; git pull ; cd..
+    echo $_a
+    cd $_a ; git pull ; cd -
   done
   unset _a
 }
@@ -57,8 +57,10 @@ gitviz(){
   echo "play $2 to view vizualization"
 }
 
-git_cat_conf(){
-  cat "$1/.git/config"
+git-conf(){
+  local _GIT_DIR="$1"
+  [[ -z "$_GIT_DIR" ]] && _GIT_DIR=$(pwd)
+  cat "${_GIT_DIR}/.git/config"
 }
 
 git_credit(){
@@ -131,7 +133,7 @@ gitinit(){
 }
 
 alias git-fork-of="git remote add forkof"
-alias git-fork-of-pull="git pull forkof"
+alias git-fork-of-pull="git pull forkof master"
 
 alias git-fetch-tags="git fetch --tags"
 alias git-push-tags="git push origin --tags"
