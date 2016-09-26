@@ -7,12 +7,12 @@
 clone_github(){
   GITHUB_ID=$1
   GITHUB_REPO_URI="https://github.com/"$GITHUB_ID"?tab=repositories"
-  repos=`curl -skL $GITHUB_REPO_URI | grep 'title="Forks"' | sed "s/.*$GITHUB_ID\///" | sed 's/\/network"\stitle="Forks">//'`
+  repos=$(curl -skL $GITHUB_REPO_URI | grep 'itemprop="name codeRepository"' | sed "s/.*$GITHUB_ID\///" | sed 's/"\ itemprop="name\ codeRepository".*//')
   for line in `echo $repos | xargs -L1`;
   do
     if [ ! -z $line ];
     then
-      repo_git='git://github.com/'$GITHUB_ID'/'$line'.git'
+      repo_git='https://github.com/'$GITHUB_ID'/'$line'.git'
       if [ -e $line ]; then
         echo 'Fetching master latest pull for: '$repo_git
         cd $line ; git pull ; cd -
@@ -24,11 +24,13 @@ clone_github(){
   done
 }
 
-clone_github_to_contribute(){
+git-conf-to-contribute(){
   if [ -z $1 ];
   then
+    sed -i 's/https\:\/\/github\.com\//git@github.com:/' **/.git/config
     sed -i 's/git\:\/\/github\.com\//git@github.com:/' **/.git/config
   else
+    sed -i 's/https\:\/\/github\.com\//git@github.com:/' **/.git/config
     sed -i 's/git\:\/\/github\.com\//git@github.com:/' $1/.git/config
   fi
 }
@@ -56,7 +58,7 @@ clone_github_private(){
   done
 }
 
-clone_git_to_https(){
+git-conf-to-https(){
   if [ -z $1 ];
   then
     sed -i 's/git\:\/\/github\.com\//https\:\/\/github.com:/' **/.git/config
