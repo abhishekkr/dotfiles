@@ -27,3 +27,13 @@ alias ipaddr-public="my-public-ip"
 nmap-xtreme(){
   sudo nmap -p 1-65535 -sS -sU -T4 -A -vvvv -Pn -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)" -oA "nmap-$1" $1
 }
+
+resolv-update(){
+  ## OpenDNS Server 208.67.222.222, 208.67.220.220
+  ## Google DNS Server 8.8.8.8
+  local timestamp=$(date +%s)
+  sudo mv "/etc/resolv.conf" "/etc/resolv.conf.${timestamp}"
+
+  echo 'nameserver 208.67.222.222' | sudo tee -a /etc/resolv.conf
+  echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf
+}
