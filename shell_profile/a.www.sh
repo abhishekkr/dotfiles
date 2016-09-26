@@ -4,6 +4,21 @@ unshort-url(){
   curl -s -IkL http://j.mp/1TpI40i | grep '^[Ll]ocation:' | sed 's/[Ll]ocation:\s*//'
 }
 
+check-ssl(){
+  if [[ $# -lt 1 ]]; then
+    echo "Usgae: check-ssl '<host:port>'"
+    return
+  fi
+  local URI="$1"
+  openssl s_client -connect $URI -state -nbio
+}
+
+http-post-json(){
+  _POST_URI="$1"
+  _POST_JSON_FILE="$2"
+  curl -Lk -X POST "${_POST_URI}" -d @"${_POST_JSON_FILE}" -H "Content-Type: application/json"
+}
+
 ## WEB API sorts
 
 x-rates(){
