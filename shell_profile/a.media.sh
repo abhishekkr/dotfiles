@@ -73,6 +73,24 @@ toMP4(){
   unset _MEDIAFILE
 }
 
+toMP3(){
+  for _MEDIAFILE in "$@"
+  do
+      echo "converting $_MEDIAFILE"
+      ffmpeg -i "${_MEDIAFILE}" -codec:a libmp3lame -qscale:a 2 "${_MEDIAFILE}.mp3"
+  done
+  unset _MEDIAFILE
+}
+
+toFLAC(){
+  for _MEDIAFILE in "$@"
+  do
+      echo "converting $_MEDIAFILE"
+      ffmpeg -i "${_MEDIAFILE}" "${_MEDIAFILE}.flac"
+  done
+  unset _MEDIAFILE
+}
+
 uget(){
   echo "$1" | sed 's/%3A/\:/g' | sed 's/%2F/\//g' | sed 's/%3F/?/g' | sed 's/%3D/\=/g' | sed 's/%26/\&/g' | xargs wget -c
 }
