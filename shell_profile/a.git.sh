@@ -42,7 +42,17 @@ alias git_amend='git commit --amend'
 gpull_all(){
   for _a in `ls` ; do
     echo $_a
-    cd $_a ; git pull ; cd -
+    cd $_a ; git pull ; cd ..
+  done
+  unset _a
+}
+
+gsb-all(){
+  for _a in `ls` ; do
+    echo ""
+    echo $_a
+    cd $_a ; git status -sb ; cd ..
+    echo "----------------------------------------------------------------"
   done
   unset _a
 }
