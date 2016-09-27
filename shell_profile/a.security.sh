@@ -1,5 +1,37 @@
 ## net/sec
 
+gpg-decrypt(){
+  local _PATHS_TO_DECRYPT=""
+
+  [[ $# -eq 0 || "$1" == "-h" || $1 == "--help" || -f "${_PATHS_TO_DECRYPT}" ]] && \
+    echo "Usage: gpg-crypt <path-to-file-encrypted-using gpg-encrypt>" && \
+    return 0
+
+  _PATHS_TO_DECRYPT="$1"
+
+  gpg -d "${_PATHS_TO_DECRYPT}" | tar zxvf -
+}
+
+gpg-crypt(){
+  local _COMPRESSED_FILE=""
+  local _PATHS_TO_ENCRYPT=""
+
+  [[ $# -eq 0 || "$1" == "-h" || $1 == "--help" ]] && \
+    echo "Usage: gpg-crypt <one-args-as path-to-encrypt-and-use-for-compressed-file>" && \
+    echo "Or Usage: gpg-crypt <encrypted-file-name> <all-paths-to-encrypt>" && \
+    return 0
+
+  [[ $# -eq 1 ]] && \
+    _COMPRESSED_FILE="${1}.tar.gz" && \
+    _PATHS_TO_ENCRYPT="$1"
+
+  _COMPRESSED_FILE="${1}.tar.gz"
+  _PATHS_TO_ENCRYPT="${@:2}"
+
+  tar zcvpf - ${_PATHS_TO_ENCRYPT} | \
+    gpg --symmetric --cipher-algo aes256 -o "${_COMPRESSED_FILE}.gpg"
+}
+
 check-https-cert(){
   local _HTTPS_URI=$1
   openssl s_client -connect "$_HTTPS_URI" # localhost:8443
