@@ -400,7 +400,7 @@ xtrakt () {
     *)           echo "don't know how to uncompress '$_COMPRESSED_FILE'..." ;;
     esac
   else
-    echo "'$_COMPRESSED_FILE' is not a valid file!"
+    echo "It uses file extension for identification. Extension of '$_COMPRESSED_FILE' is not supported yet!"
   fi
 }
 
