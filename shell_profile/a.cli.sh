@@ -394,6 +394,9 @@ xtrakt () {
     *.zip)       unzip "$_COMPRESSED_FILE"             ;;
     *.Z)         uncompress "$_COMPRESSED_FILE"        ;;
     *.7z)        7z x "$_COMPRESSED_FILE"              ;;
+    *.xz)        cp "$_COMPRESSED_FILE" "__TMP__${_COMPRESSED_FILE}" && \
+                    xz --decompress "__TMP__${_COMPRESSED_FILE}" && \
+                    mv $(echo "__TMP__${_COMPRESSED_FILE}" | sed 's/.xz$//') $(echo "$_COMPRESSED_FILE" | sed 's/.xz$//') ;;
     *)           echo "don't know how to uncompress '$_COMPRESSED_FILE'..." ;;
     esac
   else
