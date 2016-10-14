@@ -6,6 +6,8 @@ alias rdp="rdesktop-vrdp -u administrator -p -"
 alias uhoh-scr="xscreensaver-command -lock"
 alias uhoh="xlock"
 
+alias ack="ack --ignore-dir=.venv --ignore-dir=.git"
+
 mycd(){
   if [[ $# -eq 1 ]]; then
     cd "$1"
