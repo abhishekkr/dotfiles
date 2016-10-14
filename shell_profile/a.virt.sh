@@ -42,6 +42,9 @@ alias dckr-search="docker search"
 #alias dckr-latest-start="dckr-start `dckr-latest`"
 #alias dckr-latest-restart="dckr-restart `dckr-latest`"
 #alias dckr-latest-attach="dckr-attach `dckr-latest`"
+alias dckr-selinux-volume="chcon -Rt svirt_sandbox_file_t"
+
+
 dckr-sh(){
   _IMG=$1
   docker run -i -t "${_IMG}" /bin/bash
@@ -67,6 +70,16 @@ dckr-del-stopped(){
     docker rm $name
   fi
 
+}
+dckr-run-mount(){
+  [[ $# -lt 2 ]] && \
+    echo "[ERROR] Usage: dckr-run-mount HOST_PATH " && \
+    return 1
+  local _HOST_VOL_PATH="$1"
+  local _DOCKER_VOL_PATH="$2"
+  local _DOCKER_IMAGE="$3"
+  local _DOCKER_CMD="$4"
+  docker run -i -t -v ${_HOST_VOL_PATH}:${_DOCKER_VOL_PATH} $_DOCKER_IMAGE $_DOCKER_CMD
 }
 ### from: github.com/jfrazelle [end]
 
