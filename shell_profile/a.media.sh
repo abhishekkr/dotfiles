@@ -95,3 +95,18 @@ uget(){
   echo "$1" | sed 's/%3A/\:/g' | sed 's/%2F/\//g' | sed 's/%3F/?/g' | sed 's/%3D/\=/g' | sed 's/%26/\&/g' | xargs wget -c
 }
 
+dlyv(){
+  [[ $(which youtube-dl > /dev/null ; echo $?) -ne 0 ]] && \
+    echo "[ERROR] youtube-dl utility not found" && \
+    return 1
+
+  youtube-dl $@
+}
+
+dlyx(){
+  [[ $(which youtube-dl > /dev/null ; echo $?) -ne 0 ]] && \
+    echo "[ERROR] youtube-dl utility not found" && \
+    return 1
+
+  youtube-dl -x $@
+}
