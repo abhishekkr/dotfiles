@@ -477,3 +477,9 @@ free_buffer_cache(){
   sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
   free
 }
+
+ls-filetypes(){
+  local _LS_AT=$1
+  [[ -z "$_LS_AT" ]] && _LS_AT="$PWD"
+  find . -maxdepth 1 -type f | awk -F'.' '{print $NF}' | sort | uniq
+}
