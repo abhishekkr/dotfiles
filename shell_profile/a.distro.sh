@@ -9,7 +9,7 @@ pkg-clean-cache(){
         sudo pacman -Sc
     elif [ -f /etc/redhat-release ]; then
         echo "RHEL-Base: cleaning cached packages"
-        sduo yum clean packages
+        sudo yum clean packages
     else
         echo "This distro not suported yet!" && return 1
     fi

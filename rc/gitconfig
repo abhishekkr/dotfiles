@@ -55,6 +55,7 @@
   blast = for-each-ref --sort=-committerdate refs/heads/ --format="%(committerdate:relative)%09%(refname:short)"
   serve = daemon --reuseaddr --base-path=. --export-all --verbose --enable=receive-pack --listen=0.0.0.0
   lastchange = log -p --follow -n 1
+  perm-reset = "!git diff -p -R --no-color | grep -E '^(diff|(old|new) mode)' --color=never | git apply"
 
 #unpushed = !"PROJ_BRANCH=$(git symbolic-ref HEAD | sed 's|refs/heads/||') && git log origin/$PROJ_BRANCH..HEAD"
 [push]
