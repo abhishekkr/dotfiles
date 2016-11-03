@@ -24,6 +24,7 @@ alias git_upstream_sync_master='git fetch upstream ; git merge upstream/master'
 
 alias gst='git status'
 alias gsb='git status -sb'
+alias gsa="git status -sb | grep -E '^[A|M][\ M]'"
 
 alias gbrr='git branch -r'
 
