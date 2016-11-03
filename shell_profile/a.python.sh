@@ -12,9 +12,9 @@ alias pyibook='ipython2 notebook'
 
 alias py-profile="time python -m cProfile"
 
-[[ "$(which virtualenv2 > /dev/null ; echo $?)" -ne 0  ]] && alias virtualenv2="virtualenv --python=python2"
+[[ "$(which virtualenv2 &> /dev/null ; echo $?)" -ne 0  ]] && alias virtualenv2="virtualenv --python=python2"
 
-[[ "$(which virtualenv3 > /dev/null ; echo $?)" -ne 0  ]] && alias virtualenv3="virtualenv --python=python3"
+[[ "$(which virtualenv3 &> /dev/null ; echo $?)" -ne 0  ]] && alias virtualenv3="virtualenv --python=python3"
 
 
 venv_on_for(){
