@@ -456,7 +456,7 @@ function unbak() { # Revert previously bak'd target
     echo "No .bak extension, ignoring: $t"
   fi
 }
-alias lsdir='find . -type d -depth 1'
+alias lsdir='find . -type d -maxdepth 1'
 alias cdrandom='cd "$(lsdir | randomline $(lsdir | wc -l))"'
 #################### from github.com/shazow :: end
 

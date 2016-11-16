@@ -43,6 +43,10 @@ special_plugins(){
         error_msg "Exuberant Ctags (http://ctags.sourceforge.net/) 'exuberant-ctags', need to be installed manually."
       fi
     ;;
+    vim-markdown-preview)
+      echo "**************************** Installation of Plugin: vim-markdown-preview"
+      sudo pip install grip
+    ;;
     *)
       echo "No Special Tasks for ${1}"
       ;;
