@@ -32,6 +32,17 @@ gpg-crypt(){
     gpg --symmetric --cipher-algo aes256 -o "${_COMPRESSED_FILE}.gpg"
 }
 
+ssl-generate-cert(){
+  local _COMMON_NAME=""
+
+  [[ $# -eq 0 || "$1" == "-h" || $1 == "--help" || -z "${1}" ]] && \
+    echo "Usage: ssl-generate-cert <file-name>" && \
+    return 0
+
+  _COMMON_NAME="$1"
+  sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${_COMMON_NAME}.key -out ${_COMMON_NAME}.crt
+}
+
 check-https-cert(){
   local _HTTPS_URI=$1
   openssl s_client -connect "$_HTTPS_URI" # localhost:8443
