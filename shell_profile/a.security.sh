@@ -4,7 +4,7 @@ gpg-decrypt(){
   local _PATHS_TO_DECRYPT=""
 
   [[ $# -eq 0 || "$1" == "-h" || $1 == "--help" || -f "${_PATHS_TO_DECRYPT}" ]] && \
-    echo "Usage: gpg-crypt <path-to-file-encrypted-using gpg-encrypt>" && \
+    echo "Usage: gpg-decrypt <path-to-file-encrypted-using gpg-encrypt>" && \
     return 0
 
   _PATHS_TO_DECRYPT="$1"
@@ -26,7 +26,7 @@ gpg-crypt(){
     _PATHS_TO_ENCRYPT="$1"
 
   _COMPRESSED_FILE="${1}.tar.gz"
-  _PATHS_TO_ENCRYPT="${@:2}"
+  _PATHS_TO_ENCRYPT="${@:1}"
 
   tar zcvpf - ${_PATHS_TO_ENCRYPT} | \
     gpg --symmetric --cipher-algo aes256 -o "${_COMPRESSED_FILE}.gpg"

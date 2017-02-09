@@ -7,6 +7,9 @@ pkg-clean-cache(){
     if [ -f /etc/arch-release ]; then
         echo "ArchLinux: cleaning  /var/cache/pacman/pkg/ of unused packages and versions."
         sudo pacman -Sc
+    elif [ -f /etc/redhat-release ]; then
+        echo "RHEL-Base: cleaning cached packages"
+        sudo yum clean packages
     else
         echo "This distro not suported yet!" && return 1
     fi

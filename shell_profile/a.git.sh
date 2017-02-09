@@ -3,8 +3,8 @@
 alias ga='git add'
 alias gad='git add -p'
 
-alias gcm='git commit -m'
-alias gcm0='git commit --allow-empty -m'
+alias gcm='git commit --signoff -m'
+alias gcm0='git commit --signoff --allow-empty -m'
 
 alias gcp='git clone'
 
@@ -24,6 +24,7 @@ alias git_upstream_sync_master='git fetch upstream ; git merge upstream/master'
 
 alias gst='git status'
 alias gsb='git status -sb'
+alias gsa="git status -sb | grep -E '^[A|M][\ M]'"
 
 alias gbrr='git branch -r'
 
@@ -36,8 +37,8 @@ alias git_workdays="git log --date=short --format="%ci"|awk '{print $1}'|uniq"
 alias git_submodule_r="git submodule update --init --recursive"
 
 alias git_undo='git reset --soft HEAD~1'
-alias git_reset_author='git commit --amend --reset-author'
-alias git_amend='git commit --amend'
+alias git_reset_author='git commit --signoff --amend --reset-author'
+alias git_amend='git commit --signoff --amend'
 
 gpull_all(){
   for _a in `ls` ; do
@@ -166,7 +167,7 @@ git_rm_sensitive(){
 
   echo "$SENSITIVE_MISTAKE" >> .gitignore
   git add .gitignore
-  git commit -m "$SENSITIVE_MISTAKE gitignore-d"
+  git commit --signoff -m "$SENSITIVE_MISTAKE gitignore-d"
 
   git push origin --force --all
   git push origin --force --tags

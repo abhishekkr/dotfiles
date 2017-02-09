@@ -43,5 +43,5 @@ setup_ruby_install(){
 }
 
 setup_jq
-setup_chruby
-setup_ruby_install
+#setup_chruby
+#setup_ruby_install

@@ -6,6 +6,8 @@ alias rdp="rdesktop-vrdp -u administrator -p -"
 alias uhoh-scr="xscreensaver-command -lock"
 alias uhoh="xlock"
 
+alias ack="ack --ignore-dir=.venv --ignore-dir=.git"
+
 mycd(){
   if [[ $# -eq 1 ]]; then
     cd "$1"
@@ -454,7 +456,7 @@ function unbak() { # Revert previously bak'd target
     echo "No .bak extension, ignoring: $t"
   fi
 }
-alias lsdir='find . -type d -depth 1'
+alias lsdir='find . -type d -maxdepth 1'
 alias cdrandom='cd "$(lsdir | randomline $(lsdir | wc -l))"'
 #################### from github.com/shazow :: end
 
@@ -474,4 +476,10 @@ free_buffer_cache(){
   free && sync
   sudo sh -c 'echo 3 > /proc/sys/vm/drop_caches'
   free
+}
+
+ls-filetypes(){
+  local _LS_AT=$1
+  [[ -z "$_LS_AT" ]] && _LS_AT="$PWD"
+  find . -maxdepth 1 -type f | awk -F'.' '{print $NF}' | sort | uniq
 }
