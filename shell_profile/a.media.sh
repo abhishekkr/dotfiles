@@ -4,6 +4,13 @@ alias mute="(amixer get Master | grep off > /dev/null && amixer -q set Master un
 alias volumeUp="amixer -c 0 set PCM 5dB+ unmute"
 alias volumeDown="amixer -c 0 set PCM 5dB-"
 
+gaana-gaao(){
+  [[ -z "$SONGS_DIR" ]] && echo "[err] don't know where your songs are" && return
+  local SONG_PATTERN="$1"
+  find ${SONGS_DIR} -type f | grep -i ${SONG_PATTERN} > $HOME/.gaana.lst
+  mplayer -vo no -quiet -shuffle -playlist $HOME/.gaana.lst
+}
+
 play-from-log(){
   if [ $# -eq 0 ]; then
     echo "SYNTAX: play-from-log <log-file-with-path-entries>" && return 1
