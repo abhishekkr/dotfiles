@@ -126,6 +126,11 @@ alias lsz1='ls -sh1'
 alias la='ls -lash'
 alias ls-size="ls -lah | grep '^total'"
 
+ls-top10files(){
+  local _CHECK_THIS_PATH="$1"
+  find $_CHECK_THIS_PATH -type f -exec ls -sh {} \; | sort -n -r | head -10
+}
+
 alias items='ls -1 | wc -l'
 alias mysize='du -h | grep -e "\.$" | cut -f1'
 
