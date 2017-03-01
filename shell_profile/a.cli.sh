@@ -433,8 +433,9 @@ alias cdd="cd"
 function f () {
   find . -name "*$**"
 }
+
 ### Find directory under cwd and cd into it
-function fcd() {
+fcd() {
   target=$(find . -name "*$**" -type d | head -n1)
   if [[ "$target"  ]]; then
     cd "$target"
@@ -442,6 +443,54 @@ function fcd() {
     echo "Directory not found: $*"; return
   fi
 }
+
+### Find directory under cwd and cd into it with choice
+zcd() {
+  local dirfuzz="$*"
+  local targets=$(find . -iname "*${dirfuzz}*" -type d | sed 's/^\s*//' | sed 's/\s*$//')
+
+  [[ -z "${targets}" ]] && echo "[error] nothing like this found" && return 1
+  local targets_idx=0
+  for _t in $(echo $targets); do
+    ((targets_idx=targets_idx+1))
+    echo "[${targets_idx}] $_t"
+  done
+  echo -n "which index to change dir into: " && read target_idx
+  [[ -z "${target_idx}" ]] && target_idx=0
+  ((targets_idx=0))
+  for _t in $(echo $targets); do
+    ((targets_idx=targets_idx+1))
+    [[ $targets_idx -ne $target_idx ]] && continue
+    cd "$_t" && return
+  done
+  echo "Directory/Index not found: $*"; return
+}
+
+### find directory in fuzzy mode and cd with choice
+z(){
+  local dirfuzz="$*"
+  dirfuzz=$(echo $dirfuzz | sed 's/\s*/\*/g')
+  dirfuzz="${dirfuzz:1:-1}"
+
+  local targets=$(find . -iname "*${dirfuzz}*" -type d | sed 's/^\s*//' | sed 's/\s*$//')
+
+  [[ -z "${targets}" ]] && echo "[error] nothing like this found" && return 1
+  local targets_idx=0
+  for _t in $(echo $targets); do
+    ((targets_idx=targets_idx+1))
+    echo "[${targets_idx}] $_t"
+  done
+  echo -n "which index to change dir into: " && read target_idx
+  [[ -z "${target_idx}" ]] && target_idx=0
+  ((targets_idx=0))
+  for _t in $(echo $targets); do
+    ((targets_idx=targets_idx+1))
+    [[ $targets_idx -ne $target_idx ]] && continue
+    cd "$_t" && return
+  done
+  echo "Directory/Index not found: $*"; return
+}
+
 ### bak to backup target as target.bak
 function bak() {
   t="$1";
