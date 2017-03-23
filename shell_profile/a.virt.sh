@@ -43,6 +43,7 @@ alias dckr-search="docker search"
 #alias dckr-latest-restart="dckr-restart `dckr-latest`"
 #alias dckr-latest-attach="dckr-attach `dckr-latest`"
 alias dckr-selinux-volume="chcon -Rt svirt_sandbox_file_t"
+alias dckr-scrub='docker rmi $(docker images -q -f "dangling=true")'
 
 
 dckr-sh(){
