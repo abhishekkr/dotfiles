@@ -537,3 +537,16 @@ ls-filetypes(){
   [[ -z "$_LS_AT" ]] && _LS_AT="$PWD"
   find . -maxdepth 1 -type f | awk -F'.' '{print $NF}' | sort | uniq
 }
+
+clean-ssh-fingerprint(){
+  local OF_NODE="$1"
+  [[ -z "${OF_NODE}" ]] && echo "[err] wrong usage; '$0 <of-node> [<known-hosts-file>]'" && return 123
+  local SSH_KNOWN_HOSTS="$2"
+  [[ -z "${SSH_KNOWN_HOSTS}" ]] && SSH_KNOWN_HOSTS="$HOME/.ssh/known_hosts"
+  [[ ! -f "${SSH_KNOWN_HOSTS}" ]] && echo "[err] ${SSH_KNOWN_HOSTS} not found" && return 123
+
+  for LINE_NUMBER in $(grep -nr ${OF_NODE} ${SSH_KNOWN_HOSTS} | awk -F':' '{print $1}'); do
+    sed -i -e "${LINE_NUMBER}s/.*\r*\n*\s*//" "${SSH_KNOWN_HOSTS}"
+    grep -v '^$' "${SSH_KNOWN_HOSTS}" | tee "${SSH_KNOWN_HOSTS}"
+  done
+}
