@@ -7,6 +7,13 @@ if [ -z $REPO_ROOT ]; then
   cd -
 fi
 
+zsh_updates(){
+  [[ $(which zsh > /dev/null ; echo $?) != "0" ]] && echo "[warn] no ZSH found" && return
+  [[ $(which git > /dev/null ; echo $?) != "0" ]] && echo "[warn] no GIT found" && return
+  mkdir -p ~/.zsh
+  git clone git://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+}
+
 ## 'link all shell profiles'
 profile_setup(){
   mkdir -p "${HOME}/cache/pip"

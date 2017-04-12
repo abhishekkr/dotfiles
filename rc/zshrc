@@ -114,3 +114,10 @@ if [ -e ~/.shorties ];
 then
   source ~/.shorties  ## will contain all project related stuff
 fi
+
+if [ -e ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh ];
+then
+  source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+else
+  echo "zsh autosuggestion script not found, re-run your dotfiles"
+fi
