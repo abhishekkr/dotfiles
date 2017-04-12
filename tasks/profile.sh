@@ -52,3 +52,4 @@ profile_setup(){
 }
 
 profile_setup
+zsh_updates
