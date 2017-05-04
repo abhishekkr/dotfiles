@@ -8,7 +8,15 @@ alias gcm0='git commit --signoff --allow-empty -m'
 
 alias gcp='git clone'
 
-alias gco='git checkout'
+gco(){
+  local CHECKOUT_PATH="$1"
+  local DO_IT="n"
+  git diff ${CHECKOUT_PATH}
+  echo "----------------------------------------------------------------"
+  echo -n "enter to checkout (y|N): "
+  read DO_IT
+  [[ "${DO_IT}" == "y" || "${DO_IT}" == "Y" ]] && git checkout ${CHECKOUT_PATH}
+}
 
 alias gdf='git diff'
 alias gdw='git diff --word-diff'
@@ -161,7 +169,7 @@ git-tag-later(){
   fi
 }
 
-git_rm_sensitive(){
+git-rm-sensitive(){
   SENSITIVE_MISTAKE="$1"
   git filter-branch --force --index-filter "git rm --cached --ignore-unmatch $SENSITIVE_MISTAKE" --prune-empty --tag-name-filter cat -- --all
 
