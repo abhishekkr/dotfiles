@@ -240,8 +240,6 @@ _asciiart_maxpayne=$_asciiart_maxpayne"\n      SSSSSSSSSSSSSS  .SSSSSSSSSSS SSSS
 echo $_asciiart_maxpayne
 }
 
-cowsay -f dragon "$USER is here..."
-
 arch-font-install(){
   _FONTDIR="/usr/share/fonts/$USER"
   sudo mkdir -p $_FONTDIR

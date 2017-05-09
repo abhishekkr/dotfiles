@@ -11,10 +11,6 @@ esac
 [ -s $HOME/.profile ] && source $HOME/.profile
 [ -s /etc/bashrc ] && source /etc/bashrc
 
-for a in `ls /etc/profile.d/*.sh`; do
-  source $a
-done
-
 # User specific aliases and functions
 
 # Customize to your needs...

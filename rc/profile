@@ -1,6 +1,8 @@
 ### $HOME/.profile
 # PS1='[\u@\h \W]\$ '
 
+cowsay -f dragon "$USER is here..."
+
 ###################################
 
 if [[ -n "$BASH_VERSION" ]]; then
@@ -12,6 +14,8 @@ else
 fi
 
 alias poweroff-now="systemctl poweroff -i"
+
+######################################################
 
 source_if_present_else_echo(){
   local file_to_source="$1"
@@ -25,12 +29,18 @@ source_if_present_else_echo(){
 ## to source local profile
 source_if_present_else_echo $HOME/.profile.local
 ## to load ABK dotfile's main loader if present
-source_if_present_else_echo /etc/profile.d/a.profiles.sh "Don't have profiles from 'github.com/abhishekkr/dotfiles', set it up."
+[[ ! -f "/etc/profile.d/a.profiles.sh" ]] && echo "Don't have profiles from 'github.com/abhishekkr/dotfiles', set it up."
 ## to load JRE defaults
 source_if_present_else_echo /etc/profile.d/a.nda.sh "Can create '/etc/profile.d/a.nda.sh' for non-tracked dotfile config."
 ## to load JRE defaults
 export _JAVA_AWT_WM_NONREPARENTING=1
 source_if_present_else_echo /etc/profile.d/jre.sh
+
+for a in `ls /etc/profile.d/*.sh`; do
+  source_if_present_else_echo $a "[error] loading profile '${a}' failed."
+done
+
+######################################################
 
 #### at last
 
@@ -47,4 +57,5 @@ if [[ -n "$BASH_VERSION" ]] || [[ -n "$ZSH_VERSION" ]]; then
   fi
   date
 fi
+
 ######################################################
