@@ -134,12 +134,6 @@ ls-top10files(){
 alias items='ls -1 | wc -l'
 alias mysize='du -h | grep -e "\.$" | cut -f1'
 
-alias ipaddr="ifconfig | grep 'inet ' | awk '{print \$2}'"
-alias ports='netstat -tulanp'
-alias check-net='curl --silent -Ik google.com || mtr --tcp -P53 8.8.8.8'
-alias check-http='curl -LkI www.google.co.in'
-alias check-ping='ping -c10 8.8.8.8'
-
 alias espeakf="espeak -ven-us+f2"
 
 ## remote controller
