@@ -543,3 +543,21 @@ clean-ssh-fingerprint(){
     grep -v '^$' "${SSH_KNOWN_HOSTS}" | tee "${SSH_KNOWN_HOSTS}"
   done
 }
+
+forever(){
+  local MY_TASK="$@"
+  local FOREVER_TILL="/tmp/.abk.forever"$(date +%s)
+
+  touch ${FOREVER_TILL}
+  while :
+    do
+    echo '----------------'
+    echo "[INFO] to stop, rm ${FOREVER_TILL}"
+    echo '----------------'
+    eval "$MY_TASK" ;
+     if [[ ! -f "${FOREVER_TILL}" ]];
+     then
+	     break       	   #Abandon the loop.
+     fi
+  done
+}
