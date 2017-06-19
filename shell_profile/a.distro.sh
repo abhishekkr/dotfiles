@@ -37,3 +37,28 @@ pkg-versions(){
   fi
 }
 
+ubuntu-map-version(){
+  local grep_pattern="$1"
+
+  local version_map=$(
+    echo "17.04,zesty-zapus,stretch/sid"
+    echo "16.10,yakkety-yak,stretch/sid"
+    echo "16.04,xenial-xerus,stretch/sid"
+    echo "15.10,wily-werewolf,jessie/sid"
+    echo "15.04,vividi-vervetsid"
+    echo "14.10,utopic-unicorn,jessie/sid"
+    echo "14.04,trusty-tahr,jessie/sid"
+    echo "13.10,saucy-salamandar,wheezy/sid"
+    echo "13.04,raring-ringtall,wheezy/sid"
+    echo "12.10,quantal-quetzal,wheezy/sid"
+    echo "12.04,precise-pangolin,wheezy/sid"
+    echo "11.10,oneiric-ocelot,wheezy/sid"
+    echo "11.04,nattynarwhal,squeeze/sid"
+    echo "10.10,maverick-meerkat,squeeze/sid"
+    echo "10.04,lucid-lynx,squeeze/sid"
+  )
+
+  for version in $(echo $version_map); do
+    [[ $(echo $version | grep -i -c "${grep_pattern}") -ne 0 ]] && echo $version
+  done
+}
