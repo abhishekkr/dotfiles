@@ -544,11 +544,21 @@ clean-ssh-fingerprint(){
   done
 }
 
+forever-no-more(){
+  local MY_TASK_PATTERN="$@"
+  local FOREVER_TILL_PATTERN="/tmp/.abk.forever*"
+
+  for forever_pid in $(eval "ls -1 ${FOREVER_TILL_PATTERN}"); do
+    [[ $(grep -c "${MY_TASK_PATTERN}" ${forever_pid}) -ne 0 ]] && rm -i "${forever_pid}"
+  done
+}
+
 forever(){
   local MY_TASK="$@"
   local FOREVER_TILL="/tmp/.abk.forever"$(date +%s)
 
   touch ${FOREVER_TILL}
+  echo "${MY_TASK}" | tee -a "${FOREVER_TILL}"
   while :
     do
     echo '----------------'
