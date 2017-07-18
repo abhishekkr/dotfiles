@@ -45,7 +45,9 @@ alias dckr-search="docker search"
 alias dckr-selinux-volume="chcon -Rt svirt_sandbox_file_t"
 alias dckr-scrub='docker rmi $(docker images -q -f "dangling=true")'
 
-
+dckr-vol-cleanup(){
+  docker volume ls -qf dangling=true | xargs -r docker volume rm
+}
 dckr-sh(){
   _IMG=$1
   docker run -i -t "${_IMG}" /bin/bash
