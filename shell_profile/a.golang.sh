@@ -312,3 +312,34 @@ func main(){
 GOTRYEOF
   $EDITOR "${_GO_TRY_FILENAME}" 3>&1 1>&2 2>&3
 }
+
+dckr-go-174(){
+  docker run -i -t -v ${PWD}:/opt/lab golang:1.7.4 /bin/bash
+}
+
+
+################################################# golang mobile :start:
+
+gomobile-init(){
+  go get golang.org/x/mobile/cmd/gomobile
+  gomobile init
+}
+gomobile-build(){
+  local BUILD_FOR_PLATFORM="${1}"
+  locak PACKAGE_TO_BUILD="${2}"
+  gomobile build -target=${BUILD_FOR_PLATFORM} ${PACKAGE_TO_BUILD}
+}
+gomobile-apk-build(){ ## android apk
+  locak PACKAGE_TO_BUILD="${1}"
+  gomobile-build android ${PACKAGE_TO_BUILD}
+}
+gomobile-ipa-build(){ ## ios ipa
+  locak PACKAGE_TO_BUILD="${1}"
+  gomobile-build ios ${PACKAGE_TO_BUILD}
+}
+gomobile-deploy(){
+  locak PACKAGE_TO_BUILD="${1}"
+  gomobile install ${PACKAGE_TO_BUILD}
+}
+
+################################################# golang mobile :end:
