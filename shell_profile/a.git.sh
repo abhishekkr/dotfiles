@@ -169,6 +169,21 @@ git-tag-later(){
   fi
 }
 
+git-rm-sensitive-text(){
+  local _SENSITIVE_TEXT="$1"
+  local _CHANGE_TO_TEXT="$2"
+  local _LEAKY_FILE="$3"
+
+  git filter-branch --tree-filter "sed -i 's/${_SENSITIVE_TEXT}/${_CHANGE_TO_TEXT}/g' ${_LEAKY_FILE}" -- --all
+
+  git push origin --force --all
+  git push origin --force --tags
+
+  git for-each-ref --format='delete %(refname)' refs/original | git update-ref --stdin
+  git reflog expire --expire=now --all
+  git gc --prune=now
+}
+
 git-rm-sensitive(){
   SENSITIVE_MISTAKE="$1"
   git filter-branch --force --index-filter "git rm --cached --ignore-unmatch $SENSITIVE_MISTAKE" --prune-empty --tag-name-filter cat -- --all
