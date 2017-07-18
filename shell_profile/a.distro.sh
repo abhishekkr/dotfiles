@@ -15,6 +15,19 @@ pkg-clean-cache(){
     fi
 }
 
+pkg-update-sequential(){
+    if [ -f /etc/arch-release ]; then
+        echo "ArchLinux: updating sequentially."
+        echo "WIP"
+    elif [ -f /etc/redhat-release ]; then
+        echo "RHEL-Base: updating packages sequentially."
+        rpm -qa | xargs -I{} sudo dnf -y update {}
+    else
+        echo "This distro not suported yet!" && return 1
+    fi
+}
+
+
 service_log(){
   if [[ $# -eq 1 ]]; then
     journalctl -u "$1" -f
