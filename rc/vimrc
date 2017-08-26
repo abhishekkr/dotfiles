@@ -204,7 +204,7 @@ autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 """""""</neocomplete>>
 
 colorscheme PaperColor " could type ':color <_TAB_>' to weigh options
-let g:airline_theme='PaperColor'
+"let g:airline_theme='PaperColor'
 
 """""""<powerline>
 set rtp+=$HOME/.virtualenvs/anon/lib/python2.7/site-packages/powerline/bindings/vim
