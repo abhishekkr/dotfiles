@@ -18,3 +18,21 @@ chk-net-ssh(){
 chk-net-dns(){
   mtr --tcp -P53 $@
 }
+
+is-private-ip(){
+  local NODE_IP="$1"
+
+  local PRIV_LO="^127\.\d{1,3}\.\d{1,3}\.\d{1,3}$"
+  local PRIV_24="^10\.\d{1,3}\.\d{1,3}\.\d{1,3}$"
+  local PRIV_20="^192\.168\.\d{1,3}.\d{1,3}$"
+  local PRIV_16="^172.(1[6-9]|2[0-9]|3[0-1]).[0-9]{1,3}.[0-9]{1,3}$"
+
+  local IS_PRIVATE=1
+  [[ $(echo ${NODE_IP} | grep -c -P "${PRIV_LO}") -eq 1 ]] && IS_PRIVATE=0
+  [[ $(echo ${NODE_IP} | grep -c -P "${PRIV_24}") -eq 1 ]] && IS_PRIVATE=0
+  [[ $(echo ${NODE_IP} | grep -c -P "${PRIV_20}") -eq 1 ]] && IS_PRIVATE=0
+  [[ $(echo ${NODE_IP} | grep -c -P "${PRIV_16}") -eq 1 ]] && IS_PRIVATE=0
+
+  [[ "${IS_PRIVATE}" -eq 0 ]] && return 0
+  return 1
+}
