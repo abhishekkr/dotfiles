@@ -1,5 +1,15 @@
 ## net/sec
 
+b64encode(){
+  local _TXT="$@"
+  python -c "import base64 ; print base64.b64encode(\"${_TXT}\")"
+}
+
+b64decode(){
+  local _KOD="$@"
+  python -c "import base64 ; print base64.b64decode(\"${_KOD}\")"
+}
+
 gpg-decrypt(){
   local _PATHS_TO_DECRYPT=""
 
