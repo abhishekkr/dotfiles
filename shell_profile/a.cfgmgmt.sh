@@ -117,3 +117,27 @@ alias kitchen-converge="kitchen converge"
 alias kitchen-destroy="kitchen destroy"
 alias kitchen-verify="kitchen verify"
 alias kitchen-ls="kitchen list"
+
+##################### knife ############################
+
+knife-bootstrap(){
+  [[ $# -lt 1 ]] && \
+    echo "usage: knife-bootstrap <MACHINE_IP> (<MACHINE_SSH_USER> <MACHINE_SSH_KEY> <SERVICE_ENVIRONMENT> <MACHINE_NAME> <KNIFE_RB_LOCATION>)" && \
+    echo "" && \
+    echo "can set specific env var MACHINE_SSH_USER, MACHINE_SSH_KEY, SERVICE_ENVIRONMENT, MACHINE_NAME, KNIFE_RB_LOCATION externally as well" && \
+    return 1
+
+  MACHINE_IP="$1"
+
+  MACHINE_SSH_USER="-x $2"
+  MACHINE_SSH_KEY="-i $3"
+  SERVICE_ENVIRONMENT="-E $4"
+  MACHINE_NAME="--node-name $5"
+  KNIFE_RB_LOCATION="-c $6"
+
+  local CHEF_VERSION="12.19.36"
+
+  knife bootstrap ${MACHINE_IP} --bootstrap-version "${CHEF_VERSION}" "${MACHINE_SSH_USER}" "${MACHINE_SSH_KEY}" "${SERVICE_ENVIRONMENT}" -p 22 "${MACHINE_NAME}" --run-list "recipe[base]" --sudo --sudo-preserve-home "${KNIFE_RB_LOCATION}"
+}
+
+
