@@ -200,3 +200,6 @@ git-rm-sensitive(){
   git gc --prune=now
 }
 
+git-commits-count(){
+  git log --all | grep '^commit ' | wc -l
+}
