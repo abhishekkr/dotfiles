@@ -1,7 +1,7 @@
+```
 #!/bin/bash
 #############################################################################
 #
-# Place this in go project's root dir.
 # You don't need to keep your project in GOPATH go-get dir.
 # Keep your project in your normal workspace as projects on other stacks.
 # This works like virtualenv, will create a local GOPATH and manage it's own via Linux's symlinks magic.
@@ -32,7 +32,7 @@ cd ${THIS_DIR}
 [[ -z "${GO_TASK_CONFIG}" ]] && GO_TASK_CONFIG="${MY_DIR}/.go-tasks.cfg"
 [[ -f "${GO_TASK_CONFIG}" ]] && source "${GO_TASK_CONFIG}"
 
-[[ -z "${MY_GOPATH}" ]] && export MY_GOPATH="github.com/SOME-USER/SOME-REPO"
+[[ -z "${MY_GOPATH}" ]] && export MY_GOPATH="" #"github.com/SOME-USER/SOME-REPO"
 [[ -z "${GO_MAIN_FILE}" ]] && export GO_MAIN_FILE="main.go"
 [[ -z "${DIR_OF_GO_PLUGINS}" ]] && export DIR_OF_GO_PLUGINS=""
 [[ -z "${DB_MIGRATE_MAIN}" ]] && export DB_MIGRATE_MAIN=""
@@ -48,10 +48,13 @@ export GO_GET_PKG_FILE="go-get-pkg.txt"
 appendGoImportToListIfMissing(){
   local _GO_GET_PKG_FILEPATH="$1"
 
-  for goGetPath in $(go list -f {{.Deps}} | sed 's/^\[//' | sed 's/\]$//' | sed -E 's/\s+/\n/g' | grep -v '^[a-zA-Z]*$' | xargs -I{} bash -c "[[ \$(echo {} | sed 's/\/.*//' | grep -c '\.' ) -ne 0 ]] && echo {}"); do
-    if [[ $(cat "${_GO_GET_PKG_FILEPATH}" | grep -c "^${goGetPath}$") -eq 0 ]]; then
-      echo "${goGetPath}" | tee -a "${_GO_GET_PKG_FILEPATH}" >/dev/null
-    fi
+  for gofilepath in $(allPathsWithGoFiles); do
+    for goGetPath in $(go list -f '{{.Deps}}' "$gofilepath" | sed 's/^\[//' | sed 's/\]$//' | grep -v '^[a-zA-Z]*$'); do
+      [[ $(echo "${goGetPath}" | sed 's/\/.*//' | grep -c '\.' ) -ne 0 ]] || continue
+      if [[ $(cat "${_GO_GET_PKG_FILEPATH}" | grep -c "^${goGetPath}$") -eq 0 ]]; then
+        echo "${goGetPath}" | tee -a "${_GO_GET_PKG_FILEPATH}" >/dev/null
+      fi
+    done
   done
 }
 
@@ -362,7 +365,7 @@ migrateDB(){
 
   [[ -z "${DB_CONNSTR}" ]] && export DB_CONNSTR="${DB_CONNECTION_STRING}"
   [[ -z "${MIGRATION_TYPE}" ]] && export MIGRATION_TYPE="up"
-    
+
   [[ -z "${DB_CONNSTR}" ]] && echo "env DB_IP is empty, see usage" && exit 123
 
   go run db/schema.go -type ${MIGRATION_TYPE} -dir db/migrations -db "${DB_CONNSTR}"
@@ -478,3 +481,6 @@ cd $(dirname $0)
 cd $_OLD_PWD
 
 ##############################################################################
+```
+
+
