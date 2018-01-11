@@ -1,4 +1,3 @@
-```
 #!/bin/bash
 #############################################################################
 #
@@ -148,6 +147,49 @@ goGetPkgListCreate(){
   fi
 }
 
+gitGetPkgInstall(){
+  local package="$1"
+  local _cloneUrl="$2"
+  local _goGetPath="$3"
+
+  local _goenvBase=$(dirname ${_goGetPath})
+  local goenvSrcPath="${GOPATH}/src/${_goGetPath}"
+
+  local _prevDir=$(pwd)
+  if [[ !  -z $GO_GET_UPDATE && -d "${goenvSrcPath}" ]]; then
+    echo "[+] found existing ${_goGetPath}, running git pull"
+    cd "${goenvSrcPath}"
+    git pull
+  elif [[ ! -d "${goenvSrcPath}" ]]; then
+    echo "[+] not found existing ${_goGetPath}, running git clone"
+    mkdir -p $(dirname "${goenvSrcPath}")
+    cd $(dirname "${goenvSrcPath}")
+    git clone ${_cloneUrl}
+  fi
+  cd "${_prevDir}"
+
+  go get ${_goGetPath}
+}
+
+httpsGetPkgInstall(){
+  local package="$1"
+  echo "[+] setup explicitly over https:// - $package"
+
+  local _cloneUrl=$(echo "${pkg_import_path}" | sed -E 's/(https:\/\/[^\/]*\/[^\/]*\/[^\/]*).*/\1.git/')
+  local _goGetPath=$(echo "${_cloneUrl}"|  sed 's/https:\/\///' | sed 's/.git$//')
+  gitGetPkgInstall "${package}" "${_cloneUrl}" "${_goGetPath}"
+}
+
+gitAtGetPkgInstall(){
+  local package="$1"
+  local pkg_import_path=$(echo $pkg_path | awk '{print $NF}')
+  echo "[+] go get explicitly over git@ - $package"
+
+  local _cloneUrl=$(echo "${pkg_import_path}" | sed -E 's/([^\/]*\/[^\/]*).*/\1.git/')
+  local _goGetPath=$(echo "${_cloneUrl}"|  sed 's/git@//' | sed 's/:/\//' | sed 's/.git$//')
+  gitGetPkgInstall "${package}" "${_cloneUrl}" "${_goGetPath}"
+}
+
 goGetPkgInstall(){
   for pkg_list in $PKG_LISTS; do
     cat $pkg_list | while read pkg_path; do
@@ -161,8 +203,15 @@ goGetPkgInstall(){
       if [[ ! -z $GO_GET_UPDATE ]]; then
         go_get="${go_get} -u"
       fi
-      echo "fetching go package: ${go_get} ${pkg_path}";
-      ${go_get} ${pkg_path}
+
+      if [[ $(echo ${pkg_import_path} | grep -c '^https:\/\/') -ne 0  ]]; then
+        httpsGetPkgInstall "${pkg_path}"
+      elif [[ $(echo ${pkg_import_path} | grep -c '^git@') -ne 0  ]]; then
+        gitAtGetPkgInstall "${pkg_path}"
+      else
+        echo "fetching go package: ${go_get} ${pkg_path}";
+        ${go_get} ${pkg_path}
+      fi
     done
   done
 
@@ -481,6 +530,3 @@ cd $(dirname $0)
 cd $_OLD_PWD
 
 ##############################################################################
-```
-
-
