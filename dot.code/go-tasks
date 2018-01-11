@@ -28,7 +28,7 @@ cd $(dirname $0)
 MY_DIR=$(pwd)
 cd ${THIS_DIR}
 
-[[ -z "${GO_TASK_CONFIG}" ]] && GO_TASK_CONFIG="${MY_DIR}/.go-tasks.cfg"
+[[ -z "${GO_TASK_CONFIG}" ]] && GO_TASK_CONFIG="${THIS_DIR}/.go-tasks.cfg"
 [[ -f "${GO_TASK_CONFIG}" ]] && source "${GO_TASK_CONFIG}"
 
 [[ -z "${MY_GOPATH}" ]] && export MY_GOPATH="" #"github.com/SOME-USER/SOME-REPO"
@@ -40,6 +40,17 @@ cd ${THIS_DIR}
 #############################################################################
 
 export GO_GET_PKG_FILE="go-get-pkg.txt"
+
+#############################################################################
+##### check mandatory variables
+MANDATORY_ENV_VARS=""
+[[ -z "${MY_GOPATH}" ]] && MANDATORY_ENV_VARS="${MANDATORY_ENV_VARS} MY_GOPATH"
+[[ -z "${GO_MAIN_FILE}" ]] && MANDATORY_ENV_VARS="${MANDATORY_ENV_VARS} MY_GOPATH"
+[[ -z "${GO_GET_PKG_FILE}" ]] && MANDATORY_ENV_VARS="${MANDATORY_ENV_VARS} MY_GOPATH"
+
+[[ ! -z "${MANDATORY_ENV_VARS}" && "$1" != "cfg" ]] && \
+  echo "run '$0 cfg', following variable need to be configured: ${MANDATORY_ENV_VARS}" && \
+  exit 123
 
 #############################################################################
 ##### from github.com/abhishekkr/dotfiles/shell_profile/a.golang.sh
@@ -105,7 +116,7 @@ goenvOnAt(){
 
   if [ ! -d "${GOPATH}/src/${MY_GOPATH}" ]; then
     mkdir -p $(dirname "${GOPATH}/src/${MY_GOPATH}")
-    ln -sf "${MY_DIR}" "${GOPATH}/src/${MY_GOPATH}"
+    ln -sf "${THIS_DIR}" "${GOPATH}/src/${MY_GOPATH}"
   fi
 
   echo "your new GOPATH is at $GOPATH"
@@ -175,7 +186,7 @@ httpsGetPkgInstall(){
   local package="$1"
   echo "[+] setup explicitly over https:// - $package"
 
-  local _cloneUrl=$(echo "${pkg_import_path}" | sed -E 's/(https:\/\/[^\/]*\/[^\/]*\/[^\/]*).*/\1.git/')
+  local _cloneUrl=$(echo "${pkg_import_path}" | sed -E 's/(https:\/\/[^\/]*\/[^\/]*\/[^\/]*).*/\1/' | sed 's/.git$//')".git"
   local _goGetPath=$(echo "${_cloneUrl}"|  sed 's/https:\/\///' | sed 's/.git$//')
   gitGetPkgInstall "${package}" "${_cloneUrl}" "${_goGetPath}"
 }
@@ -185,7 +196,7 @@ gitAtGetPkgInstall(){
   local pkg_import_path=$(echo $pkg_path | awk '{print $NF}')
   echo "[+] go get explicitly over git@ - $package"
 
-  local _cloneUrl=$(echo "${pkg_import_path}" | sed -E 's/([^\/]*\/[^\/]*).*/\1.git/')
+  local _cloneUrl=$(echo "${pkg_import_path}" | sed -E 's/([^\/]*\/[^\/]*).*/\1/' | sed 's/.git$//')",git"
   local _goGetPath=$(echo "${_cloneUrl}"|  sed 's/git@//' | sed 's/:/\//' | sed 's/.git$//')
   gitGetPkgInstall "${package}" "${_cloneUrl}" "${_goGetPath}"
 }
@@ -438,7 +449,7 @@ goTasksHelp(){
 }
 
 configGoTasks(){
-  [[ -z "${GO_TASK_CONFIG}" ]] && GO_TASK_CONFIG="${MY_DIR}/.go-tasks.cfg"
+  [[ -z "${GO_TASK_CONFIG}" ]] && GO_TASK_CONFIG="${THIS_DIR}/.go-tasks.cfg"
 
   echo -n "[+] enter 'go get'-able path for this project: "
   read MY_GOPATH
