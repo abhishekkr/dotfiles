@@ -3,10 +3,71 @@
 alias ls='ls --color=auto'
 alias rdp="rdesktop-vrdp -u administrator -p -"
 
-alias uhoh-scr="xscreensaver-command -lock"
-alias uhoh="xlock"
-
 alias ack="ack --ignore-dir=.venv --ignore-dir=.git"
+
+uhoh-scr(){
+  xscreensaver-command -lock
+}
+uhoh(){
+  xlock
+}
+
+fuzzPathsList(){
+  ## used in collaboration with 'fuzzPathsValue'
+  ## check it's comments for full picture
+  local pathfuzz="$*"
+  pathfuzz=$(echo $pathfuzz | sed 's/\s*/\*/g')
+  pathfuzz="${pathfuzz:1:-1}"
+
+  local targets=$(find . -iname "*${pathfuzz}*" -type d | sed 's/^\s*//' | sed 's/\s*$//')
+
+  [[ -z "${targets}" ]] && echo "[error] nothing like this found" && return 1
+  local targets_idx=0
+  for _t in $(echo $targets); do
+    ((targets_idx=targets_idx+1))
+    echo "[${targets_idx}] $_t"
+  done
+}
+
+fuzzPathsValue(){
+  ## in caller foo
+  ## use fuzzPathsList to show options to user,
+  ## then something as following to get the option
+  ## #### echo -n "which index to change dir into: " && read target_idx
+  ## then call this foo with <option-input> <input-of-fuzzPathsList>
+
+  local pathIdx="$1"
+  local pathfuzz="${@:2}"
+  pathfuzz=$(echo $pathfuzz | sed 's/\s*/\*/g')
+  pathfuzz="${pathfuzz:1:-1}"
+
+  local targets=$(find . -iname "*${pathfuzz}*" -type d | sed 's/^\s*//' | sed 's/\s*$//')
+
+  [[ -z "${targets}" ]] && echo "." && return 1
+
+  ((targets_idx=0))
+  for _t in $(echo $targets); do
+    ((targets_idx=targets_idx+1))
+    [[ $targets_idx -ne $pathIdx ]] && continue
+    echo "$_t" && return
+  done
+  echo "."; return 123
+}
+
+vimm(){
+  local vimTarget="$1"
+
+  [[ -z "${vimTarget}" ]] && vimTarget='.'
+
+  if [[ "${vimTarget}" != '.' ]]; then
+    fuzzPathsList "${vimTarget}"
+    echo -n "which index to change dir into: " && read pathIdx
+    [[ -z "${pathIdx}" ]] && pathIdx=0
+    vimTarget=$( fuzzPathsValue "${pathIdx}" "${vimTarget}" )
+  fi
+
+  vim "${vimTarget}"
+}
 
 mycd(){
   if [[ $# -eq 1 ]]; then

@@ -10,3 +10,4 @@ vim/bundle/*
 vim/plugin/*
 temp/*
 **/tags
+*.patch
