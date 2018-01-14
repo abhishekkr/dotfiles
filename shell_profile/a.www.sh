@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 unshort-url(){
-  curl -s -IkL http://j.mp/1TpI40i | grep '^[Ll]ocation:' | sed 's/[Ll]ocation:\s*//'
+  curl -s -IkL "$@" | grep '^[Ll]ocation:' | sed 's/^[Ll]ocation:\s*//'
 }
 
 check-ssl(){
