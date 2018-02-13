@@ -19,7 +19,7 @@ fuzzPathsList(){
   pathfuzz=$(echo $pathfuzz | sed 's/\s*/\*/g')
   pathfuzz="${pathfuzz:1:-1}"
 
-  local targets=$(find . -iname "*${pathfuzz}*" -type d | sed 's/^\s*//' | sed 's/\s*$//')
+  local targets=$(find . -iname "*${pathfuzz}*" | sed 's/^\s*//' | sed 's/\s*$//')
 
   [[ -z "${targets}" ]] && echo "[error] nothing like this found" && return 1
   local targets_idx=0
@@ -41,7 +41,7 @@ fuzzPathsValue(){
   pathfuzz=$(echo $pathfuzz | sed 's/\s*/\*/g')
   pathfuzz="${pathfuzz:1:-1}"
 
-  local targets=$(find . -iname "*${pathfuzz}*" -type d | sed 's/^\s*//' | sed 's/\s*$//')
+  local targets=$(find . -iname "*${pathfuzz}*" | sed 's/^\s*//' | sed 's/\s*$//')
 
   [[ -z "${targets}" ]] && echo "." && return 1
 
