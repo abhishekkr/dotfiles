@@ -130,6 +130,9 @@ command! FPY set filetype=python
 "" Perl PHP PL/SQL Python (Pyrex/Cython) REXX Ruby Scheme Shell scripts (Bourne/Korn/Z)
 "" S-Lang SML (Standard ML) Tcl TeX Vera Verilog VHDL Vim YACC
 map <F8> :!/usr/bin/ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
+""" Ctl+] to jump to definition of on-cursor tag
+""" Ctl+t to jump back to on-cursor tag
+""" g+Ctl+t to jump for ambiguous tag
 ""au BufWritePost *.go silent! !~/.vim/bin/gotags -sort -silent . > /dev/null
 "" "au BufWritePost *.go silent! !ctags -R --fields=+iaS --extra=+q --go-types=fvt .
 ""au BufWritePost *.cpp,*.c,*.h,*.hpp silent! !ctags -R --fields=+iaS --extra=+q .
@@ -302,8 +305,15 @@ let g:tagbar_type_go = {
 
 " open all files tagged in project as list
 " Netrw Style Listing
-let g:netrw_liststyle = 3
+"let g:netrw_banner = 0 "disable banner
+let g:netrw_liststyle = 3 "tree view
+"let g:netrw_browse_split = 4 "open in prior window
+let g:netrw_altv=1 "open splits to the right
+"let g:netrw_list_hide=netrw_gitignore#Hide()
+"let g:netrw_list_hide=',\(^\|\s\s\)\zs\.\S\+'
 nnoremap <Leader><F9> :Tlist<CR><C-W>h<C-W>s:e .<CR><C-W>l:let g:netrw_chgwin=winnr()<CR><C-W>h
+
+
 """""""</tagbar>
 
 """""""<github.com:fatih>
@@ -386,7 +396,30 @@ smap <expr><tab> neosnippet#expandable_or_jumpable() ?
 
 inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
+""init replace for word under cursor
+:nnoremap <Leader>s :%s/<C-r><C-w>/<C-r><C-w>/gc
+
 autocmd InsertLeave * NeoSnippetClearMarkers
+
+
+"""""""ABK new
+
+"" built-in file finder
+""" search into all subdirs of subdirs.. `:find filenameOrPattern`
+set path+=**
+set wildmenu ""display all matching files on tab completion
+""open new split window and init find *
+:nnoremap <Leader>p :Sex<CR>:find *
+
+"" custome snippets
+nnoremap ,html :-1read $HOME/.vim/snippets/skeleton.html<CR>3jwf>a
+"" different snippets activating only in filetype for similar use-case by same shortcut
+autocmd Filetype ruby nnoremap ,d :-1read $HOME/.vim/snippets/pry.rb<CR>
+autocmd Filetype python nnoremap ,d :-1read $HOME/.vim/snippets/pdb.py<CR>
+autocmd Filetype go nnoremap ,e :-1read $HOME/.vim/snippets/if-err-not-nil.go.snip<CR>jwi
+
+""" under trial
+
 
 "" http://stackoverflow.com/questions/1218390/what-is-your-most-productive-shortcut-with-vim
 """"" CHEATSHEET FOR SELECTION (http://stackoverflow.com/a/1218429)
@@ -394,7 +427,7 @@ autocmd InsertLeave * NeoSnippetClearMarkers
 "" vi", vi' : for double quotes and for single quotes
 "" viB, vi{ : to select a curly brace block
 "" ggVG     : entire file
-"" 
+""
 
 """"" CHEATSHEET (keep revising full : http://vim.wikia.com/wiki/Best_Vim_Tips)
 "" :Ex     : file explorer note capital Ex
@@ -498,4 +531,47 @@ autocmd InsertLeave * NeoSnippetClearMarkers
 ""
 "" ar : a ruby block, any expression closed with 'end'
 "" ir : inner ruby block
+""
+""
+""
+"" `:ls` to show files held in memory... can jump to other file by `:b uniqFilePattern`
+""
+""
+"" auto-complete, ':help ins-completion'
+""" Ctl+x,Ctl+n for just THIS file
+""" Ctl+x,Ctl+i for current and included files
+""" Ctl+x,Ctl+f for filenames, works with path tricks
+""" Ctl+x,Ctl+] for tags only
+""" Ctl+n for anything specifed by complete option
+""" Ctl+x,s for spelling suggestion
+"""
+""" Ctl+n(ext) and Ctl+p(revious) to go back and forth in suggestion list
+""
+""
+"" :help netrw-browse-maps
+""" :edit <dirname> ~ open explorer there
+""" Super(command) + v ~ vertical split open
+""" Super(command) + t ~ tab split open
+""
+""
+"" 'set showcmd' to show commands while being typed... so people watching know
+""
+""
+"" Vim needs make output as QuickFixFormatter
+"" for a filetype set 'set makeprg=bundle\ exec\ rspec\ -f\ QuickFixFormatter'
+"" now can run ':make' to run build
+"" ':cl' to list errors
+"" ':cc#' to jump to error by number
+"" ':cn' and ':cp' to navigate next and previous
+""
+""
+"" copy+paste registers
+""" by default gets used default register
+""" can shuffle in named double-quote register like
+""" '"byy' '"cyy' '"bp' '"cp' to manage to set of copy paste across
+""
+""
+"" :help mode_^char like ':help i_^n'
+"" :helpgrep term
+""
 ""
