@@ -103,6 +103,10 @@ augroup filetypedetect
   au BufNewFile,BufRead *.go       set filetype=go syntax=go
   au BufNewFile,BufRead *.sbt      set filetype=scala syntax=scala
   au BufNewFile,BufRead *.js       set filetype=javascript syntax=javascript
+
+  au BufNewFile,BufRead *.pu       set filetype=plantuml syntax=plantuml
+  au BufNewFile,BufRead *.plantuml set filetype=plantuml syntax=plantuml
+  au BufNewFile,BufRead *.uml      set filetype=plantuml syntax=plantuml
 augroup END
 
 autocmd FileType cpp,c,go,haskell,python setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4
@@ -121,6 +125,11 @@ autocmd BufWritePre *.py normal m`:%s/\s\+$//e ``
 autocmd BufRead,BufNewFile *.json set filetype=json
 autocmd FileType json setlocal expandtab autoindent formatoptions=tcq2l
 autocmd FileType json setlocal textwidth=78 shiftwidth=2 softtabstop=2 tabstop=8 foldmethod=syntax
+
+"" preview uml using plantuml
+autocmd FileType plantuml nnoremap <buffer> <leader>m :!java -jar ~/bin/plantuml.jar --tpng -o %:p:h %<cr><cr>
+"" preview markdown
+autocmd FileType markdown map <leader>m :MarkdownPreview default<CR>
 
 command! FRB set filetype=ruby
 command! FPY set filetype=python

@@ -56,3 +56,14 @@ venv_anon(){
   export PATH=${ANON_VIRTUALENV}/bin:$PATH
 }
 
+decimalToBinary(){
+  local _DEC=$1
+  [[ -z "${_DEC}" ]] && return 123
+  python -c "print(bin("${_DEC}"))"
+}
+
+binaryToDecimal(){
+  local _BIN=$1
+  [[ -z "${_BIN}" ]] && return 123
+  python -c "print(int('"${_BIN}"', 2))"
+}
