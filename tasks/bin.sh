@@ -9,6 +9,14 @@ setup_jq(){
   echo "placed: ${jq_fylname}"
 }
 
+setup_plantuml(){
+  plantuml_url="https://excellmedia.dl.sourceforge.net/project/plantuml/plantuml.jar"
+  plantuml_fylname="$HOME_BINDIR/plantuml.jar"
+  curl -Lk -o "${plantuml_fylname}" "${plantuml_url}"
+  chmod +x "${plantuml_fylname}"
+  echo "placed: ${plantuml_fylname}"
+}
+
 setup_chruby(){
   CHRUBY_VERSION="0.3.9"
   CHRUBY_DIR="chruby-${CHRUBY_VERSION}"
@@ -43,5 +51,6 @@ setup_ruby_install(){
 }
 
 setup_jq
+setup_plantuml
 #setup_chruby
 #setup_ruby_install
