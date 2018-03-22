@@ -10,7 +10,7 @@ augroup AutoReloadVimRC
   au BufWritePost .vimrc so ~/.vimrc
 augroup END
 
-set nocompatible                  " Must come first because it changes other options.
+"set nocompatible                  " Must come first because it changes other options.
 set formatoptions-=cro            " Turn AutoComment on next line
 set modeline
 
