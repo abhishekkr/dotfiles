@@ -1,8 +1,16 @@
-func TestFoo (t *testing.T) {
-  /*
+import (
+	"log"
+	"testing"
+)
+
+func TestFoo(t *testing.T) {
+	//"github.com/bouk/monkey"
+	//"github.com/stretchr/testify/assert"
+	//"github.com/stretchr/testify/mock"
+
 	var guard *monkey.PatchGuard
 	var guardB bool
-	guard = monkey.Patch(){
+	guard = monkey.Patch(log.Fatal, func(err error) {
 		guard.Unpatch()
 		defer guard.Restore()
 		guardB = true
@@ -13,5 +21,5 @@ func TestFoo (t *testing.T) {
 	mc.On("ImplMeth").Return()
 	Foo(mc)
 	assert.Equal(t, guardB, true)
-  */
+	mc.Mock.AssertExpectations(t)
 }
