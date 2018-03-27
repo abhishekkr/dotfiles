@@ -31,26 +31,28 @@ cd ${THIS_DIR}
 [[ -z "${GO_TASK_CONFIG}" ]] && GO_TASK_CONFIG="${THIS_DIR}/.go-tasks.cfg"
 [[ -f "${GO_TASK_CONFIG}" ]] && source "${GO_TASK_CONFIG}"
 
-[[ -z "${MY_GOPATH}" ]] && export MY_GOPATH="" #"github.com/SOME-USER/SOME-REPO"
-[[ -z "${GO_MAIN_FILE}" ]] && export GO_MAIN_FILE="main.go"
+## can set defaults here, if don't want a cfg file
+[[ -z "${MY_GOPATH}" ]] && export MY_GOPATH=""
+[[ -z "${GO_MAIN_FILE}" ]] && export GO_MAIN_FILE=""
 [[ -z "${DIR_OF_GO_PLUGINS}" ]] && export DIR_OF_GO_PLUGINS=""
 [[ -z "${DB_MIGRATE_MAIN}" ]] && export DB_MIGRATE_MAIN=""
+[[ -z "${GO_GET_PKG_FILE}" ]] && export GO_GET_PKG_FILE="go-tasks.pkg"
+
+[[ -z "${GOOS_OPTIONS}" ]] && export GOOS_OPTIONS="darwin linux windows"
+[[ -z "${GOARCH_OPTIONS}" ]] && export GOARCH_OPTIONS="386 amd64"
 
 # managing go deps
 #############################################################################
-
-export GO_GET_PKG_FILE="go-get-pkg.txt"
 
 #############################################################################
 ##### check mandatory variables
 MANDATORY_ENV_VARS=""
 [[ -z "${MY_GOPATH}" ]] && MANDATORY_ENV_VARS="${MANDATORY_ENV_VARS} MY_GOPATH"
-[[ -z "${GO_MAIN_FILE}" ]] && MANDATORY_ENV_VARS="${MANDATORY_ENV_VARS} MY_GOPATH"
 [[ -z "${GO_GET_PKG_FILE}" ]] && MANDATORY_ENV_VARS="${MANDATORY_ENV_VARS} MY_GOPATH"
 
 [[ ! -z "${MANDATORY_ENV_VARS}" && "$1" != "cfg" ]] && \
   echo "run '$0 cfg', following variable need to be configured: ${MANDATORY_ENV_VARS}" && \
-  exit 123
+  return 123
 
 #############################################################################
 ##### from github.com/abhishekkr/dotfiles/shell_profile/a.golang.sh
@@ -131,10 +133,43 @@ goenvoff(){
 }
 
 goGetPkgHelp(){
-  echo "goGetPkg handles your Golang Project dependencies."
+  echo "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+  echo "| go-tasks handles Golang Project dependencies & more |"
+  echo "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+  echo ""
+  echo "* Configure repo specific variables for go-task to use go repos"
+  echo "  $ $0 cfg"
   echo ""
   echo "* Create new dependency list or install from existing:"
   echo "  $ $0 deps"
+  echo ""
+  echo "* Update dependency list for new imports:"
+  echo "  $ $0 redep"
+  echo ""
+  echo "* Update dependency list for new imports and existing ones as well:"
+  echo "  $ $0 redep up"
+  echo ""
+  echo "* to run the ${GO_MAIN_FILE}"
+  echo "  $ $0 run"
+  echo ""
+  echo "* to build ${GO_MAIN_FILE}, plugin in subdirs of ${DIR_OF_GO_PLUGINS} if available, migrate ${DB_MIGRATE_MAIN} if available"
+  echo "  $ $0 build"
+  echo ""
+  echo "* to re-build plug-ins only from ${DIR_OF_GO_PLUGINS}"
+  echo "  $ $0 build-plugin"
+  echo ""
+  echo "* run migrate ${DB_MIGRATE_MAIN}"
+  echo "  $ $0 migrate"
+  echo ""
+  echo "* run different quality checks on packages"
+  echo "  $ $0 quality"
+  echo ""
+  echo "* this is to run tests on packages"
+  echo "  $ $0 test"
+  echo ""
+  echo "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+  echo ""
+  echo "{ specific environment variables impact }"
   echo ""
   echo "* Install from existing with updated dependencies"
   echo "  $ GO_GET_UPDATE=true $0 deps"
@@ -144,6 +179,8 @@ goGetPkgHelp(){
   echo ""
   echo "* Install from existing with updated dependencies (re-prepared binaries even if no updates)"
   echo "  $ GO_GET_RENEW=true GO_GET_UPDATE=true $0 deps"
+  echo ""
+  echo "+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
 }
 
 goGetPkgListCreate(){
@@ -266,16 +303,16 @@ goGetPkg(){
 }
 
 goGetPkgRefresh(){
+  local _GO_GET_UPDATE="${GO_GET_UPDATE}"
   if [[ "$1" == "help" ]]; then
     goGetPkgHelp
     return 0
+  elif [[ "$1" == "up" ]]; then
+    export GO_GET_UPDATE="true"
   fi
 
   PKG_LISTS=$(goGetPkgFile $@)
   rm -f "${PKG_LISTS}"
-
-  local _GO_GET_UPDATE="${GO_GET_UPDATE}"
-  export GO_GET_UPDATE="true"
 
   goGetPkg $@
   export GO_GET_UPDATE="${_GO_GET_UPDATE}"
@@ -320,8 +357,8 @@ buildForAll(){
   buildPlugins
 
   mkdir -p ./bin
-  for GOOS in darwin linux windows; do
-    for GOARCH in 386 amd64; do
+  for GOOS in "${GOOS_OPTIONS}"; do
+    for GOARCH in "${GOARCH_OPTIONS}"; do
       [[ ! -z "${FOR_OS_ARCH}" && "${GOOS}-${GOARCH}" != "${FOR_OS_ARCH}" ]] && continue
       echo "[+] building ${GO_MAIN_FILE} for $GOOS - $GOARCH"
       go build -o ./bin/${GO_MAIN_BIN}-$GOOS-$GOARCH "${GO_MAIN_FILE}"
@@ -451,30 +488,60 @@ goTasksHelp(){
 configGoTasks(){
   [[ -z "${GO_TASK_CONFIG}" ]] && GO_TASK_CONFIG="${THIS_DIR}/.go-tasks.cfg"
 
-  echo -n "[+] enter 'go get'-able path for this project: "
-  read MY_GOPATH
+  echo -n "[+] enter 'go get'-able path for this project (default: '${MY_GOPATH}'): "
+  read _MY_GOPATH
+  [[ -z "${_MY_GOPATH}" ]] && _MY_GOPATH="${MY_GOPATH}"
 
-  echo -n "[+] main.go file or some other name which has package main: "
-  read GO_MAIN_FILE
+  echo -n "[+] relative filepath with package main (default: '${GO_MAIN_FILE}'): "
+  read _GO_MAIN_FILE
+  [[ -z "${_GO_MAIN_FILE}" ]] && _GO_MAIN_FILE="${GO_MAIN_FILE}"
 
-  echo -n "[+] if there are plug-ins provide their parent-dir path, else just press enter: "
-  read DIR_OF_GO_PLUGINS
+  echo -n "[+] if there are plug-ins provide their parent-dir path, else just press enter (default: '${DIR_OF_GO_PLUGINS}'): "
+  read _DIR_OF_GO_PLUGINS
+  [[ -z "${_DIR_OF_GO_PLUGINS}" ]] && _DIR_OF_GO_PLUGINS="${DIR_OF_GO_PLUGINS}"
 
-  echo -n "[+] if there is a separate main file handling db migration, it's path else just press enter: "
-  read DB_MIGRATE_MAIN
+  echo -n "[+] if there is a separate main file handling db migration, it's path else just press enter (default: '${DB_MIGRATE_MAIN}'): "
+  read _DB_MIGRATE_MAIN
+  [[ -z "${_DB_MIGRATE_MAIN}" ]] && _DB_MIGRATE_MAIN="${DB_MIGRATE_MAIN}"
 
-  if [[ ! -z "${MY_GOPATH}" ]]; then
-    echo "export MY_GOPATH='${MY_GOPATH}'" > "${GO_TASK_CONFIG}"
+  echo -n "[+] provide non-default path for dependency list else just press enter (default: '${GO_GET_PKG_FILE}'): "
+  read _GO_GET_PKG_FILE
+  [[ -z "${_GO_GET_PKG_FILE}" ]] && _GO_GET_PKG_FILE="${GO_GET_PKG_FILE}"
+
+
+  if [[ ! -z "${_MY_GOPATH}" ]]; then
+    echo "export MY_GOPATH='${_MY_GOPATH}'" > "${GO_TASK_CONFIG}"
   fi
-  if [[ ! -z "${GO_MAIN_FILE}" ]]; then
-    echo "export GO_MAIN_FILE='${GO_MAIN_FILE}'" >> "${GO_TASK_CONFIG}"
+  if [[ ! -z "${_GO_MAIN_FILE}" ]]; then
+    echo "export GO_MAIN_FILE='${_GO_MAIN_FILE}'" >> "${GO_TASK_CONFIG}"
   fi
-  if [[ ! -z "${DIR_OF_GO_PLUGINS}" ]]; then
-    echo "export DIR_OF_GO_PLUGINS='${DIR_OF_GO_PLUGINS}'" >> "${GO_TASK_CONFIG}"
+  if [[ ! -z "${_DIR_OF_GO_PLUGINS}" ]]; then
+    echo "export DIR_OF_GO_PLUGINS='${_DIR_OF_GO_PLUGINS}'" >> "${GO_TASK_CONFIG}"
   fi
-  if [[ ! -z "${DB_MIGRATE_MAIN}" ]]; then
-    echo "export DB_MIGRATE_MAIN='${DB_MIGRATE_MAIN}'" >> "${GO_TASK_CONFIG}"
+  if [[ ! -z "${_DB_MIGRATE_MAIN}" ]]; then
+    echo "export DB_MIGRATE_MAIN='${_DB_MIGRATE_MAIN}'" >> "${GO_TASK_CONFIG}"
   fi
+  if [[ ! -z "${_GO_GET_PKG_FILE}" ]]; then
+    echo "export GO_GET_PKG_FILE='${_GO_GET_PKG_FILE}'" >> "${GO_TASK_CONFIG}"
+  fi
+}
+
+goLinkMe(){
+		_REPO_DIR=$PWD
+		_REPO_URL="${MY_GOPATH}"
+		_TMP_PWD=$PWD
+		cd $_REPO_DIR
+		if [[ ! -d "${GOPATH}/src/${_REPO_URL}" ]]; then
+      _REPO_BASEDIR=$(dirname "${GOPATH}/src/${_REPO_URL}")
+      if [ ! -d "${_REPO_BASEDIR}" ]
+      then
+        mkdir -p "${_REPO_BASEDIR}/src"
+      fi
+      ln -sf "${PWD}" "${GOPATH}/src/${_REPO_URL}"
+		fi
+
+		echo cd "${GOPATH}/src/${_REPO_URL}"
+		cd "${GOPATH}/src/${_REPO_URL}"
 }
 
 goTasks(){
@@ -490,7 +557,7 @@ goTasks(){
       goGetPkg
       ;;
     deps-refresh|redep)
-      goGetPkgRefresh
+      goGetPkgRefresh ${@:2}
       ;;
     run)
       go run $(dirname $0)/${GO_MAIN_FILE} ${@:2}
@@ -514,6 +581,9 @@ goTasks(){
     test)
       bash $0 deps
       goTest
+      ;;
+    linkme)
+      goLinkMe
       ;;
     *)
       goTasksHelp

@@ -11,3 +11,4 @@ vim/plugin/*
 temp/*
 **/tags
 *.patch
+*.backup
