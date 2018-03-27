@@ -421,11 +421,12 @@ set wildmenu ""display all matching files on tab completion
 :nnoremap <Leader>p :Sex<CR>:find *
 
 "" custome snippets
-nnoremap ,html :-1read $HOME/.vim/snippets/skeleton.html<CR>3jwf>a
+nnoremap ,html :-1read $HOME/.vim/snippets/skeleton.html.snip<CR>3jwf>a
 "" different snippets activating only in filetype for similar use-case by same shortcut
-autocmd Filetype ruby nnoremap ,d :-1read $HOME/.vim/snippets/pry.rb<CR>
-autocmd Filetype python nnoremap ,d :-1read $HOME/.vim/snippets/pdb.py<CR>
+autocmd Filetype ruby nnoremap ,d :-1read $HOME/.vim/snippets/pry.rb.snip<CR>
+autocmd Filetype python nnoremap ,d :-1read $HOME/.vim/snippets/pdb.py.snip<CR>
 autocmd Filetype go nnoremap ,e :-1read $HOME/.vim/snippets/if-err-not-nil.go.snip<CR>jwi
+autocmd Filetype go nnoremap ,t O<esc>:read $HOME/.vim/snippets/test-func.go.snip<CR>jwi
 
 """ under trial
 
