@@ -411,6 +411,14 @@ inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 autocmd InsertLeave * NeoSnippetClearMarkers
 
 
+"" plugin: vim-multiple-cursors
+let g:multi_cursor_use_default_mapping=0
+let g:multi_cursor_next_key='<C-n>'
+let g:multi_cursor_prev_key='<C-m>'
+let g:multi_cursor_skip_key='<C-x>'
+let g:multi_cursor_quit_key='<Esc>'
+
+
 """""""ABK new
 
 "" built-in file finder
@@ -584,4 +592,9 @@ autocmd Filetype go nnoremap ,t O<esc>:read $HOME/.vim/snippets/test-func.go.sni
 "" :help mode_^char like ':help i_^n'
 "" :helpgrep term
 ""
+""
+"" plugin: vim-multiple-cursors
+"" <ctrl+n>: select virtual word(s)
+"" <ctrl+p>: deselect newly selected virtual word and move to previous, customized to <ctrl+m> here
+"" <ctrl+x>: skip current virtual word selection, move to next
 ""
