@@ -1,6 +1,8 @@
 # .bashrc
 
-alias py='/usr/bin/env python2'
+alias py2='/usr/bin/env python2'
+alias py3='/usr/bin/env python3'
+alias py='py3'
 alias server.py='python2 -m SimpleHTTPServer'
 
 # let's you re-use pip downoads between branches
