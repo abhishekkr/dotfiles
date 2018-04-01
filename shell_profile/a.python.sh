@@ -19,7 +19,7 @@ alias py-profile="time python -m cProfile"
 [[ "$(which virtualenv3 &> /dev/null ; echo $?)" -ne 0  ]] && alias virtualenv3="virtualenv --python=python3"
 
 
-venv_on_for(){
+venv2_on_for(){
   local VENV_PATH="$1"
   [ ! -s "${VENV_PATH}" ] && virtualenv2 "${VENV_PATH}"
   source "${VENV_PATH}/bin/activate"
@@ -27,17 +27,27 @@ venv_on_for(){
   export PATH="${VENV_PATH}/bin:${PATH}"
 }
 
-venv_on(){
+venv3_on_for(){
+  local VENV_PATH="$1"
+  [ ! -s "${VENV_PATH}" ] && virtualenv3 "${VENV_PATH}"
+  source "${VENV_PATH}/bin/activate"
+  export _TMP_VENV_PATH="${PATH}"
+  export PATH="${VENV_PATH}/bin:${PATH}"
+}
+
+alias venv_on_for=venv3_on_for
+
+venv2_on(){
   local VENV_PATH="${PWD}/.venv"
   venv_on_for "${VENV_PATH}"
 }
-alias venv2_on="venv_on"
+
 venv3_on(){
-  [ ! -s ./.venv ] && virtualenv3 .venv
-  source .venv/bin/activate
-  _TMP_VENV_PATH=$PATH
-  PATH=$PATH:$PWD/.venv/bin
+  local VENV_PATH="${PWD}/.venv"
+  venv_on_for "${VENV_PATH}"
 }
+
+alias venv_on="venv3_on"
 
 venv_off(){
   deactivate
