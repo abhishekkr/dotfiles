@@ -52,3 +52,8 @@ debug(){
   kubectl describe pods ${_POD_ID}
   kubectl logs ${_POD_ID}
 }
+
+k8s-exec(){
+  local POD_ID="$1"
+  kubectl exec -it  ${POD_ID}  -- /bin/bash
+}

@@ -66,6 +66,10 @@ nohistry(){
   export HISTFILE=/dev/null
 }
 
+my-public-ip2(){
+  dig +short myip.opendns.com @resolver1.opendns.com.
+}
+
 my-public-ip(){
   local _MY_PUBLIC_IP=$( curl "https://www.google.co.in/search?q=my+ip&oq=my+ip&aqs=chrome..69i57.1205j0j1&sourceid=chrome&es_sm=0&ie=UTF-8" 2>/dev/null | grep -E -o '\(Client IP address: [0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*\)' | grep -E -o '([0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*.[0-9][0-9]*)' )
   if [[ "${_MY_PUBLIC_IP}" == "" ]]; then
