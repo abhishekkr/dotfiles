@@ -3,6 +3,8 @@
 
 cowsay -f dragon "$USER is here..."
 
+fortune
+
 ###################################
 
 if [[ -n "$BASH_VERSION" ]]; then

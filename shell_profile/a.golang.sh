@@ -271,6 +271,18 @@ goenv_link(){
 
 alias goenv_linkme="goenv_link \$PWD"
 
+goenv-cd(){
+  local _MY_GO_PATH=$(git remote get-url $(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)|cut -d/ -f1) | sed 's/git@//' | sed 's/https\:\/\///' | sed 's/\:/\//' | sed 's/\.git$//')
+
+  goenv_on
+  export GOENV_CD_MY_GO_PROJECT_PATH=$(pwd)
+  cd "${GOPATH}/src/${_MY_GO_PATH}"
+}
+
+goenv-cdc(){
+  cd "${GOENV_CD_MY_GO_PROJECT_PATH}"
+}
+
 goenv_unlink(){
   _LINK_PATH="${GOPATH}/src/${_REPO_URL}"
   if [ -L $_LINK_PATH ]; then
