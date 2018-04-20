@@ -36,3 +36,22 @@ is-private-ip(){
   [[ "${IS_PRIVATE}" -eq 0 ]] && return 0
   return 1
 }
+
+net-conn-established(){
+  netstat -an | grep EST | awk '{print $5}' | cut -d ":" -f1 | xargs -I{} nslookup {} | grep name | awk '{print $4}' | cut -d "." -f1 | sort | uniq
+}
+alias conn-est="net-conn-established"
+
+net-conn-listen(){
+   sudo lsof -i | grep LISTEN
+}
+alias conn-srv="net-conn-listen"
+
+net-conn-all(){
+   sudo lsof -i | grep ESTABLISHED | awk '{print $9}' | sed 's/\->/\n/g' | sort | uniq -c | grep -v ' '$(hostname)'\:' | grep -v ' 127.0.0.1\:'
+}
+
+net-conn-all-uniq(){
+   sudo lsof -i | grep ESTABLISHED | awk '{print $9}' | sed 's/\->/\n/g'| awk -F':' '{print $1}'  | sort | uniq | grep -v ' '$(hostname)'\:' | grep -v ' 127.0.0.1\:'
+}
+alias conn-all="net-conn-all-uniq"
