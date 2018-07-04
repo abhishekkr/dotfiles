@@ -47,6 +47,10 @@ special_plugins(){
       echo "**************************** Installation of Plugin: vim-markdown-preview"
       sudo pip install grip
     ;;
+    vim-racer)
+      echo "**************************** Installation of Plugin: rust's vim-racer"
+      cargo install racer
+      ;;
     *)
       echo "No Special Tasks for ${1}"
       ;;
