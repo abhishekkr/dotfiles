@@ -259,6 +259,18 @@ ascii_pacman(){
     echo "$_asciiart_pacman"
 }
 
+ascii_goku(){
+    if [[ "$1" != "" ]]; then
+      _msg="$1"
+    else
+      _msg=`date`
+    fi
+    #cat ${MY_DOTFILE_DIR}/tasks/shell/data/goku.ascii-art
+    echo ''
+    echo "${msg}"
+    echo ''
+}
+
 ascii_maxpayne(){
     if [[ "$1" != "" ]]; then
       _msg="$1"
@@ -631,4 +643,10 @@ forever(){
 	     break       	   #Abandon the loop.
      fi
   done
+}
+
+top-resource-eaters(){
+  local _PROC_COUNT=$1
+  [[ -z "${_PROC_COUNT}" ]] && _PROC_COUNT=10
+  ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -${_PROC_COUNT}
 }
