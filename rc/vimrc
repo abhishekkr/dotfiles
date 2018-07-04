@@ -118,6 +118,12 @@ autocmd FileType go set smartindent autoindent
 au BufNewFile,BufRead *.go setlocal commentstring=//\ %s
 autocmd FileType go setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4 "foldmethod=syntax
 
+"<rust>
+let g:rustfmt_autosave = 1
+let g:racer_cmd = "~/.cargo/bin/racer"
+let g:racer_experimental_completer = 1
+"</rust>
+
 autocmd BufRead *.py set cinwords=if,elif,else,for,while,try,except,finally,def,class
 autocmd BufRead *.py set nocindent smartindent autoindent
 autocmd BufWritePre *.py normal m`:%s/\s\+$//e ``
@@ -159,6 +165,10 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-l> <C-w>l
+
+" move to home and end
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
 
 " press leader + tab to move through split windows
 nmap <Leader><tab> <C-w>w
