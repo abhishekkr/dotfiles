@@ -1,5 +1,7 @@
 HOME_BINDIR="${HOME}/bin"
+HOME_A_BINDIR="${HOME}/ABK/bin"
 mkdir -p $HOME_BINDIR
+mkdir -p $HOME_A_BINDIR
 
 setup_jq(){
   jq_url="http://stedolan.github.io/jq/download/linux64/jq"
@@ -48,6 +50,26 @@ setup_ruby_install(){
   cd "${RUBY_INSTALL_DIR}"
   sudo ./setup.sh
   cd "${HOME_BINDIR}" && rm -rf "${RUBY_INSTALL_DIR}"
+}
+
+setup_packetbeat(){
+  local pbeat_version="6.3.1"
+  local pbeat_tardir="packetbeat-${pbeat_version}-linux-x86_64"
+  local pbeat_url="https://artifacts.elastic.co/downloads/beats/packetbeat/${pbeat_targz}.tar.gz"
+  local dst_pbeat_dir="${HOME_A_BINDIR}/packetbeat"
+
+  pushd /tmp
+  curl -skLO $pbeat_url
+  tar zxf "${pbeat_tardir}.tar.gz"
+  mv ${pbeat_tardir} ${dst_pbeat_dir}
+  echo ${version} > "${dst_pbeat_dir}/version"
+  sed -i 's/^output.elasticsearch\:/output.console:/' "${dst_pbeat_dir}/packetbeat.yml"
+  sed -i 's/hosts\: \["localhost\:9200"\]$/pretty: true/' "${dst_pbeat_dir}/packetbeat.yml"
+  sudo chown root "${dst_pbeat_dir}/packetbeat.yml"
+  popd
+
+  echo "sudo ${dst_pbeat_dir}/packetbeat -c ${dst_pbeat_dir}/packetbeat.yml" > "${HOME_BINDIR}/packetbeat-run"
+  chmod +x "${HOME_BINDIR}/packetbeat-run"
 }
 
 setup_jq
