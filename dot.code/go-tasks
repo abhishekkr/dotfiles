@@ -367,6 +367,10 @@ buildForAll(){
       for _GO_MAIN_FILE in $(echo "${GO_MAIN_FILE}" | tr ' ' '\n'); do
         [[ -z "${_GO_MAIN_FILE}" ]] && continue
         echo "[+] building ${_GO_MAIN_FILE} for $GOOS - $GOARCH"
+        local _GO_MAIN_BIN_PREFIX=$(echo "${MY_GOPATH}" | xargs basename)
+        local _GO_MAIN_BIN=$(echo "${_GO_MAIN_FILE}" | xargs dirname | xargs basename)
+        [[ "${_GO_MAIN_BIN}" == "." ]] && _GO_MAIN_BIN=$(echo "${_GO_MAIN_FILE}" | awk -F'.' '{print $1}')
+        _GO_MAIN_BIN="${_GO_MAIN_BIN_PREFIX}-${_GO_MAIN_BIN}"
         go build -o ./bin/${_GO_MAIN_BIN}-$GOOS-$GOARCH "${_GO_MAIN_FILE}"
         [[ $? -ne 0 ]] && echo "go build for ${_GO_MAIN_FILE}-${GOOS}-${GOARCH} failed" && exit 123
       done
