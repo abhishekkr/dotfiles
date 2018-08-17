@@ -349,20 +349,26 @@ buildForAll(){
   local FOR_OS_ARCH="$1"
   local GO_MAIN_BIN=$(echo "${GO_MAIN_FILE}" | sed 's/.go$//')
 
-  [[ ! -f "${GO_MAIN_FILE}" ]] && \
-    echo "[error] missing main file ${GO_MAIN_FILE}, set correct env for GO_MAIN_FILE" && \
-    exit 123
+  for _GO_MAIN_FILE in $(echo "${GO_MAIN_FILE}" | tr ' ' '\n'); do
+    [[ -z "${_GO_MAIN_FILE}" ]] && continue
+    [[ ! -f "${_GO_MAIN_FILE}" ]] && \
+      echo "[error] missing main file ${_GO_MAIN_FILE}, set correct env for GO_MAIN_FILE" && \
+      exit 123
+  done
 
   buildMigrate
   buildPlugins
 
   mkdir -p ./bin
-  for GOOS in "${GOOS_OPTIONS}"; do
-    for GOARCH in "${GOARCH_OPTIONS}"; do
+  for GOOS in $(echo "${GOOS_OPTIONS}" | tr ' ' '\n'); do
+    for GOARCH in $(echo "${GOARCH_OPTIONS}" | tr ' ' '\n'); do
       [[ ! -z "${FOR_OS_ARCH}" && "${GOOS}-${GOARCH}" != "${FOR_OS_ARCH}" ]] && continue
-      echo "[+] building ${GO_MAIN_FILE} for $GOOS - $GOARCH"
-      go build -o ./bin/${GO_MAIN_BIN}-$GOOS-$GOARCH "${GO_MAIN_FILE}"
-      [[ $? -ne 0 ]] && echo "go build for ${GO_MAIN_FILE}-${GOOS}-${GOARCH} failed" && exit 123
+      for _GO_MAIN_FILE in $(echo "${GO_MAIN_FILE}" | tr ' ' '\n'); do
+        [[ -z "${_GO_MAIN_FILE}" ]] && continue
+        echo "[+] building ${_GO_MAIN_FILE} for $GOOS - $GOARCH"
+        go build -o ./bin/${_GO_MAIN_BIN}-$GOOS-$GOARCH "${_GO_MAIN_FILE}"
+        [[ $? -ne 0 ]] && echo "go build for ${_GO_MAIN_FILE}-${GOOS}-${GOARCH} failed" && exit 123
+      done
     done
   done
 }
