@@ -359,6 +359,7 @@ buildForAll(){
   buildMigrate
   buildPlugins
 
+  pushd "${GOPATH}/src/${MY_GOPATH}"
   mkdir -p ./bin
   for GOOS in $(echo "${GOOS_OPTIONS}" | tr ' ' '\n'); do
     for GOARCH in $(echo "${GOARCH_OPTIONS}" | tr ' ' '\n'); do
@@ -371,6 +372,7 @@ buildForAll(){
       done
     done
   done
+  popd
 }
 
 allPathsWithGoFiles(){
