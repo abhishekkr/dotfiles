@@ -75,3 +75,10 @@ ubuntu-map-version(){
     [[ $(echo $version | grep -i -c "${grep_pattern}") -ne 0 ]] && echo $version
   done
 }
+
+fedora-rpm-list(){
+  rpm -qa | sed -E 's/\-[a-z0-9]+\.[0-9].*//' | sed 's/\.fc[0-9][0-9].*//'
+}
+fedora-yum-installed-pkg(){
+  dnf -y list installed | awk '{print $1}' | sed 's/\.noarch//' | sed 's/\.x86_64//' | sort
+}
