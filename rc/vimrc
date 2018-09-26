@@ -417,6 +417,8 @@ inoremap <silent><expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
 
 ""init replace for word under cursor
 :nnoremap <Leader>s :%s/<C-r><C-w>/<C-r><C-w>/gc
+"" init replace forvisually selected
+vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
 autocmd InsertLeave * NeoSnippetClearMarkers
 
