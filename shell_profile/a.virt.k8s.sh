@@ -10,6 +10,25 @@ bash-completion-for-kubectl(){
   source ~/.kube/completion.bash.inc
 }
 
+k8scc(){
+  kubectl config current-context
+}
+
+k8sgc(){
+  local _WHICH=" $1"
+  kubectl config get-contexts | grep ${_WHICH}
+}
+
+k8suc(){
+  local _WHICH="$1"
+  local _WHICH_CONTEXT=$(kubectl config get-contexts | grep "${_WHICH}" | head -1 | awk '{print $NF}')
+  kubectl config use-context ${_WHICH_CONTEXT}
+}
+
+k8tail(){
+   kubectl logs -f  --tail=100 $@
+}
+
 gcp-default-cluster-set(){
   local _GCP_PROJECT="$1"
   local _CLUSTER_ID="$2"
@@ -27,7 +46,7 @@ gcp-k8s-clusters(){
 k8s-pods(){
   local _POD_ID="$1"
 
-  kubectl get pods
+  kubectl get po --all-namespaces --no-headers | awk '{print $1","$2}' | grep "${_POD_ID}"
 }
 
 k8s-pod-get(){
@@ -37,7 +56,7 @@ k8s-pod-get(){
 }
 
 k8s-pod-del(){
-  local _POD_ID="$1"
+  local _POD_ID="$@"
 
   kubectl delete pod ${_POD_ID}
 }
@@ -53,7 +72,55 @@ debug(){
   kubectl logs ${_POD_ID}
 }
 
+k8s-which(){
+  kubectl config current-context | sed 's/_/ > /g'
+}
+
+k8s-switch(){
+  local _CONTEXT_PATTERN="$1"
+  local _MATCHED_CONTEXT=$(kubectl config get-contexts --no-headers | grep -E "${_CONTEXT_PATTERN}" | awk '{print $1}' | grep -v '*')
+  local _CONTEXT=$(echo "${_MATCHED_CONTEXT}" | head -1)
+  echo "matched:"
+  echo "${_MATCHED_CONTEXT}" | sed 's/_/ > /g'
+  echo ""
+  kubectl config use-context ${_CONTEXT} > /dev/null
+  echo -n "switched to first: "
+  k8s-which
+}
+
 k8s-exec(){
   local POD_ID="$1"
-  kubectl exec -it  ${POD_ID}  -- /bin/bash
+  kubectl exec -it  ${POD_ID} ${@:2}  -- /bin/bash
+}
+
+k8s-hook(){
+   kubectl run abk-shell --rm -i --tty --namespace default --image alpine:latest --restart=Never  -- /bin/sh
+}
+
+k8s-all(){
+  for res in $(kubectl get crd --no-headers --all-namespaces=true | awk '{print $1}'); do
+    kubectl get all --all-namespaces=true
+  done
+}
+
+k8s-sa(){
+  local _SA_NAME="$1"
+  local _K8S_NAMESPACE="$2"
+  kubectl get sa/${_SA_NAME} -n ${_K8S_NAMESPACE}
+}
+
+k8s-psql(){
+  local USER=${1}
+  local DBNAME=${2}
+  local DB_SVC="${3}"
+  local _NS="${4}"
+
+  [[ $# -ge 3 ]] && \
+      echo "usage: k8s-psql <db-user> <db-name> <svc-name> (<namespace>)" && \
+      exit 1
+  [[ -z "${_NS}" ]] && \
+    _NS="default"
+
+  local _PGPASSWORD=$(kubectl-n ${_NS}  get secret alice-db-s-1-stolon-secret -o jsonpath="{.data.password}" | base64 --decode)
+  kubectl run pgclient -n ${_NS} --image=postgres --env PGPASSWORD=$_PGPASSWORD -it --rm -- bash -c "psql -U ${USER} -d ${DBNAME} -h ${DB_SVC}"
 }
