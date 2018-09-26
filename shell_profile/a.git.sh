@@ -33,6 +33,11 @@ alias git_upstream_sync_master='git fetch upstream ; git merge upstream/master'
 alias gst='git status'
 alias gsb='git status -sb'
 alias gsa="git status -sb | grep -E '^[A|M][\ M]'"
+gsbb(){
+  local _WHERE="$1"
+  [[ -z "${_WHERE}" ]] && _WHERE="."
+  git status -sb $_WHERE | grep -v '^?? '| sed 's/^M /+|/g' | sed 's/^ M / | /g'
+}
 
 alias gbrr='git branch -r'
 
