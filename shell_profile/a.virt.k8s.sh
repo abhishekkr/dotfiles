@@ -43,6 +43,12 @@ gcp-k8s-clusters(){
   gcloud --project "${_GCP_PROJECT}" container clusters list
 }
 
+k8s-make-admin(){
+  local _KUBE_USER_ID="$1"
+  [[ -z "${_KUBE_USER_ID}" ]] && echo "usage: k8s-make-admin <user-id>" && return 1
+  kubectl create clusterrolebinding cluster-admin-binding --clusterrole cluster-admin --user "${_KUBE_USER_ID}"
+}
+
 k8s-pods(){
   local _POD_ID="$1"
 
