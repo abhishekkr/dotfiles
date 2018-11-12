@@ -62,7 +62,7 @@ venv_anon(){
   if [ ! -d ${HOME_VIRTUALENV} ]; then
     mkdir -p ${HOME_VIRTUALENV}
   fi
-  [ ! -s ${ANON_VIRTUALENV} ] && virtualenv2 ${ANON_VIRTUALENV}
+  [ ! -s ${ANON_VIRTUALENV} ] && virtualenv3 ${ANON_VIRTUALENV}
   source ${ANON_VIRTUALENV}/bin/activate
   export _TMP_VENV_PATH=$PATH
   export PATH=${ANON_VIRTUALENV}/bin:$PATH
