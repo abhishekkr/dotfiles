@@ -72,6 +72,16 @@ setup_packetbeat(){
   chmod +x "${HOME_BINDIR}/packetbeat-run"
 }
 
+setup_leiningen(){
+  local LEIN_INSTALL_URL="https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein"
+  local LEIN_INSTALL_FILE="${HOME_BINDIR}/lein"
+
+  wget -c -O "${LEIN_INSTALL_FILE}" "${LEIN_INSTALL_URL}"
+
+  chmod +x "${LEIN_INSTALL_FILE}"
+  bash -c "${LEIN_INSTALL_FILE}"
+}
+
 setup_jq
 setup_plantuml
 #setup_chruby
