@@ -38,6 +38,8 @@ source_if_present_else_echo /etc/profile.d/a.nda.sh "Can create '/etc/profile.d/
 export _JAVA_AWT_WM_NONREPARENTING=1
 source_if_present_else_echo /etc/profile.d/jre.sh
 
+export PATH="${PATH}:${HOME}/.npm-packages/bin"
+
 for a in `ls /etc/profile.d/*.sh`; do
   source_if_present_else_echo $a "[error] loading profile '${a}' failed."
 done
@@ -46,7 +48,7 @@ done
 
 #### at last
 
-xstart(){
+x-start(){
   [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
 }
 

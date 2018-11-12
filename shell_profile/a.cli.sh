@@ -650,3 +650,7 @@ top-resource-eaters(){
   [[ -z "${_PROC_COUNT}" ]] && _PROC_COUNT=10
   ps -eo pid,ppid,cmd,%mem,%cpu --sort=-%mem | head -${_PROC_COUNT}
 }
+
+ascii-perseverent-face(){
+  echo 'ゞ( ͡°⍛ ͡°)و'
+}

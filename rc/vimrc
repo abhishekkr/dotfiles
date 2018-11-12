@@ -514,6 +514,9 @@ autocmd Filetype go nnoremap ,t O<esc>:read $HOME/.vim/snippets/test-func.go.sni
 "" cm<NOUN|MOTION> : commentary
 ""
 
+""""" Insert mode
+"" <C-o> to utilize normal mode vim commands in insert mode right after
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"" Vim Text Objects
 """"" CHEATSHEET (nouns), these can be paired with verbs
