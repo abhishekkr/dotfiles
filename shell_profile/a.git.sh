@@ -28,6 +28,11 @@ alias gpullo='git pull origin'
 
 alias gpush='git push'
 alias gpusho='git push origin'
+gpusho-this(){
+  local _this=$(git branch | grep '*' | awk '{print $2}')
+  gpusho ${_this}
+}
+
 alias git_upstream_sync_master='git fetch upstream ; git merge upstream/master'
 
 alias gst='git status'

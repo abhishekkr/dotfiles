@@ -654,3 +654,18 @@ top-resource-eaters(){
 ascii-perseverent-face(){
   echo 'ゞ( ͡°⍛ ͡°)و'
 }
+
+pipevim(){
+  [[ $# -lt 1 ]] && echo "no command passed" && exit 1
+  eval "$@" | vim -
+}
+
+pipeless(){
+  [[ $# -lt 1 ]] && echo "no command passed" && exit 1
+  eval "$@" | less
+}
+
+pipemore(){
+  [[ $# -lt 1 ]] && echo "no command passed" && exit 1
+  eval "$@" | more
+}

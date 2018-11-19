@@ -567,6 +567,11 @@ autocmd Filetype go nnoremap ,t O<esc>:read $HOME/.vim/snippets/test-func.go.sni
 ""
 ""
 ""
+"" :e | :edit : re-read current state of file
+"" :checktime : check if any buffer were changed outside vim to avoid two versions of file
+""
+""
+""
 "" `:ls` to show files held in memory... can jump to other file by `:b uniqFilePattern`
 ""
 ""
