@@ -82,6 +82,27 @@ setup_leiningen(){
   bash -c "${LEIN_INSTALL_FILE}"
 }
 
+setup-fzf(){
+  set -ex
+
+  pushd /tmp
+  local GITHUB_DDL_HEADERS=$(curl -Iks https://github.com/junegunn/fzf-bin/releases/download/0.17.5/fzf-0.17.5-linux_amd64.tgz)
+
+  local URLTO_DDL=$(echo "$GITHUB_DDL_HEADERS"  | grep '^Location: ' | awk '{print $2}' | sed 's/[[:space:]]*$//g')
+  local HEADER_GITHUB_REQUEST_ID=$(echo "$GITHUB_DDL_HEADERS"  | grep '^X-GitHub-Request-Id: ' | awk '{print $2}' | sed 's/[[:space:]]*$//g')
+  local HEADER_REQUEST_ID=$(echo "$GITHUB_DDL_HEADERS"  | grep '^X-Request-Id: ' | awk '{print $2}' | sed 's/[[:space:]]*$//g')
+
+  curl -H "X-GitHub-Request-Id: ${HEADER_GITHUB_REQUEST_ID}" -H "X-Request-Id: ${HEADER_REQUEST_ID}" -Lk -o fzf-0.17.5-linux_amd64.tgz "${URLTO_DDL}"
+
+  tar zxvf fzf-0.17.5-linux_amd64.tgz
+
+  mv ./fzf ~/bin/fzf
+  rm  fzf-0.17.5-linux_amd64.tgz
+  popd
+
+  set +ex
+}
+
 setup_jq
 setup_plantuml
 #setup_chruby
