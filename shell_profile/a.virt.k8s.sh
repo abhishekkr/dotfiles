@@ -67,6 +67,12 @@ k8s-pod-del(){
   kubectl delete pod ${_POD_ID}
 }
 
+k8s-del-from-ns-all-res(){
+  [[ $# -ne 2 ]] && \
+    echo "usage: k8s-del-from-ns-all-res <namespace> <resource-type>"
+  kubectl -n $1 get $2 --no-headers=true | awk '{print $1}' | xargs -I{}  kubectl -n $1 delete $2 {}
+}
+
 k8s-deployments-get(){
   kubectl get deployment -o json
   #curl -X GET 'http://127.0.0.1:8001/apis/apps/v1beta1/namespaces/default/deployments'

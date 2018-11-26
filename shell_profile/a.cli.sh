@@ -657,15 +657,17 @@ ascii-perseverent-face(){
 
 pipevim(){
   [[ $# -lt 1 ]] && echo "no command passed" && exit 1
-  eval "$@" | vim -
+  eval "$@" 2>&1 | vim -
 }
+alias pvim="pipevim"
 
 pipeless(){
   [[ $# -lt 1 ]] && echo "no command passed" && exit 1
-  eval "$@" | less
+  eval "$@" 2>&1 | less
 }
+alias pless="pipeless"
 
 pipemore(){
   [[ $# -lt 1 ]] && echo "no command passed" && exit 1
-  eval "$@" | more
+  eval "$@" 2>&1 | more
 }
