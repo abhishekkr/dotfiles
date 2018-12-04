@@ -57,8 +57,18 @@ k8s-pods(){
 
 k8s-pod-get(){
   local _POD_ID="$1"
-
   kubectl get pod -o json ${_POD_ID}
+}
+
+k8s-get-all-in-ns(){
+  [[ $# -ne 1 ]] && \
+    echo "usage: k8s-get-all-in-ns <namespace>"
+  local NS="$1"
+  for res in ds sts deploy rs jobs cronjobs po cm secrets svc ep ing pvc sa roles rolebindings; do
+    echo "[+] Listing all ${res} in ${NS}"
+    kubectl --namespace=$NS get $res
+    echo
+  done
 }
 
 k8s-pod-del(){
@@ -71,6 +81,38 @@ k8s-del-from-ns-all-res(){
   [[ $# -ne 2 ]] && \
     echo "usage: k8s-del-from-ns-all-res <namespace> <resource-type>"
   kubectl -n $1 get $2 --no-headers=true | awk '{print $1}' | xargs -I{}  kubectl -n $1 delete $2 {}
+}
+
+k8s-del-all-in-ns(){
+  [[ $# -ne 1 ]] && \
+    echo "usage: k8s-del-all-in-ns <namespace>"
+  local NS="$1"
+  for res in ds sts deploy rs jobs cronjobs po cm secrets svc ep ing pvc sa roles rolebindings; do
+    kubectl --namespace=$NS delete --all --ignore-not-found $res
+  done
+}
+
+helm-del-all-in-ns(){
+	[[ $# -ne 1 ]] && echo "usage: helm-del-all-in-ns <namespace>"
+	local NS="$1"
+	for res in $(helm ls --tiller-namespace $NS | grep -v NAME |awk '{print $1}')
+	do
+		helm del --purge $res --tiller-namespace $NS &
+	done
+  wait
+}
+
+k8s-del-all(){
+  local NS_LIKE="$1"
+  [[ -z "${NS_LIKE}" ]] && \
+    echo "would not work without namespace pattern; usage: kube-delete-all <ns-pattern>" && \
+    echo "to explicitly delete from all namespaces, run$ kube-delete-all '*'" && \
+    return 1
+  for ns in $(kubectl get namespaces -o jsonpath={..metadata.name}); do
+    [[ $(echo $ns | grep -c -E "$NS_LIKE") -lt 1 ]] && continue
+		helm-del-all-in-ns $ns
+		k8s-del-all-in-ns $ns
+  done
 }
 
 k8s-deployments-get(){

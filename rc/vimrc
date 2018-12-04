@@ -618,3 +618,6 @@ autocmd Filetype go nnoremap ,t O<esc>:read $HOME/.vim/snippets/test-func.go.sni
 "" <ctrl+p>: deselect newly selected virtual word and move to previous, customized to <ctrl+m> here
 "" <ctrl+x>: skip current virtual word selection, move to next
 ""
+"" searching for specific case-sensitive, need something like '/searchTerm\C'
+"" searching for specific case-insensitive, need '/searchTerm\c'
+""
