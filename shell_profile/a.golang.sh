@@ -23,9 +23,9 @@ goenv_on_at(){
   if [ $# -eq 0 ]; then
     _GOPATH_VALUE="${PWD}/.goenv"
   else
-    cd "$1" ; _GOPATH_VALUE="${1}/.goenv" ; cd -
+    pushd "$1" ; _GOPATH_VALUE="${1}/.goenv" ; popd
   fi
-  if [ ! -d $_GOPATH_VALUE ]; then
+  if [ ! -d "${_GOPATH_VALUE}/site" ]; then
     mkdir -p "${_GOPATH_VALUE}/site"
   fi
   export _OLD_GOPATH=$GOPATH
@@ -272,15 +272,33 @@ goenv_link(){
 alias goenv_linkme="goenv_link \$PWD"
 
 goenv-cd(){
-  local _MY_GO_PATH=$(git remote get-url $(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD)|cut -d/ -f1) | sed 's/git@//' | sed 's/https\:\/\///' | sed 's/\:/\//' | sed 's/\.git$//')
+  local _MY_GO_PATH=$(git remote get-url $(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD 2>/dev/null) 2>/dev/null |cut -d/ -f1) 2>/dev/null | sed 's/git@//' | sed 's/https\:\/\///' | sed 's/\:/\//' | sed 's/\.git$//')
+
+  [[ ! -z "${GOENV_CD_MY_GO_PROJECT_PATH}" ]] && \
+    echo "[error] you are alread pushed in '${GOPATH}'; need to pop first" && \
+    return 123
+  [[ -z "${_MY_GO_PATH}" ]] && \
+    echo "[error] unable to get git-repo path; run from root of repo" && \
+    return 123
 
   goenv_on
   export GOENV_CD_MY_GO_PROJECT_PATH=$(pwd)
-  cd "${GOPATH}/src/${_MY_GO_PATH}"
+  local GOENV_CD_MY_GO_PROJECT_SYMPATH="${GOPATH}/src/${_MY_GO_PATH}"
+  [[ ! -L "${GOENV_CD_MY_GO_PROJECT_SYMPATH}" ]] && \
+    mkdir -p $(dirname "${GOENV_CD_MY_GO_PROJECT_SYMPATH}") && \
+    ln -sf "${GOENV_CD_MY_GO_PROJECT_PATH}" "${GOENV_CD_MY_GO_PROJECT_SYMPATH}"
+  cd "${GOENV_CD_MY_GO_PROJECT_SYMPATH}"
 }
+alias goenv-pushd="goenv-cd"
 
-goenv-cdc(){
+goenv-popd(){
+  [[ -z "${GOENV_CD_MY_GO_PROJECT_PATH}" || ! -d "${GOENV_CD_MY_GO_PROJECT_PATH}" ]] && \
+    echo "[error] nowhere to pop; did you ran goenv-cd|pushd" && \
+    return 123
+
+  goenv_off
   cd "${GOENV_CD_MY_GO_PROJECT_PATH}"
+  unset GOENV_CD_MY_GO_PROJECT_PATH
 }
 
 goenv_unlink(){
