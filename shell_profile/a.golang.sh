@@ -281,12 +281,15 @@ goenv-cd(){
     echo "[error] unable to get git-repo path; run from root of repo" && \
     return 123
 
-  goenv_on
   export GOENV_CD_MY_GO_PROJECT_PATH=$(pwd)
+
+  goenv_on
   local GOENV_CD_MY_GO_PROJECT_SYMPATH="${GOPATH}/src/${_MY_GO_PATH}"
+
   [[ ! -L "${GOENV_CD_MY_GO_PROJECT_SYMPATH}" ]] && \
     mkdir -p $(dirname "${GOENV_CD_MY_GO_PROJECT_SYMPATH}") && \
     ln -sf "${GOENV_CD_MY_GO_PROJECT_PATH}" "${GOENV_CD_MY_GO_PROJECT_SYMPATH}"
+
   cd "${GOENV_CD_MY_GO_PROJECT_SYMPATH}"
 }
 alias goenv-pushd="goenv-cd"
