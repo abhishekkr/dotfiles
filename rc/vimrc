@@ -461,6 +461,10 @@ let g:fzf_buffers_jump = 1
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
 let g:fzf_tags_command = 'ctags -R'
 
+"" gitgutter
+set updatetime=15000  "" gitgutter refresh 1000=1sec
+let g:gitgutter_max_signs = 500  " default value
+
 
 "" http://stackoverflow.com/questions/1218390/what-is-your-most-productive-shortcut-with-vim
 """"" CHEATSHEET FOR SELECTION (http://stackoverflow.com/a/1218429)
