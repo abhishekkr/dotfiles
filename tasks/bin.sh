@@ -105,5 +105,6 @@ setup-fzf(){
 
 setup_jq
 setup_plantuml
+setup-fzf
 #setup_chruby
 #setup_ruby_install
