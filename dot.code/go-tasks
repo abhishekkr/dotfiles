@@ -380,7 +380,9 @@ buildForAll(){
 }
 
 allPathsWithGoFiles(){
-  find . -maxdepth 1 -type d | grep -v -E '^\.$|^./\.git$|^./\.goenv$|^./temp$|^./vendor$'
+  for p in $(find . -type d  | grep -v -E '^\.$|\/\.git\/|\/\.goenv\/|\/temp\/|\/vendor\/'); do
+    [[ $(find $p -maxdepth 1 -type f -name '*.go' | wc -l) -gt 0 ]] && echo $p
+  done
 }
 
 goVetAll(){
