@@ -82,3 +82,15 @@ fedora-rpm-list(){
 fedora-yum-installed-pkg(){
   dnf -y list installed | awk '{print $1}' | sed 's/\.noarch//' | sed 's/\.x86_64//' | sort
 }
+
+which-svc-autostart(){
+  systemctl list-unit-files 2>/dev/null | grep enabled | awk '{print $1}'
+  chkconfig 2>/dev/null | grep '3:on' | awk '{print $1}'
+}
+
+selinux-auditallow(){
+  echo "applying: $@"
+  `sudo $@` | grep semodule > /tmp/$(date +%s).semodule
+  echo sudo $to_apply
+  echo sudo rm *.pp *.te
+}
