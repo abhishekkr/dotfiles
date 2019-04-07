@@ -45,7 +45,10 @@ alias conn-est="net-conn-established"
 net-conn-listen(){
    sudo lsof -i | grep LISTEN
 }
-alias conn-srv="net-conn-listen"
+conn-srv(){
+  sudo lsof -i -P | grep LISTEN | awk '{print "process:",$1,"| pid:",$2,"| listen-at:",$9}'
+}
+
 
 net-conn-all(){
    sudo lsof -i | grep ESTABLISHED | awk '{print $9}' | sed 's/\->/\n/g' | sort | uniq -c | grep -v ' '$(hostname)'\:' | grep -v ' 127.0.0.1\:'
