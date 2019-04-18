@@ -23,7 +23,7 @@ goenv_on_at(){
   if [ $# -eq 0 ]; then
     _GOPATH_VALUE="${PWD}/.goenv"
   else
-    pushd "$1" ; _GOPATH_VALUE="${1}/.goenv" ; popd
+    pushd "$1" && _GOPATH_VALUE="${1}/.goenv" && popd
   fi
   if [ ! -d "${_GOPATH_VALUE}/site" ]; then
     mkdir -p "${_GOPATH_VALUE}/site"
@@ -271,12 +271,31 @@ goenv_link(){
 
 alias goenv_linkme="goenv_link \$PWD"
 
+goenv-cd!(){
+  unset GOENV_CD_MY_GO_PROJECT_PATH
+  goenv-cd
+}
+
+goenv-build(){
+  local _ROOT_DIR=$(pwd)
+  goenv-cd!
+  if [[ $# -eq 0 ]]; then
+    go build main.go
+  else
+    go build $@
+  fi
+  cd "${_ROOT_DIR}"
+}
+
 goenv-cd(){
   local _MY_GO_PATH=$(git remote get-url $(git for-each-ref --format='%(upstream:short)' $(git symbolic-ref -q HEAD 2>/dev/null) 2>/dev/null |cut -d/ -f1) 2>/dev/null | sed 's/git@//' | sed 's/https\:\/\///' | sed 's/\:/\//' | sed 's/\.git$//')
 
   [[ ! -z "${GOENV_CD_MY_GO_PROJECT_PATH}" ]] && \
     echo "[error] you are alread pushed in '${GOPATH}'; need to pop first" && \
     return 123
+  [[ -z "${_MY_GO_PATH}" ]] && \
+    echo -n "no git upstream found, enter this repo's go-gettable path: " && \
+    read _MY_GO_PATH
   [[ -z "${_MY_GO_PATH}" ]] && \
     echo "[error] unable to get git-repo path; run from root of repo" && \
     return 123
