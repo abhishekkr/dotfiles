@@ -3,6 +3,11 @@ HOME_A_BINDIR="${HOME}/ABK/bin"
 mkdir -p $HOME_BINDIR
 mkdir -p $HOME_A_BINDIR
 
+
+setup-rust(){
+  curl https://sh.rustup.rs -sSf | sudo sh
+}
+
 setup_jq(){
   jq_url="http://stedolan.github.io/jq/download/linux64/jq"
   jq_fylname="$HOME_BINDIR/jq"
@@ -103,6 +108,7 @@ setup-fzf(){
   set +ex
 }
 
+setup-rust
 setup_jq
 setup_plantuml
 setup-fzf
