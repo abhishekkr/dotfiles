@@ -8,14 +8,21 @@ alias gcm0='git commit --signoff --allow-empty -m'
 
 alias gcp='git clone'
 
-gco(){
+gco-path(){
   local CHECKOUT_PATH="$1"
   local DO_IT="n"
   git diff ${CHECKOUT_PATH}
   echo "----------------------------------------------------------------"
   echo -n "enter to checkout (y|N): "
   read DO_IT
-  [[ "${DO_IT}" == "y" || "${DO_IT}" == "Y" ]] && git checkout ${CHECKOUT_PATH}
+  [[ "${DO_IT}" == "y" || "${DO_IT}" == "Y" ]] && git checkout -- ${CHECKOUT_PATH}
+}
+gco(){
+  for CHECKOUT_PATH in $@; do
+    [[ "${CHECKOUT_PATH}" == "--" ]] && continue
+    gco-path "${CHECKOUT_PATH}"
+    echo "${CHECKOUT_PATH}"
+  done
 }
 
 alias gdf='git diff'
@@ -25,6 +32,8 @@ alias gdc='git diff --cached'
 alias gpr='git pull --rebase'
 alias gpull='git pull'
 alias gpullo='git pull origin'
+
+alias gsprsp='git stash && git git pull --rebase && git stash pop'
 
 alias gpush='git push'
 alias gpusho='git push origin'
@@ -42,6 +51,18 @@ gsbb(){
   local _WHERE="$1"
   [[ -z "${_WHERE}" ]] && _WHERE="."
   git status -sb $_WHERE | grep -v '^?? '| sed 's/^M /+|/g' | sed 's/^ M / | /g'
+}
+gsb-d(){
+  for mydir in $(find . -maxdepth 1 -type d | grep -v '^.$'); do
+    pushd "${mydir}"
+    if [[ -d "./.git" ]]; then
+      git status -sb
+    else
+      echo "[+] not a git repo"
+    fi
+    popd > /dev/null
+    echo && echo
+  done
 }
 
 alias gbrr='git branch -r'

@@ -63,3 +63,5 @@ if [[ -n "$BASH_VERSION" ]] || [[ -n "$ZSH_VERSION" ]]; then
 fi
 
 ######################################################
+
+export PATH="$HOME/.cargo/bin:$PATH"
