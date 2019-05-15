@@ -271,14 +271,14 @@ goenv_link(){
 
 alias goenv_linkme="goenv_link \$PWD"
 
-goenv-cd!(){
+goenv-popd(){
   unset GOENV_CD_MY_GO_PROJECT_PATH
   goenv-cd
 }
 
 goenv-build(){
   local _ROOT_DIR=$(pwd)
-  goenv-cd!
+  goenv-popd
   if [[ $# -eq 0 ]]; then
     go build main.go
   else
