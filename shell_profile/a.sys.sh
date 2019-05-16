@@ -9,3 +9,15 @@ set-swappiness(){
   [[ -z "${VM_SWAPPINESS}" ]] && VM_SWAPPINESS=15
   echo "vm.swappiness = ${VM_SWAPPINESS}" | sudo tee -a /etc/sysctl.conf
 }
+
+hwtime(){
+  sudo hwclock -r
+}
+
+hwclock-to-os(){
+  sudo hwclock --hctosys
+}
+
+os-to-hwclock(){
+  sudo hwclock --systohc
+}
