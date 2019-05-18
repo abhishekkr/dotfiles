@@ -3,7 +3,7 @@ https://github.com/Shougo/vimproc.vim.git
 https://github.com/eagletmt/ghcmod-vim.git
 https://github.com/neovimhaskell/haskell-vim.git
 https://github.com/eagletmt/neco-ghc.git
-file:///https://raw.githubusercontent.com/chrisdone/hindent/master/vim/hindent.vim
+https://github.com/alx741/vim-hindent.git
 https://github.com/dag/vim2hs.git
 https://github.com/mileszs/ack.vim.git
 https://github.com/fatih/vim-go.git
@@ -44,3 +44,4 @@ https://github.com/mattn/emmet-vim.git
 https://github.com/airblade/vim-gitgutter.git
 https://github.com/leafgarland/typescript-vim.git
 https://github.com/tbastos/vim-lua.git
+https://github.com/dart-lang/dart-vim-plugin.git

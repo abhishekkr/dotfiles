@@ -33,7 +33,23 @@ alias gpr='git pull --rebase'
 alias gpull='git pull'
 alias gpullo='git pull origin'
 
-alias gsprsp='git stash && git git pull --rebase && git stash pop'
+gsprsp-branch(){
+  [[ $# -lt 1 ]] && echo "[+] error: no branch found to pull" && return 123
+  local _this=${1}
+  [[ ! -d "./.git" ]] && echo "[+] error: not a git repo" && return 123
+  git stash
+  git pull origin ${_this} --rebase
+  [[ $(git stash list | wc -l) -gt 0 ]] && git stash pop
+}
+
+gsprsp-master(){
+  gsprsp-branch "master"
+}
+
+gsprsp(){
+  local _this=$(git branch | grep '*' | awk '{print $2}')
+  gsprsp-branch "${_this}"
+}
 
 alias gpush='git push'
 alias gpusho='git push origin'
