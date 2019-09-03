@@ -3,6 +3,8 @@
 alias ls='ls --color=auto'
 alias rdp="rdesktop-vrdp -u administrator -p -"
 
+alias T='tree -u -p -h -Q -F'
+
 alias ack="ack --ignore-dir=.venv --ignore-dir=.git"
 
 uhoh-scr(){
@@ -10,6 +12,14 @@ uhoh-scr(){
 }
 uhoh(){
   xlock
+}
+
+grep-for(){
+  local _PATTERN="$1"
+  local _SEARCH_AT="$2"
+  [[ -z "${_PATTERN}" ]] && echo "$ grep-for <pattern> [<search-path>]" && return 1
+  [[ -z "${_SEARCH_AT}" ]] && _SEARCH_AT="."
+  grep -r "${_PATTERN}" ${_SEARCH_AT} | awk -F':' '{print $1}' | sort | uniq
 }
 
 fuzzPathsList(){

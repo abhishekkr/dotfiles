@@ -103,6 +103,7 @@ augroup filetypedetect
   au BufNewFile,BufRead *.go       set filetype=go syntax=go
   au BufNewFile,BufRead *.sbt      set filetype=scala syntax=scala
   au BufNewFile,BufRead *.js       set filetype=javascript syntax=javascript
+  au BufNewFile,BufRead *.jl       set filetype=javascript syntax=julia
 
   au BufNewFile,BufRead *.pu       set filetype=plantuml syntax=plantuml
   au BufNewFile,BufRead *.plantuml set filetype=plantuml syntax=plantuml
@@ -117,6 +118,7 @@ autocmd FileType css  setlocal shiftwidth=2 tabstop=2 foldmethod=indent
 autocmd FileType go set smartindent autoindent
 au BufNewFile,BufRead *.go setlocal commentstring=//\ %s
 autocmd FileType go setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4 "foldmethod=syntax
+"autocmd FileType julia setlocal g:latex_to_unicode_auto=1
 
 "<rust>
 let g:rustfmt_autosave = 1
