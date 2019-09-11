@@ -21,7 +21,8 @@ k8sgc(){
 
 k8suc(){
   local _WHICH="$1"
-  local _WHICH_CONTEXT=$(kubectl config get-contexts | grep "${_WHICH}" | head -1 | awk '{print $NF}')
+  local _WHICH_CONTEXT=$(kubectl config get-contexts | awk '{print $NF}' | grep -v NAMESPACE | fzf -q "${_WHICH}")
+  [[ -z "${_WHICH_CONTEXT}" ]] && echo "make up your mind" && return
   kubectl config use-context ${_WHICH_CONTEXT}
 }
 
