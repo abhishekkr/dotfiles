@@ -83,6 +83,33 @@ highlight ExtraWhitespace ctermbg=darkgreen guibg=darkgreen
 match ExtraWhitespace /\s\+$/    " Trailing Spaces
 set laststatus=2
 
+let g:rbpt_max = 16
+let g:rbpt_loadcmd_toggle = 0
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+
+let g:syntastic_enable_racket_racket_checker = 0 "1
+
 augroup filetypedetect
   "au BufNewFile,BufRead .vimrc set filetype=vim
   au BufNewFile,BufRead *.rs set filetype=rust syntax=rust
@@ -104,6 +131,7 @@ augroup filetypedetect
   au BufNewFile,BufRead *.sbt      set filetype=scala syntax=scala
   au BufNewFile,BufRead *.js       set filetype=javascript syntax=javascript
   au BufNewFile,BufRead *.jl       set filetype=javascript syntax=julia
+  au BufNewFile,BufRead *.rkt       set filetype=racket syntax=racket
 
   au BufNewFile,BufRead *.pu       set filetype=plantuml syntax=plantuml
   au BufNewFile,BufRead *.plantuml set filetype=plantuml syntax=plantuml
