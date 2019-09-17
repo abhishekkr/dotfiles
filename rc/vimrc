@@ -477,6 +477,7 @@ autocmd Filetype ruby nnoremap ,d :-1read $HOME/.vim/snippets/pry.rb.snip<CR>
 autocmd Filetype python nnoremap ,d :-1read $HOME/.vim/snippets/pdb.py.snip<CR>
 autocmd Filetype go nnoremap ,e :-1read $HOME/.vim/snippets/if-err-not-nil.go.snip<CR>jwi
 autocmd Filetype go nnoremap ,t O<esc>:read $HOME/.vim/snippets/test-func.go.snip<CR>jwi
+autocmd Filetype racket nnoremap ,d :-1read $HOME/.vim/snippets/racket-trace.skt.snip<CR>jwi
 
 """ under trial
 
@@ -490,6 +491,7 @@ let g:fzf_history_dir = '~/.vim-fzf-history'
 let g:fzf_buffers_jump = 1
 let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
 let g:fzf_tags_command = 'ctags -R'
+command! FZFILES Files .
 
 "" gitgutter
 set updatetime=15000  "" gitgutter refresh 1000=1sec
