@@ -66,6 +66,10 @@ nohistry(){
   export HISTFILE=/dev/null
 }
 
+my-public-ip3(){
+  curl -s https://ipinfo.io/ip
+}
+
 my-public-ip2(){
   dig +short myip.opendns.com @resolver1.opendns.com.
 }
@@ -93,4 +97,14 @@ resolv-update(){
 
   echo 'nameserver 208.67.222.222' | sudo tee -a /etc/resolv.conf
   echo 'nameserver 8.8.8.8' | sudo tee -a /etc/resolv.conf
+}
+
+geolocate-ip(){
+  local IP="${1}"
+  local RESULT=$(curl -skL "https://ipvigilante.com/${IP}")
+  [[ $(echo "${RESULT}" | jq '.status') != "success" ]] && \
+    RESULT=$(curl -skL "https://ipinfo.io/${IP}") && \
+    [[ -z $(echo "${RESULT}" | jq '.hostname') ]] && \
+    echo "error geo-locating ${IP}" && return 1
+  echo "${RESULT}" | jq '.'
 }
