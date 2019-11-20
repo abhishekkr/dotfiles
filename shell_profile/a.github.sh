@@ -4,25 +4,32 @@
 # save it as /etc/profiles/a.github.sh
 ##
 
-clone_github(){
+# usage:
+#   $ clone-github mr_x
+clone-github(){
   GITHUB_ID=$1
   GITHUB_REPO_URI="https://github.com/"$GITHUB_ID"?tab=repositories"
-  repos=$(curl -skL $GITHUB_REPO_URI | grep 'itemprop="name codeRepository"' | sed "s/.*$GITHUB_ID\///" | sed 's/"\ itemprop="name\ codeRepository".*//')
+  repos=`curl -skL $GITHUB_REPO_URI | grep 'name codeRepository' | sed 's/.*href=\"//' | sed 's/".*//'`
   for line in `echo $repos | xargs -L1`;
   do
-    if [ ! -z $line ];
-    then
-      repo_git='https://github.com/'$GITHUB_ID'/'$line'.git'
-      if [ -e $line ]; then
-        echo 'Fetching master latest pull for: '$repo_git
-        cd $line ; git pull ; cd -
-      else
-        echo "Cloning... "$repo_git
-        `git clone $repo_git`
-      fi
+    if [[ -z $line ]]; then
+      next
+    fi
+    repo_git='git://github.com'$line'.git'
+    repo_dir=$(basename $line)
+    if [[ -d "${repo_dir}" ]]; then
+      echo 'Fetching master latest pull for: '$repo_git
+      pushd "${repo_dir}" ; git pull ; popd
+    else
+      echo "Cloning... "$repo_git
+      git clone $repo_git
     fi
   done
 }
+clone_github(){
+  clone-github $@
+}
+
 
 git-conf-to-contribute(){
   if [ -z $1 ];
@@ -36,7 +43,7 @@ git-conf-to-contribute(){
 }
 
 #old github style # no contrib
-# usgae:
+# usage:
 #   $ clone-github-private github.private_instance.com mr_x
 clone_github_private(){
   GITHUB_HOST=$1
