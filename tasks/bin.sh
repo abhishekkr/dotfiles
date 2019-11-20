@@ -3,12 +3,71 @@ HOME_A_BINDIR="${HOME}/ABK/bin"
 mkdir -p $HOME_BINDIR
 mkdir -p $HOME_A_BINDIR
 
+############################### _lib
+
+download-release-from-github(){
+  local REPO_PATH="$1"
+  local REPO_VERSION="$2"
+  local TAR_GZ="$3"
+
+  local GITHUB_DDL_HEADERS=$(curl -Iks "https://github.com/${REPO_PATH}/releases/download/${REPO_VERSION}/${TAR_GZ}")
+
+  local URLTO_DDL=$(echo "$GITHUB_DDL_HEADERS"  | grep '^Location: ' | awk '{print $2}' | sed 's/[[:space:]]*$//g')
+  local HEADER_GITHUB_REQUEST_ID=$(echo "$GITHUB_DDL_HEADERS"  | grep '^X-GitHub-Request-Id: ' | awk '{print $2}' | sed 's/[[:space:]]*$//g')
+  local HEADER_REQUEST_ID=$(echo "$GITHUB_DDL_HEADERS"  | grep '^X-Request-Id: ' | awk '{print $2}' | sed 's/[[:space:]]*$//g')
+
+  curl -H "X-GitHub-Request-Id: ${HEADER_GITHUB_REQUEST_ID}" -H "X-Request-Id: ${HEADER_REQUEST_ID}" -Lk -o "${TAR_GZ}" "${URLTO_DDL}"
+}
+
+download-archive-from-github(){
+  local REPO_PATH="$1"
+  local REPO_VERSION="$2"
+  local TAR_GZ="$3"
+
+}
+
+setup-from-github(){
+  local REPO_PATH="$1"
+  local REPO_VERSION="$2"
+  local TAR_GZ="$3"
+  local SETUP_CMD="$4"
+  local RELEASE_OR_ARCHIVE=${5:-release}
+
+  set -ex
+
+  pushd /tmp
+  if [[ "${RELEASE_OR_ARCHIVE}" == "release" ]]; then
+    download-release-from-github "${REPO_PATH}" "${REPO_VERSION}" "${TAR_GZ}"
+  elif [[ "${RELEASE_OR_ARCHIVE}" == "archive" ]]; then
+    local TARBALL_URI="https://github.com/${REPO_PATH}/archive/${TAR_GZ}"
+    wget -c -O "${TAR_GZ}" "${TARBALL_URI}"
+  else
+    echo "[error] unidentified github download type"
+  fi
+  tar zxvf "${TAR_GZ}"
+  eval "${SETUP_CMD}"
+  rm  "${TAR_GZ}"
+  popd
+
+  set +ex
+}
+
+############################## _setup_lib
+
 
 setup-rust(){
+  [[ $(rustc --version &>/dev/null ; echo $?) -eq 0 ]] && \
+    echo "* rust is already setup" && \
+    return 0
+
   curl https://sh.rustup.rs -sSf | sudo sh
 }
 
-setup_jq(){
+setup-jq(){
+  [[ $(jq --version &>/dev/null ; echo $?) -eq 0 ]] && \
+    echo "* jq is already setup" && \
+    return 0
+
   jq_url="http://stedolan.github.io/jq/download/linux64/jq"
   jq_fylname="$HOME_BINDIR/jq"
   wget -O "${jq_fylname}" -c "${jq_url}"
@@ -16,52 +75,63 @@ setup_jq(){
   echo "placed: ${jq_fylname}"
 }
 
-setup_plantuml(){
+setup-plantuml(){
   plantuml_url="https://excellmedia.dl.sourceforge.net/project/plantuml/plantuml.jar"
   plantuml_fylname="$HOME_BINDIR/plantuml.jar"
+
+  [[ -f "${plantuml_fylname}" ]] && \
+    echo "* plantuml is already setup" && \
+    return 0
+
   curl -Lk -o "${plantuml_fylname}" "${plantuml_url}"
   chmod +x "${plantuml_fylname}"
   echo "placed: ${plantuml_fylname}"
 }
 
-setup_chruby(){
-  CHRUBY_VERSION="0.3.9"
-  CHRUBY_DIR="chruby-${CHRUBY_VERSION}"
-  CHRUBY_DIR_ABS="${HOME_BINDIR}/${CHRUBY_INSTALL_DIR}"
-  CHRUBY_TARBALL_PATH="${HOME_BINDIR}/${CHRUBY_DIR}.tar.gz"
-  CHRUBY_TARBALL_URI="https://github.com/postmodern/chruby/archive/v${CHRUBY_VERSION}.tar.gz"
+setup-chruby(){
+  local CHRUBY_VERSION="0.3.9"
+  local CHRUBY_DIR="chruby-${CHRUBY_VERSION}"
+  local FILE_TO_SOURCE="/usr/local/share/chruby/chruby.sh"
 
-  wget -c -O "$CHRUBY_TARBALL_PATH" "$CHRUBY_TARBALL_URI"
+  local REPO_PATH="postmodern/chruby"
+  local REPO_VERSION="v${CHRUBY_VERSION}"
+  local TAR_GZ="${REPO_VERSION}.tar.gz"
+  local SETUP_CMD="pushd \"${CHRUBY_DIR}\" ; sudo ./scripts/setup.sh ; popd ; rm -rf \"${CHRUBY_DIR}\""
 
-  cd "${HOME_BINDIR}" && tar -xzvf "${CHRUBY_DIR}.tar.gz"
-  rm -f "${CHRUBY_DIR}.tar.gz" && rm -f "${CHRUBY_DIR}.tar.gz.asc"
-  cd "${CHRUBY_DIR}"
-  sudo ./scripts/setup.sh
-  cd "${HOME_BINDIR}" && rm -rf "${CHRUBY_DIR}"
-  source /usr/local/share/chruby/chruby.sh
+  [[ -f "${FILE_TO_SOURCE}" ]] && \
+    echo "* chruby is already setup" && \
+    return 0
+
+  setup-from-github "${REPO_PATH}" "${REPO_VERSION}" "${TAR_GZ}" "${SETUP_CMD}" "archive"
+
+  source "${FILE_TO_SOURCE}"
 }
 
-setup_ruby_install(){
-  local RUBY_INSTALL_VERSION="0.6.0"
+setup-ruby-install(){
+  local RUBY_INSTALL_VERSION="0.7.0"
   local RUBY_INSTALL_DIR="ruby-install-${RUBY_INSTALL_VERSION}"
-  local RUBY_INSTALL_DIR_ABS="${HOME_BINDIR}/${RUBY_INSTALL_DIR}"
-  local TARBALL_PATH="${HOME_BINDIR}/${RUBY_INSTALL_DIR}.tar.gz"
-  local TARBALL_URI="https://github.com/postmodern/ruby-install/archive/v${RUBY_INSTALL_VERSION}.tar.gz"
 
-  wget -c -O "${TARBALL_PATH}" "${TARBALL_URI}"
+  local REPO_PATH="postmodern/ruby-install"
+  local REPO_VERSION="v${RUBY_INSTALL_VERSION}"
+  local TAR_GZ="${REPO_VERSION}.tar.gz"
+  local SETUP_CMD="pushd \"${RUBY_INSTALL_DIR}\" ; sudo ./setup.sh ; popd ; rm -rf \"${RUBY_INSTALL_DIR}\""
 
-  cd "${HOME_BINDIR}" && tar -xzvf "${RUBY_INSTALL_DIR}.tar.gz"
-  rm -f "${RUBY_INSTALL_DIR}.tar.gz"
-  cd "${RUBY_INSTALL_DIR}"
-  sudo ./setup.sh
-  cd "${HOME_BINDIR}" && rm -rf "${RUBY_INSTALL_DIR}"
+  [[ $(ruby-install --version | awk '{print $2}') == "${RUBY_INSTALL_VERSION}" ]] && \
+    echo "* ruby-install is already setup" && \
+    return 0
+
+  setup-from-github "${REPO_PATH}" "${REPO_VERSION}" "${TAR_GZ}" "${SETUP_CMD}" "archive"
 }
 
-setup_packetbeat(){
+setup-packetbeat(){
   local pbeat_version="6.3.1"
   local pbeat_tardir="packetbeat-${pbeat_version}-linux-x86_64"
   local pbeat_url="https://artifacts.elastic.co/downloads/beats/packetbeat/${pbeat_targz}.tar.gz"
   local dst_pbeat_dir="${HOME_A_BINDIR}/packetbeat"
+
+  [[ ! -x "${dst_pbeat_dir}/packetbeat" ]] && \
+    echo "* packetbeat is already setup" && \
+    return 0
 
   pushd /tmp
   curl -skLO $pbeat_url
@@ -77,9 +147,13 @@ setup_packetbeat(){
   chmod +x "${HOME_BINDIR}/packetbeat-run"
 }
 
-setup_leiningen(){
+setup-leiningen(){
   local LEIN_INSTALL_URL="https://raw.githubusercontent.com/technomancy/leiningen/stable/bin/lein"
   local LEIN_INSTALL_FILE="${HOME_BINDIR}/lein"
+
+  [[ $(lein --version &>/dev/null ; echo $?) -eq 0 ]] && \
+    echo "* lein is already setup" && \
+    return 0
 
   wget -c -O "${LEIN_INSTALL_FILE}" "${LEIN_INSTALL_URL}"
 
@@ -88,29 +162,83 @@ setup_leiningen(){
 }
 
 setup-fzf(){
-  set -ex
+  local REPO_PATH="junegunn/fzf-bin"
+  local REPO_VERSION="0.17.5"
+  local TAR_GZ="fzf-0.17.5-linux_amd64.tgz"
+  local SETUP_CMD="mv ./fzf ${HOME_BINDIR}/fzf"
 
-  pushd /tmp
-  local GITHUB_DDL_HEADERS=$(curl -Iks https://github.com/junegunn/fzf-bin/releases/download/0.17.5/fzf-0.17.5-linux_amd64.tgz)
+  [[ $(fzf --version &>/dev/null ; echo $?) -eq 0 ]] && \
+    echo "* fzf is already setup" && \
+    return 0
 
-  local URLTO_DDL=$(echo "$GITHUB_DDL_HEADERS"  | grep '^Location: ' | awk '{print $2}' | sed 's/[[:space:]]*$//g')
-  local HEADER_GITHUB_REQUEST_ID=$(echo "$GITHUB_DDL_HEADERS"  | grep '^X-GitHub-Request-Id: ' | awk '{print $2}' | sed 's/[[:space:]]*$//g')
-  local HEADER_REQUEST_ID=$(echo "$GITHUB_DDL_HEADERS"  | grep '^X-Request-Id: ' | awk '{print $2}' | sed 's/[[:space:]]*$//g')
-
-  curl -H "X-GitHub-Request-Id: ${HEADER_GITHUB_REQUEST_ID}" -H "X-Request-Id: ${HEADER_REQUEST_ID}" -Lk -o fzf-0.17.5-linux_amd64.tgz "${URLTO_DDL}"
-
-  tar zxvf fzf-0.17.5-linux_amd64.tgz
-
-  mv ./fzf ~/bin/fzf
-  rm  fzf-0.17.5-linux_amd64.tgz
-  popd
-
-  set +ex
+  setup-from-github "${REPO_PATH}" "${REPO_VERSION}" "${TAR_GZ}" "${SETUP_CMD}"
 }
 
+setup-bcat(){
+  local BIN_NAME="bcat"  ## instead of just bat; to avoid conflict
+  local REPO_PATH="sharkdp/bat"
+  local REPO_VERSION="v0.12.1"
+  local TAR_GZ="bat-${REPO_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+  local SETUP_CMD="mv bat-${REPO_VERSION}-x86_64-unknown-linux-gnu/bat ${HOME_BINDIR}/${BIN_NAME} ; rm -rf bat-${REPO_VERSION}-x86_64-unknown-linux-gnu"
+
+  [[ $(${BIN_NAME} --version &>/dev/null ; echo $?) -eq 0 ]] && \
+    echo "* ${BIN_NAME} (bat) is already setup" && \
+    return 0
+
+  setup-from-github "${REPO_PATH}" "${REPO_VERSION}" "${TAR_GZ}" "${SETUP_CMD}"
+}
+
+setup-diskus(){
+  local REPO_PATH="sharkdp/diskus"
+  local REPO_VERSION="v0.6.0"
+  local TAR_GZ="diskus-${REPO_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+  local SETUP_CMD="mv diskus-${REPO_VERSION}-x86_64-unknown-linux-gnu/diskus ${HOME_BINDIR}/diskus ; rm -rf diskus-${REPO_VERSION}-x86_64-unknown-linux-gnu"
+
+  [[ $(diskus --version &>/dev/null ; echo $?) -eq 0 ]] && \
+    echo "* diskus is already setup" && \
+    return 0
+
+  setup-from-github "${REPO_PATH}" "${REPO_VERSION}" "${TAR_GZ}" "${SETUP_CMD}"
+}
+
+setup-hyperfine(){
+  local REPO_PATH="sharkdp/hyperfine"
+  local REPO_VERSION="v1.8.0"
+  local TAR_GZ="hyperfine-${REPO_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+  local SETUP_CMD="mv hyperfine-${REPO_VERSION}-x86_64-unknown-linux-gnu/hyperfine ${HOME_BINDIR}/hyperfine ; rm -rf hyperfine-${REPO_VERSION}-x86_64-unknown-linux-gnu"
+
+  [[ $(hyperfine --version &>/dev/null ; echo $?) -eq 0 ]] && \
+    echo "* hyperfine is already setup" && \
+    return 0
+
+  setup-from-github "${REPO_PATH}" "${REPO_VERSION}" "${TAR_GZ}" "${SETUP_CMD}"
+}
+
+setup-ffind(){
+  local BIN_NAME="ffind"  ## instead of just fd; to avoid conflict
+  local REPO_PATH="sharkdp/fd"
+  local REPO_VERSION="v7.4.0"
+  local TAR_GZ="fd-${REPO_VERSION}-x86_64-unknown-linux-gnu.tar.gz"
+  local SETUP_CMD="mv fd-${REPO_VERSION}-x86_64-unknown-linux-gnu/fd ${HOME_BINDIR}/${BIN_NAME} ; rm -rf fd-${REPO_VERSION}-x86_64-unknown-linux-gnu"
+
+  [[ $(${BIN_NAME} --version &>/dev/null ; echo $?) -eq 0 ]] && \
+    echo "* ${BIN_NAME} (fd) is already setup" && \
+    return 0
+
+  setup-from-github "${REPO_PATH}" "${REPO_VERSION}" "${TAR_GZ}" "${SETUP_CMD}"
+}
+
+##### main()
+
 setup-rust
-setup_jq
-setup_plantuml
+setup-jq
+setup-plantuml
 setup-fzf
-#setup_chruby
-#setup_ruby_install
+setup-bcat
+setup-diskus
+setup-hyperfine
+setup-ffind
+setup-chruby
+setup-ruby-install
+setup-packetbeat
+setup-leiningen
