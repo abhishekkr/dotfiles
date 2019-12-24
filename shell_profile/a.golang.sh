@@ -8,9 +8,13 @@ export GOARCH=amd64
 [ -s $GOPATH ] && mkdir -p $GOPATH
 
 alias gofmt-fix="gofmt -l -w -s"
-
 alias gorun="go run"
 alias gobld="go build"
+
+alias gofmt-fix-nomode="GO111MODULE=off gofmt -l -w -s"
+alias gorun-nomod="GO111MODULE=off go run"
+alias gobld-nomod="GO111MODULE=off go build"
+
 go_clr(){
   go run "$@"
 }
