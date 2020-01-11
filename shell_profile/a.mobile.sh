@@ -28,3 +28,37 @@ alias cordova-get="npm install -g cordova"
 alias cordova-new="phonegap create"
 
 alias cordova-droid="cordova platform add android ; cordova emulate android"
+
+#####
+
+available-avd-name(){
+  /opt/android-sdk/tools/bin/avdmanager list avd | grep 'Name: ' | tail -1 | awk '{print $2}'
+}
+alias avd-name-available="available-avd-name"
+
+start-available-avd(){
+  pushd /opt/android-sdk/emulator
+  export PATH="${PWD}/bin64:${PATH}"
+  ./emulator -avd $(available-avd-name)
+  popd
+}
+alias avd-start-available="start-available-avd"
+alias init.avd="start-available-avd"
+
+enable-flutter-config(){
+  export ANDROID_HOME=/opt/android-sdk
+  export ANDROID_LOCATION=/opt
+  export ANDROID_SDK_ROOT="${ANDROID_HOME}"
+
+  export GRADLE_USER_HOME="${HOME}/.gradle"
+  export JAVA_OPTIONS="-Xms1280m -Xmx2280m"
+
+  export FLUTTER_HOME="/opt/flutter"
+
+  export PATH="${FLUTTER_HOME}/bin:${PATH}"
+  export PATH="${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/tools:${ANDROID_HOME}/build-tools/28.0.0:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/emulator:${ANDROID_HOME}/tools:${PATH}"
+  export PATH="$PATH":"${FLUTTER_HOME}/.pub-cache/bin"
+
+  export LD_LIBRARY_PATH="${ANDROID_HOME}/tools/lib:${LD_LIBRARY_PATH}"
+}
+alias init.flutter="enable-flutter-config"
