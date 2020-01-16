@@ -114,3 +114,7 @@ fi
 clock(){
   echo $CLOCK_SYMBOL"  :  "`date`
 }
+
+sudo-here(){
+  sudo su -c 'cd $PWD ; bash'
+}
