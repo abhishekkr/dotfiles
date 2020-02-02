@@ -11,7 +11,6 @@ export ANDROID_HOME=$ANDROID_LOCATION/android-sdk
 
 alias android-avd="android avd &"
 
-
 ##### PhoneGap: http://phonegap.com/
 
 alias phonegap-get="npm install -g phonegap"
@@ -62,3 +61,24 @@ enable-flutter-config(){
   export LD_LIBRARY_PATH="${ANDROID_HOME}/tools/lib:${LD_LIBRARY_PATH}"
 }
 alias init.flutter="enable-flutter-config"
+
+adb-screen-record(){
+  local FILENAME="${1:-mobileusage.mp4}"
+  adb shell screenrecord "/sdcard/$FILENAME"
+}
+
+adb-fetch-record(){
+  local FILENAME="${1:-mobileusage.mp4}"
+  adb pull "/sdcard/$FILENAME"
+}
+
+adb-delete-record(){
+  local FILENAME="${1:-mobileusage.mp4}"
+  adb shell rm "/sdcard/$FILENAME"
+}
+
+adb-fetch-n-delete-record(){
+  local FILENAME="${1:-mobileusage.mp4}"
+  adb-fetch-record "${FILENAME}"
+  adb-delete-record "${FILENAME}"
+}
