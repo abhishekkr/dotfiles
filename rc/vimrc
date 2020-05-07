@@ -305,20 +305,6 @@ let g:haskell_enable_static_pointers = 1
 au BufWritePost *.hs GhcModCheck
 """""""</haskell-vim>
 
-"""""""<easytags>
-"" to jump to tag 'CTRL+]', open definition in a horizontal tab 'Ctrl+W Ctrl+]'
-"" to jump back CTRL+t
-"" goto next,previous,list-all definition of last tag ':tn', ':tp', ':ts'
-" open definition in a new tab
-map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-" open definition in a vertical tab
-map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-
-
-" moving tags to project location, from where vim started to control file size
-set tags=./tags,tags;$HOME
-"""""""</easytags>
-
 """""""<tagbar>
 " moving tags to project location, from where vim started to control file size
 nmap <Leader><F8> :TagbarToggle<CR>
