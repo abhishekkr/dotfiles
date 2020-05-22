@@ -15,6 +15,10 @@ alias gofmt-fix-nomode="GO111MODULE=off gofmt -l -w -s"
 alias gorun-nomod="GO111MODULE=off go run"
 alias gobld-nomod="GO111MODULE=off go build"
 
+go-rm-testcache(){
+  go clean -testcache
+}
+
 go_clr(){
   go run "$@"
 }

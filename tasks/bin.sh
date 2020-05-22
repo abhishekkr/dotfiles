@@ -228,6 +228,22 @@ setup-ffind(){
   setup-from-github "${REPO_PATH}" "${REPO_VERSION}" "${TAR_GZ}" "${SETUP_CMD}"
 }
 
+setup-nvm(){
+  local BIN_NAME="nvm"
+  local BIN_VERSION="0.35.3"
+  local INSTALL_SCRIPT_URI="https://raw.githubusercontent.com/nvm-sh/nvm/v${BIN_VERSION}/install.sh"
+
+  [[ $(whcih ${BIN_NAME} &>/dev/null ; echo $?) -eq 0 ]] && \
+    echo "* ${BIN_NAME} (bat) is already setup" && \
+    return 0
+
+  curl -o- "${INSTALL_SCRIPT_URI}" | bash
+  ## live load
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+  [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+}
+
 ##### main()
 
 setup-rust
@@ -242,3 +258,4 @@ setup-chruby
 setup-ruby-install
 setup-packetbeat
 setup-leiningen
+setup-nvm

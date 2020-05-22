@@ -8,10 +8,19 @@ if [ -z $REPO_ROOT ]; then
 fi
 
 zsh_updates(){
+  local ZSH_AUTOSUGGESTION_DIR="${HOME}/.zsh/zsh-autosuggestions"
+
   [[ $(which zsh > /dev/null ; echo $?) != "0" ]] && echo "[warn] no ZSH found" && return
   [[ $(which git > /dev/null ; echo $?) != "0" ]] && echo "[warn] no GIT found" && return
-  mkdir -p ~/.zsh
-  git clone git://github.com/zsh-users/zsh-autosuggestions ~/.zsh/zsh-autosuggestions
+
+  if [[ ! -d "${ZSH_AUTOSUGGESTION_DIR}" ]]; then
+    mkdir -p ~/.zsh
+    git clone git://github.com/zsh-users/zsh-autosuggestions "${ZSH_AUTOSUGGESTION_DIR}"
+  else
+    pushd "${ZSH_AUTOSUGGESTION_DIR}"
+    git pull origin master
+    popd
+  fi
 }
 
 ## 'link all shell profiles'

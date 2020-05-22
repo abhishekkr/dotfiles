@@ -19,3 +19,15 @@ iex-ls(){
   echo "[+] builds:"
   ls -1 _build/ | xargs -I{} echo "    "{}
 }
+
+hex-search-recent(){
+  xopen "https://hex.pm/packages?search=${1}&sort=recent_downloads"
+}
+
+hex-search-total(){
+  xopen "https://hex.pm/packages?search=${1}&sort=total_downloads"
+}
+
+hex-search(){
+  hex-search-recent "$1"
+}
