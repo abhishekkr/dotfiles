@@ -32,6 +32,11 @@ alias gdc='git diff --cached'
 alias gpr='git pull --rebase'
 alias gpull='git pull'
 alias gpullo='git pull origin'
+alias gpullm='git pull origin master'
+gpullo-this(){
+  local _this=$(git branch | grep '*' | awk '{print $2}')
+  gpullo ${_this}
+}
 
 gsprsp-branch(){
   [[ $# -lt 1 ]] && echo "[+] error: no branch found to pull" && return 123
@@ -47,15 +52,35 @@ gsprsp-master(){
 }
 
 gsprsp(){
-  local _this=$(git branch | grep '*' | awk '{print $2}')
+  local _this=$(git branch --show-current)
   gsprsp-branch "${_this}"
+}
+
+git-all-filenames(){
+  git ls-tree -r HEAD~1 --name-only
+}
+
+git-this-branch(){
+  git branch --show-current
+}
+
+gitrebasem(){
+  set -ex
+  git stash
+  git checkout master
+  git pull origin master
+  git checkout -
+  git rebase master
+  git stash pop
+  set +ex
 }
 
 alias gpush='git push'
 alias gpusho='git push origin'
 gpusho-this(){
-  local _this=$(git branch | grep '*' | awk '{print $2}')
-  gpusho ${_this}
+  local options="$@"
+  local _this=$(git branch --show-current)
+  gpusho $options ${_this}
 }
 
 alias git_upstream_sync_master='git fetch upstream ; git merge upstream/master'
@@ -221,7 +246,9 @@ git-rm-sensitive-text(){
   local _CHANGE_TO_TEXT="$2"
   local _LEAKY_FILE="$3"
 
+  set -x
   git filter-branch --tree-filter "sed -i 's/${_SENSITIVE_TEXT}/${_CHANGE_TO_TEXT}/g' ${_LEAKY_FILE}" -- --all
+  set +x
 
   git push origin --force --all
   git push origin --force --tags
@@ -249,4 +276,10 @@ git-rm-sensitive(){
 
 git-commits-count(){
   git log --all | grep '^commit ' | wc -l
+}
+
+git-co-remote(){
+  local BRANCH_NAME="$1"
+  git fetch origin
+  git checkout -b ${BRANCH_NAME} origin/${BRANCH_NAME}
 }
