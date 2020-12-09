@@ -681,3 +681,25 @@ pipemore(){
   [[ $# -lt 1 ]] && echo "no command passed" && exit 1
   eval "$@" 2>&1 | more
 }
+
+run-it(){
+  local _cmd="$@"
+  local _cmd_type=$(echo "${_cmd}" | sed 's/ .*//g')
+  local _checksum=$(echo "${_cmd}" | base64)
+
+  [[ -z "${RUN_IT_CACHE_DIR}" ]] && \
+    RUN_IT_CACHE_DIR="/tmp/run-it"
+  [[ ! -d "${RUN_IT_CACHE_DIR}" ]] && \
+    mkdir -p "${RUN_IT_CACHE_DIR}"
+  local _cache_file="${RUN_IT_CACHE_DIR}/${_cmd_type}.${_checksum}"
+
+  if [[ $(echo "${RUN_IT_CACHE_DISABLED}!" | tr '[:upper:]' '[:lower:]') == "true!" ]]; then
+    eval $_cmd
+    return
+  fi
+
+  [[ ! -f "${_cache_file}" ]] && \
+    eval $_cmd > "${_cache_file}"
+
+  cat "${_cache_file}"
+}
