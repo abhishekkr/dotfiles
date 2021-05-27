@@ -79,6 +79,19 @@ toMP4(){
   done
   unset _MEDIAFILE
 }
+alias to-mp4="toMP4"
+
+toMKV(){
+  for _MEDIAFILE in "$@"
+  do
+      echo "converting $_MEDIAFILE"
+      local _MKVNAME=$(echo "${_MEDIAFILE}" | sed 's/\/[A-Za-z0-9]$//')".mkv"
+      ffmpeg -i "${_MEDIAFILE}" "${_MKVNAME}"
+  done
+  unset _MEDIAFILE _MKVNAME
+}
+alias to-mkv="toMKV"
+
 
 toMP3(){
   for _MEDIAFILE in "$@"
@@ -88,6 +101,7 @@ toMP3(){
   done
   unset _MEDIAFILE
 }
+alias to-mp3="toMP3"
 
 toFLAC(){
   for _MEDIAFILE in "$@"
@@ -97,6 +111,7 @@ toFLAC(){
   done
   unset _MEDIAFILE
 }
+alias to-flac="toFLAC"
 
 uget(){
   echo "$1" | sed 's/%3A/\:/g' | sed 's/%2F/\//g' | sed 's/%3F/?/g' | sed 's/%3D/\=/g' | sed 's/%26/\&/g' | xargs wget -c

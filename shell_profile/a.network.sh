@@ -11,6 +11,14 @@ alias ip-ls-dummy="ip link show type dummy"
 alias ip-ls-veth="ip link show type veth"
 alias ip-ls-vlan="ip link show type vlan"
 
+ls-wifi(){
+  nmcli dev wifi list
+}
+
+ls-conn(){
+  nmcli con
+}
+
 chk-net-ssh(){
   mtr --tcp -P22 $@
 }
