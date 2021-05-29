@@ -301,3 +301,24 @@ nspawn-arch(){
 }
 
 ### systemd #end###############################################################
+
+### podman #start###############################################################
+podman-pgsql(){
+  local PG_DB="$1"
+  local PG_USER="$2"
+  local PG_PASSWORD="$3"
+  [[ -z "${PG_DB}" ]] && PG_DB=$( head /dev/urandom | tr -dc a-z0-9 | head -c10 )
+  [[ -z "${PG_USER}" ]] && PG_USER="postgres"
+  [[ -z "${PG_PASSWORD}" ]] && PG_PASSWORD="${PG_USER}"
+
+  mkdir -p "/tmp/${PG_DB}"
+  podman run \
+    -p 5432:5432 \
+    -e POSTGRES_PASSWORD=postgres \
+    -e POSTGRES_USER=postgres \
+    -e POSTGRES_DB=${PG_DB} \
+    -v /tmp/${PG_DB}:/var/lib/postgresql/data:Z \
+    postgres:12.2-alpine \
+    -d "postgres_${PG_DB}"
+}
+### podman #end###############################################################
