@@ -132,3 +132,7 @@ dlyx(){
 
   youtube-dl -x $@
 }
+
+dlyv-lt-mb(){
+  dlyv -f "best[filesize<${1}M]" ${@:2}
+}
