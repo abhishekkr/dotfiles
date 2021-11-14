@@ -54,6 +54,10 @@ setup-from-github(){
 
 ############################## _setup_lib
 
+setup-yaml2json(){
+  [[ ! -f "${HOME_BINDIR}/yaml2json" ]] && \
+    cp $(dirname $0)/../dot.code/yaml2json "${HOME_BINDIR}/yaml2json"
+}
 
 setup-rust(){
   [[ $(rustc --version &>/dev/null ; echo $?) -eq 0 ]] && \
@@ -246,6 +250,7 @@ setup-nvm(){
 
 ##### main()
 
+setup-yaml2json
 setup-rust
 setup-jq
 setup-plantuml

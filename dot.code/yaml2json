@@ -1,0 +1,35 @@
+#!python
+
+import json
+import yaml
+import os
+import sys
+
+
+def yaml2json(input_file, output_file):
+    if missing_input(input_file):
+        sys.exit(3)
+    with open(input_file, 'r') as yaml_file:
+        data = yaml.safe_load(yaml_file)
+    with open(output_file, "w") as json_file:
+        json.dump(data, json_file, indent=4)
+    print("written: %s" % output_file)
+
+
+def missing_input(input_file):
+    if not os.path.exists(input_file):
+        print("input file '%s' is missing" % (input_file))
+        return True
+    return False
+
+
+## __main__
+if __name__ == "__main__":
+    if len(sys.argv) != 3:
+        print("usage: %s <yaml-file> <json-file>"
+              % (sys.argv[0]))
+        sys.exit(2)
+    input_file  = sys.argv[1]
+    output_file = sys.argv[2]
+    yaml2json(input_file, output_file)
+
