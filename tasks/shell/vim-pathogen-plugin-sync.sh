@@ -5,7 +5,7 @@ _VIM_DIR="${HOME}/.vim"
 _VIM_PLUGIN_LIST="$(dirname $0)/data/vim-pathogen-plugin-sync.list"
 
 update_pathogen(){
-  _PATHOGEN_VIM_URL="https://raw.githubusercontent.com/tpope/vim-pathogen/master/autoload/pathogen.vim"
+  local _PATHOGEN_VIM_URL="https://tpo.pe/pathogen.vim"
   curl -Lk -o "${_VIM_DIR}/autoload/pathogen.vim" ${_PATHOGEN_VIM_URL}
   unset _PATHOGEN_VIM_URL
 }
