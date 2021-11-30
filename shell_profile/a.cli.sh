@@ -7,6 +7,8 @@ alias T='tree -u -p -h -Q -F'
 
 alias ack="ack --ignore-dir=.venv --ignore-dir=.git"
 
+alias sudo-vim="sudo -E vim"
+
 uhoh-scr(){
   xscreensaver-command -lock
 }

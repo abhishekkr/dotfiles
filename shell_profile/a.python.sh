@@ -3,7 +3,20 @@
 alias py2='/usr/bin/env python2'
 alias py3='/usr/bin/env python3'
 alias py='py3'
-alias server.py='python2 -m SimpleHTTPServer'
+alias server.py="python3 -m http.server"
+
+server-py(){
+  [[ $(python --version | grep -c 'Python ') -eq 0 ]] && \
+    echo "[error] no python found" && exit 123
+
+  if [[ $(python --version | grep -c 'Python 2') -gt 0 ]]; then
+    python -m SimpleHTTPServer
+  elif [[ $(python --version | grep -c 'Python 3') -gt 0 ]]; then
+    python -m http.server
+  else
+    echo "[error] unable to figure out Python version" && exit 123
+  fi
+}
 
 # let's you re-use pip downoads between branches
 export PIP_DOWNLOAD_CACHE=$HOME/cache/pip
