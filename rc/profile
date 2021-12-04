@@ -38,9 +38,14 @@ source_if_present_else_echo /etc/profile.d/a.nda.sh "Can create '/etc/profile.d/
 export _JAVA_AWT_WM_NONREPARENTING=1
 source_if_present_else_echo /etc/profile.d/jre.sh
 
+export GEM_PATH="${HOME}/ruby/3.0.0"
+export GEM_HOME="${HOME}/ruby/3.0.0"
+[[ ! -d "${GEM_HOME}" ]] && mkdir -p "${GEM_HOME}"
+
 PATH="${PATH}:${HOME}/.npm-packages/bin"
 PATH="${PATH}:${HOME}/.go/site/bin"
 PATH="${PATH}:${HOME}/ABK/bin/node-v16.13.0-linux-x64/bin"
+PATH="${PATH}:${HOME}/ruby/3.0.0/bin"
 export PATH="$PATH"
 
 for a in `ls /etc/profile.d/*.sh`; do
@@ -55,13 +60,80 @@ x-start(){
   [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && exec startx
 }
 
-if [[ -n "$BASH_VERSION" ]] || [[ -n "$ZSH_VERSION" ]]; then
+check-code-versions(){
+  check-load-chruby
+
+  echo -n "*|°_°|* "
+  if [[ $(go version > /dev/null | grep -ic '^go version ') -gt 0 ]]; then
+    echo -n "[ Go: "$(go version | cut -d' ' -f3 | sed 's/^go//')" ]"
+  else
+    echo -n "[ ❌Go :( ]"
+  fi
+  if [[ $(python --version > /dev/null | grep -ic '^python ') -gt 0 ]]; then
+    echo -n "[ Python: "$(python --version | cut -d' ' -f2)" ]"
+  else
+    echo -n "[ ❌Python :( ]"
+  fi
+  if [[ $(ruby --version > /dev/null | grep -ic '^ruby ') -gt 0 ]]; then
+    echo -n "[ Ruby: "$(ruby --version | cut -d' ' -f2)" ]"
+  else
+    echo -n "[ ❌Ruby :( ]"
+  fi
+  if [[ $(rustc --version > /dev/null | grep -ic '^rustc ') -gt 0 ]]; then
+    echo -n "[ Rust: "$(rustc --version | cut -d' ' -f2)" ]"
+  else
+    echo -n "[ ❌Rust :( ]"
+  fi
+  if [[ $(gcc --version > /dev/null | grep -ic '^gcc ') -gt 0 ]]; then
+    echo -n "[ GCC: "$(gcc --version | cut -d' ' -f3)" ]"
+  else
+    echo -n "[ ❌GCC :( ]"
+  fi
+  echo " *|°_°|*"
+  echo -n "*|°_°|* "
+  if [[ $(elixir --version > /dev/null | grep -ic '^elixir ') -gt 0 ]]; then
+    echo -n "[ Elixir: "$(elixir --version | grep 'Elixir' | cut -d' ' -f2- | sed 's/compiled with //')" ]"
+  else
+    echo -n "[ ❌Elixir :( ]"
+  fi
+  #if [[ $(erl -version 2>&1 | grep -ic '^erlang ') -gt 0 ]]; then
+  #  echo -n "[ Erlang: "$(erl -version 2>&1 | awk '{print $NF}')" ]"
+  #else
+  #  echo -n "[ ❌Erlang :( ]"
+  #fi
+  #if [[ $(julia --version > /dev/null | grep -ic '^julia ') -gt 0 ]]; then
+  #  echo -n "[ Julia: "$(julia --version | awk '{print $NF}')" ]"
+  #else
+  #  echo -n "[ ❌Julia :( ] or Fix the Code Versions"
+  #fi
+  if [[ $(ghc --version > /dev/null | grep -ic 'Glasgow Haskell Compil') -gt 0 ]]; then
+    echo -n "[ Haskell: "$(ghc --version | awk '{print $NF}')" ]"
+  else
+    echo -n "[ ❌Haskell :( ]"
+  fi
+  if [[ $(node --version > /dev/null | grep -ic '^v') -gt 0 ]]; then
+    echo -n "[ NodeJS: "$(node --version | awk '{print $NF}')" ]"
+  else
+    echo -n "[ ❌NodeJS :( ]"
+  fi
+  if [[ $(npm --version > /dev/null | grep -ic '^[0-9]') -gt 0 ]]; then
+    echo -n "[ NPM: "$(npm --version | awk '{print $NF}')" ]"
+  else
+    echo -n "[ ❌NPM :( ]"
+  fi
+  echo " *|°_°|*"
+}
+check-load-chruby(){
   if [[ -f /usr/local/share/chruby/chruby.sh  ]]; then
     source /usr/local/share/chruby/chruby.sh
     source /usr/local/share/chruby/auto.sh
-  else
+  elif [[ "${ABK_PROFILE_WARNING}" == "true" ]]; then
     echo "Ain't got no chruby"
   fi
+}
+
+if [[ -n "$BASH_VERSION" ]] || [[ -n "$ZSH_VERSION" ]]; then
+  check-load-chruby
   date
 fi
 

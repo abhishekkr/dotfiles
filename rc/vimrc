@@ -55,6 +55,8 @@ let mapleader="\\"
 " \y to copy to system clipboard
 vnoremap <Leader>y y:call system("xclip -i -selection c", getreg("\""))<CR>
 
+set autowriteall "save on buffer switch
+
 set autochdir
 
 " setting spell

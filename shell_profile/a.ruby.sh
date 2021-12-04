@@ -3,7 +3,6 @@
 alias rb='ruby'
 
 alias bi='bundle install'
-alias bib='bundle install --path .bundle'
 alias be='bundle exec'
 alias berb='bundle exec ruby'
 alias beirb='bundle exec irb -I .'
@@ -13,6 +12,11 @@ alias gem-i="gem install"
 alias gem-u="gem uninstall"
 
 alias server.rb='ruby -run -e httpd . -p5000'
+
+bib(){
+  bundle config set --local path '.bundle'
+  bundle install
+}
 
 dot-ruby-version-2-2-3(){
   local RUBY_VERSION_FILE="${PWD}/.ruby-version"
