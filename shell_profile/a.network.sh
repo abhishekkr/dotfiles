@@ -77,3 +77,9 @@ dnsg(){
 net-neighbors(){
   ip neigh show
 }
+
+tcpdump-http(){
+  local _HTTP_PORT="${1:-80}"
+  echo "sudo tcpdump -i any -A -s 0 'tcp port ${_HTTP_PORT} and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'"
+  eval "sudo tcpdump -i any -A -s 0 'tcp port ${_HTTP_PORT} and (((ip[2:2] - ((ip[0]&0xf)<<2)) - ((tcp[12]&0xf0)>>2)) != 0)'"
+}
