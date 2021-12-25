@@ -247,21 +247,36 @@ set noswapfile
 call pathogen#infect()
 """""""</pathogen>
 
-"""""""<neocomplete>>
-let g:neocomplete#enable_at_startup = 1
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-" Set minimum syntax keyword length.
-let g:neocomplete#sources#syntax#min_keyword_length = 3
+"""""""<deoplete>>
+" Use deoplete.
+let g:deoplete#enable_at_startup = 1
+call deoplete#custom#option('omni_patterns', {
+\ 'go': '[^. *\t]\.\w*',
+\})
+
+let g:deoplete#enable_smart_case = 1
+let g:deoplete#sources#syntax#min_keyword_length = 3
+let g:marching_enable_deoplete = 1
 
 "" vim-marching for Clang
 let g:marching_clang_command = "/usr/bin/env clang"
-let g:marching_enable_neocomplete = 1
 
 "" necoghc for Haskell " Disable haskell-vim omnifunc
 let g:haskellmode_completion_ghc = 0
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-"""""""</neocomplete>>
+
+if !exists('g:deoplete#sources')
+  let g:deoplete#sources = {}
+endif
+let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary']
+let g:deoplete#sources.go = ['omni']
+
+" reactJS
+let g:syntastic_javascript_checkers = ['eslint']
+
+" disable sorting
+call deoplete#custom#source('_', 'sorters', [])
+"""""""</deoplete>>
 
 colorscheme PaperColor " could type ':color <_TAB_>' to weigh options
 "let g:airline_theme='PaperColor'
@@ -397,21 +412,6 @@ command! W write " Write on :W, too.
 command! E edit " Edit on :E, too.
 
 " ==================== completion and snippet =========================
-let g:neocomplete#enable_at_startup = 1
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#sources#syntax#min_keyword_length = 3
-
-if !exists('g:neocomplete#sources')
-  let g:neocomplete#sources = {}
-endif
-let g:neocomplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary']
-let g:neocomplete#sources.go = ['omni']
-
-" reactJS
-let g:syntastic_javascript_checkers = ['eslint']
-
-" disable sorting
-call neocomplete#custom#source('_', 'sorters', [])
 " I want to use my tab more smarter. If we are inside a completion menu jump
 " to the next item. Otherwise check if there is any snippet to expand, if yes
 " expand it. Also if inside a snippet and we need to jump tab jumps. If none

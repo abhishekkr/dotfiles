@@ -20,6 +20,11 @@ error_msg(){
 
 special_plugins(){
   case "$1" in
+    deoplete.nvim)
+      echo "**************************** Installation of Plugin: Deoplete"
+      pip3 install --upgrade neovim
+      pip3 install --upgrade flake8
+      ;;
     YouCompleteMe)
       echo "**************************** Installation of Plugin: YouCompleteMe"
       ./install.sh
