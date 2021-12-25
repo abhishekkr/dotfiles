@@ -138,7 +138,13 @@ augroup filetypedetect
   au BufNewFile,BufRead *.pu       set filetype=plantuml syntax=plantuml
   au BufNewFile,BufRead *.plantuml set filetype=plantuml syntax=plantuml
   au BufNewFile,BufRead *.uml      set filetype=plantuml syntax=plantuml
+  au BufNewFile,BufRead *.json      set filetype=json syntax=json
+  au BufNewFile,BufRead *.html      set filetype=html syntax=html
+  au BufNewFile,BufRead *.htm      set filetype=html syntax=html
+  au BufNewFile,BufRead *.xml      set filetype=xml syntax=xml
 augroup END
+
+autocmd FileType cpp,c,go,haskell,python,rust,ruby,markdown,javascript,racket,julia set background=light
 
 autocmd FileType cpp,c,go,haskell,python setlocal expandtab list! tabstop=4 shiftwidth=4 softtabstop=4
 autocmd FileType java,js,ruby,scala setlocal expandtab list! tabstop=2 shiftwidth=2 softtabstop=2
@@ -456,7 +462,8 @@ let g:multi_cursor_quit_key='<Esc>'
 set path+=**
 set wildmenu ""display all matching files on tab completion
 ""open new split window and init find *
-:nnoremap <Leader>p :Sex<CR>:find *
+:nnoremap <Leader>p :Sex<CR>:Files<CR>
+:nnoremap <Leader>f :Sex<CR>:Rg<CR>
 
 "" custome snippets
 nnoremap ,html :-1read $HOME/.vim/snippets/skeleton.html.snip<CR>3jwf>a
