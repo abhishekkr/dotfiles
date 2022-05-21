@@ -136,3 +136,14 @@ dlyx(){
 dlyv-lt-mb(){
   dlyv -f "best[filesize<${1}M]" ${@:2}
 }
+
+dly-pick(){
+  local VID_URL="$1"
+  local pick_line=$(youtube-dl -F "${VID_URL}" | sort | fzf)
+  local pick=$(echo "${pick_line}" | awk '{print $1}')
+  if [[ -z "${pick}" ]]; then
+    echo "guess you skipped downloading.."
+    return 0
+  fi
+  youtube-dl -f ${pick} "${VID_URL}"
+}
