@@ -32,3 +32,8 @@ ls-io-schedulers(){
     cat "${blockPath}/queue/scheduler"
   done
 }
+
+mem-rss(){
+  local PROCNAME="${1:-bash}"
+  ps -ylC ${PROCNAME} --sort:rss
+}

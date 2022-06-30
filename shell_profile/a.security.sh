@@ -108,3 +108,11 @@ geolocate-ip(){
     echo "error geo-locating ${IP}" && return 1
   echo "${RESULT}" | jq '.'
 }
+
+nmap-ssh-algos(){
+  nmap --script ssh2-enum-algos $@
+}
+
+nmap-https-protocols(){
+  nmap -sV --script ssl-enum-ciphers -p 443 $@
+}
