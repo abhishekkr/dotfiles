@@ -40,14 +40,16 @@ source_if_present_else_echo /etc/profile.d/jre.sh
 
 export GEM_PATH="${HOME}/ruby/3.0.0"
 export GEM_HOME="${HOME}/ruby/3.0.0"
-[[ ! -d "${GEM_HOME}" ]] && mkdir -p "${GEM_HOME}"
+#[[ ! -d "${GEM_HOME}" ]] && mkdir -p "${GEM_HOME}"
 
 export NEXT_TELEMETRY_DISABLED=1
 
-PATH="${PATH}:${HOME}/.npm-packages/bin"
-PATH="${PATH}:${HOME}/.go/site/bin"
-PATH="${PATH}:${HOME}/ABK/bin/node-v16.13.0-linux-x64/bin"
-PATH="${PATH}:${HOME}/ruby/3.0.0/bin"
+export NODE_VERSION="v19.3.0"
+
+[[ -d "${HOME}/.npm-packages/bin" ]] && PATH="${PATH}:${HOME}/.npm-packages/bin"
+[[ -d "${HOME}/.go/site/bin" ]] && PATH="${PATH}:${HOME}/.go/site/bin"
+[[ -d "${HOME}/ABK/bin/node-${NODE_VERSION}-linux-x64/bin" ]] && PATH="${PATH}:${HOME}/ABK/bin/node-${NODE_VERSION}-linux-x64/bin"
+[[ -d "${HOME}/ruby/3.0.0/bin" ]] && PATH="${PATH}:${HOME}/ruby/3.0.0/bin"
 export PATH="$PATH"
 
 for a in `ls /etc/profile.d/*.sh`; do

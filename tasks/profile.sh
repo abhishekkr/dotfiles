@@ -15,7 +15,7 @@ zsh_updates(){
 
   if [[ ! -d "${ZSH_AUTOSUGGESTION_DIR}" ]]; then
     mkdir -p ~/.zsh
-    git clone git://github.com/zsh-users/zsh-autosuggestions "${ZSH_AUTOSUGGESTION_DIR}"
+    git clone https://github.com/zsh-users/zsh-autosuggestions "${ZSH_AUTOSUGGESTION_DIR}"
   else
     pushd "${ZSH_AUTOSUGGESTION_DIR}"
     git pull origin master
