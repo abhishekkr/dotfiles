@@ -38,12 +38,32 @@ podman-pgsql(){
   [[ -z "${PG_PASSWORD}" ]] && PG_PASSWORD="${PG_USER}"
 
   mkdir -p "/tmp/${PG_DB}"
-  podman run \
+  podman run --rm \
     -p 5432:5432 \
-    -e POSTGRES_PASSWORD=postgres \
-    -e POSTGRES_USER=postgres \
+    -e POSTGRES_PASSWORD=${PG_PASSWORD} \
+    -e POSTGRES_USER=${PG_USER} \
     -e POSTGRES_DB=${PG_DB} \
     -v /tmp/${PG_DB}:/var/lib/postgresql/data:Z \
-    postgres:12.2-alpine \
-    -d "postgres_${PG_DB}"
+    -d --name="postgres_${PG_DB}" \
+    docker.io/postgres:12.10-alpine
+}
+
+podman-mysql(){
+  local MY_DB="$1"
+  local MY_USER="$2"
+  local MY_PASSWORD="$3"
+  [[ -z "${MY_DB}" ]] && MY_DB=$( head /dev/urandom | tr -dc a-z0-9 | head -c10 )
+  [[ -z "${MY_USER}" ]] && MY_USER="dbuser"
+  [[ -z "${MY_PASSWORD}" ]] && MY_PASSWORD="dbpassword"
+
+  mkdir -p "/tmp/${MY_DB}"
+  podman run --rm \
+    -p 3306:3306 \
+    -e MYSQL_ROOT_PASSWORD=${MY_PASSWORD} \
+    -e MYSQL_USER=${MY_USER} \
+    -e MYSQL_PASSWORD=${MY_PASSWORD} \
+    -e MYSQL_DATABASE=${MY_DB} \
+    -v /tmp/${MY_DB}:/var/lib/mysql:Z \
+    -d --name="mysql_${MY_DB}" \
+    docker.io/mysql:5.7.37-oracle
 }

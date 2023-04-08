@@ -42,6 +42,8 @@ export GEM_PATH="${HOME}/ruby/3.0.0"
 export GEM_HOME="${HOME}/ruby/3.0.0"
 [[ ! -d "${GEM_HOME}" ]] && mkdir -p "${GEM_HOME}"
 
+export NEXT_TELEMETRY_DISABLED=1
+
 PATH="${PATH}:${HOME}/.npm-packages/bin"
 PATH="${PATH}:${HOME}/.go/site/bin"
 PATH="${PATH}:${HOME}/ABK/bin/node-v16.13.0-linux-x64/bin"
@@ -139,4 +141,4 @@ fi
 
 ######################################################
 
-export PATH="$HOME/.cargo/bin:$PATH"
+. "$HOME/.cargo/env"

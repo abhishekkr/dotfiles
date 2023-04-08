@@ -705,3 +705,9 @@ run-it(){
 
   cat "${_cache_file}"
 }
+
+toPDF(){
+  local SRC_FILE="$1"
+  pandoc --pdf-engine=pdflatex -V CJKmainfont="KaiTi" "${SRC_FILE}" -o "${SRC_FILE}.pdf"
+}
+alias to-pdf="toPDF"

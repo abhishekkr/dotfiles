@@ -2,7 +2,22 @@
     "parser": "babel-eslint",
     "env": {
         "browser": true,
+        "commonjs": true,
+        "es6": true,
         "node": true
+    },
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended"
+    ],
+    "parserOptions": {
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true,
+            "jsx": true,
+            "legacyDecorators": true
+        },
+        "sourceType": "module",
+        "allowImportExportEverywhere": false
     },
     "settings": {
         "ecmascript": 6,
@@ -12,8 +27,26 @@
         "react"
     ],
     "rules": {
+        "indent": [
+            "off",
+            4
+        ],
+        "linebreak-style": [
+            "warn",
+            "unix"
+        ],
+        "quotes": [
+            "off",
+            "single"
+        ],
+        "semi": [
+            "off",
+            "always"
+        ],
+        "react/prop-types": ["warn", {"skipUndeclared": true}],
+        "no-console": "off",
+        "no-mixed-spaces-and-tabs": "warn",
         "strict": 0,
-        "quotes": 0,
         "no-unused-vars": 0,
         "camelcase": 0,
         "no-underscore-dangle": 0

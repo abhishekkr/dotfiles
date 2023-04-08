@@ -111,6 +111,7 @@ au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 
 let g:syntastic_enable_racket_racket_checker = 0 "1
+let g:syntastic_rust_checkers = []
 
 augroup filetypedetect
   "au BufNewFile,BufRead .vimrc set filetype=vim
@@ -249,13 +250,26 @@ call pathogen#infect()
 
 """""""<deoplete>>
 " Use deoplete.
+"set completeopt+=noselect
 let g:deoplete#enable_at_startup = 1
+"call deoplete#custom#option('auto_complete_delay', 50)
+call deoplete#custom#option('smart_case', v:true)
+call deoplete#custom#option('yarp', v:false)
+call deoplete#custom#option('min_keyword_legth', 3)
 call deoplete#custom#option('omni_patterns', {
-\ 'go': '[^. *\t]\.\w*',
-\})
+    \ 'go': '[^. *\t]\.\w*',
+		\ 'ruby': ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::'],
+		\ 'java': '[^. *\t]\.\w*',
+		\ 'html': ['<', '</', '<[^>]*\s[[:alnum:]-]*'],
+		\ 'xhtml': ['<', '</', '<[^>]*\s[[:alnum:]-]*'],
+		\ 'xml': ['<', '</', '<[^>]*\s[[:alnum:]-]*'],
+  \})
+call deoplete#custom#option('sources', {
+		\ '_': ['buffer', 'member', 'tag', 'file', 'dictionary'],
+		\ 'cpp': ['buffer', 'tag'],
+		\})
+"\ 'go': ['omni'],
 
-let g:deoplete#enable_smart_case = 1
-let g:deoplete#sources#syntax#min_keyword_length = 3
 let g:marching_enable_deoplete = 1
 
 "" vim-marching for Clang
@@ -264,12 +278,6 @@ let g:marching_clang_command = "/usr/bin/env clang"
 "" necoghc for Haskell " Disable haskell-vim omnifunc
 let g:haskellmode_completion_ghc = 0
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
-
-if !exists('g:deoplete#sources')
-  let g:deoplete#sources = {}
-endif
-let g:deoplete#sources._ = ['buffer', 'member', 'tag', 'file', 'dictionary']
-let g:deoplete#sources.go = ['omni']
 
 " reactJS
 let g:syntastic_javascript_checkers = ['eslint']
@@ -282,7 +290,9 @@ colorscheme PaperColor " could type ':color <_TAB_>' to weigh options
 "let g:airline_theme='PaperColor'
 
 """""""<powerline>
-set rtp+=$HOME/.virtualenvs/anon/lib/python2.7/site-packages/powerline/bindings/vim
+if !has('nvim')
+  set rtp+=$HOME/.virtualenvs/anon/lib/python2.7/site-packages/powerline/bindings/vim
+endif
 """""""</powerline>
 
 """""""<go-vim>
@@ -666,3 +676,6 @@ let g:gitgutter_max_signs = 500  " default value
 "" to do alteration with selected text
 "" :s'<,'>!awk -F "-" '{ print $2 , $1}'
 ""
+
+let $NVIM_PYTHON_LOG_FILE="/tmp/nvim_log"
+let $NVIM_PYTHON_LOG_LEVEL="DEBUG"

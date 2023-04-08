@@ -17,7 +17,8 @@ gco-path(){
   read DO_IT
   [[ "${DO_IT}" == "y" || "${DO_IT}" == "Y" ]] && git checkout -- ${CHECKOUT_PATH}
 }
-gco(){
+
+gco-all(){
   for CHECKOUT_PATH in $@; do
     [[ "${CHECKOUT_PATH}" == "--" ]] && continue
     gco-path "${CHECKOUT_PATH}"

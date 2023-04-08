@@ -11,7 +11,16 @@ ZSH=$HOME/.oh-my-zsh
 # time that oh-my-zsh is loaded.
 #ZSH_THEME="cypher" ="gentoo" ="funky"
 #ZSH_THEME="clean"
-ZSH_THEME="blinks"
+#ZSH_THEME="blinks"
+#ZSH_THEME="agnoster"
+ZSH_THEME="random"
+ZSH_THEME_RANDOM_CANDIDATES=(
+  "agnoster"
+  "funky"
+  "gnzh"
+  "mortalscumbag"
+  "blinks"
+)
 
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
@@ -38,7 +47,30 @@ COMPLETION_WAITING_DOTS="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=()
+plugins=(
+  ansible
+  archlinux
+  aws
+  composer
+  dnf
+  fzf
+  git
+  golang
+  history
+  mix
+  nmap
+  npm
+  pip
+  postgres
+  python
+  redis-cli
+  ruby
+  rust
+  systemd
+  terraform
+  virtualenv
+  vscode
+)
 
 source $ZSH/oh-my-zsh.sh
 
