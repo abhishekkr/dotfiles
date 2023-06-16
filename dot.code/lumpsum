@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+
+import sys
+import locale
+
+locale.setlocale(locale.LC_ALL, 'en_IN.UTF-8')  # en_US.UTF-8 for USD
+
+
+def money_str(amt):
+    # return "{:,.2f}".format(amt)
+    return locale.currency(amt, grouping=True)
+
+
+def print_yr_money(purpose, yr, saved_amount, spent_amount):
+    saved_money = money_str(saved_amount)
+    spent_money = money_str(spent_amount)
+    if purpose == "spend":
+        msg = "at %-2s year:\t[spent] %s"
+        print(msg % (yr, spent_money))
+    elif purpose == "saved":
+        msg = "at %-2s year:\t[saved] %s"
+        print(msg % (yr, saved_money))
+    elif purpose == "all":
+        msg = "at %-2s year:\t[saved] %s\t[spent] %s"
+        print(msg % (yr, saved_money, spent_money))
+
+
+def print_help():
+    print("""usage:
+    %s <money-amount> <number-of-years> <rate-%%> [<spend|saved|all>]"""
+          % sys.argv[0])
+
+
+def do_lumpsum(args):
+    amount = float(args[0])
+    years = int(args[1])
+    percent = float(args[2])/100
+    purpose = ""
+    if len(args) > 3:
+        purpose = str(args[3])
+    if purpose not in ["spend", "saved"]:
+        purpose = "all"
+    spent_amount = amount
+    print("%s | %d | %f | %s" % (money_str(amount), years, percent, purpose))
+    print_yr_money(purpose, 0, amount, spent_amount)
+    for yr in range(1, years+1):
+        amount += (amount*percent)
+        spent_amount += amount
+        print_yr_money(purpose, yr, amount, spent_amount)
+    if purpose in ["spend", "all"]:
+        print("\ntotal spending would be:\t", money_str(spent_amount))
+    if purpose in ["saved", "all"]:
+        print("\ntotal savings would be:\t", money_str(amount))
+
+
+if len(sys.argv) < 4:
+    print_help()
+    if len(sys.argv) > 1 and sys.argv[1] in ["-h", "--help"]:
+        sys.exit(0)
+    sys.exit(1)
+try:
+    do_lumpsum(sys.argv[1:])
+except Exception as e:
+    print(e)
+    print_help()
