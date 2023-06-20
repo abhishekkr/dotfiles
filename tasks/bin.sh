@@ -248,8 +248,15 @@ setup-nvm(){
   [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
 }
 
+setup-poetry(){
+  python3 -m pip install --user pipx
+  python3 -m pipx ensurepath
+  pipx install poetry
+}
+
 ##### main()
 
+setup-poetry
 setup-yaml2json
 setup-rust
 setup-jq

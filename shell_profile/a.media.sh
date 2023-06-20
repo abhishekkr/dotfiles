@@ -147,3 +147,19 @@ dly-pick(){
   fi
   youtube-dl -f ${pick} "${VID_URL}"
 }
+
+pdf-to-pngs-to-pdf(){
+  local SRC_PDFPATH="${1}"
+  local DEST_PDFPATH="${2}"
+  [[ -z "${DEST_PDFPATH}" ]] && DEST_PDFPATH=$(dirname "${SRC_PDFPATH}")"/imgonlyPDF-"$(basename "$SRC_PDFPATH")
+
+  local SRCBASENAME=$(basename "$SRC_PDFPATH" | sed 's/.pdf$//')
+  local WDIR="/tmp/today/${SRCBASENAME}"
+  mkdir -p "${WDIR}"
+  pushd "${WDIR}"
+  echo "converting to pngs at ${WDIR}"
+  pdftoppm -png "${SRC_PDFPATH}" prefix
+  echo "converting to pdf at ${DEST_PDFPATH}"
+  convert *.png "${DEST_PDFPATH}"
+  popd
+}

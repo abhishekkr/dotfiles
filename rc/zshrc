@@ -149,4 +149,7 @@ else
   echo "zsh autosuggestion script not found, re-run your dotfiles"
 fi
 
+autoload -U bashcompinit
+bashcompinit
+eval "$(register-python-argcomplete pipx)"
 source $HOME/.profile

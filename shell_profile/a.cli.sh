@@ -199,6 +199,9 @@ alias lsz1='ls -sh1'
 alias la='ls -lash'
 alias ls-size="ls -lah | grep '^total'"
 
+alias ls-dirs="find . -maxdepth 1 -type d"
+alias ls-files="find . -maxdepth 1 -type f"
+
 ls-top10files(){
   local _CHECK_THIS_PATH="$1"
   find $_CHECK_THIS_PATH -type f -exec ls -sh {} \; | sort -n -r | head -10
