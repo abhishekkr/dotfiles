@@ -46,9 +46,10 @@ export GEM_HOME="${HOME}/ruby/3.0.0"
 
 export NEXT_TELEMETRY_DISABLED=1
 
-export NODE_VERSION="v19.3.0"
+export NODE_VERSION="v20.4.0"
 
-export POETRY_CACHE_DIR="/tmp/cache-pypoetry" ; mkdir $POETRY_CACHE_DIR
+export POETRY_CACHE_DIR="/tmp/cache-pypoetry"
+[[ ! -d "$POETRY_CACHE_DIR" ]] && mkdir $POETRY_CACHE_DIR
 
 [[ -d "${HOME}/.go/site/bin" ]] && PATH="${PATH}:${HOME}/.go/site/bin"
 [[ -d "${HOME}/.npm-packages/bin" ]] && PATH="${PATH}:${HOME}/.npm-packages/bin"
@@ -149,3 +150,44 @@ fi
 ######################################################
 
 . "$HOME/.cargo/env"
+
+ffmpeg-half-video(){
+  local _INVID="$@"
+  local _INVID_DIR=$(dirname "${_INVID}")
+  local _INVID_FYL=$(basename "${_INVID}")
+  local _OUTVID="${_INVID_DIR}/half-${_INVID_FYL}"
+  ffmpeg -i "${_INVID}" -vf scale="iw/2:ih/2" -acodec copy "${_OUTVID}"
+}
+
+ffmpeg-resize-video(){
+  local _NEW_WIDTH="$1"
+  local _INVID="${@:2}"
+  local _INVID_DIR=$(dirname "${_INVID}")
+  local _INVID_FYL=$(basename "${_INVID}")
+  local _OUTVID="${_INVID_DIR}/half-${_INVID_FYL}"
+  ffmpeg -i "${_INVID}" -vf scale="${_NEW_WIDTH}:-1" -acodec copy "${_OUTVID}"
+}
+
+ffmpeg-merge-ado-vdo(){
+  local _INVID="$1"
+  local _INADO="$2"
+  local _OUT="$3"
+  ffmpeg -i "${_INVID}" -i "${_INADO}" -c:v copy -c:a aac "${_OUT}"
+}
+
+ffmpeg-sepia(){
+  local _INVID="$@"
+  local _INVID_DIR=$(dirname "${_INVID}")
+  local _INVID_FYL=$(basename "${_INVID}")
+  local _OUTVID="${_INVID_DIR}/sepia-${_INVID_FYL}"
+  ffmpeg -i "${_INVID}" -filter_complex "
+[0:v]colorchannelmixer=.35:.4:.189:0:.34:.4:.168:0:.27:.4:.131[colorchannelmixed];
+[colorchannelmixed]eq=1.0:0:1.3:2.4:1.0:1.0:1.0:1.0[color_effect]" -map [color_effect] -c:v libx264 -c:a copy "${_OUTVID}"
+}
+
+zip-crypt(){
+  local _PASS=${ZIP_PASS:-MaxPayne}
+  local ZIPFILE="$1"
+  local TOZIP="${@:2}"
+  eval "zip -P '${_PASS}' '${ZIPFILE}' ${TOZIP}"
+}
