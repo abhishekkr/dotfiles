@@ -7,6 +7,7 @@ alias gcm='git commit --signoff -m'
 alias gcm0='git commit --signoff --allow-empty -m'
 
 alias gcp='git clone'
+alias gcp-shallow='git clone --depth=1 '
 
 gco-path(){
   local CHECKOUT_PATH="$1"
