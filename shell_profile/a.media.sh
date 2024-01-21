@@ -113,6 +113,14 @@ toFLAC(){
 }
 alias to-flac="toFLAC"
 
+toGIF(){
+  local MEDIA_FILE="$@"
+  local GIF_FILE="${MEDIA_FILE}.gif"
+  ffmpeg -i "${MEDIA_FILE}" -vf "fps=10" -c:v pam -f image2pipe - | \
+    convert -delay 10 - -loop 0 -layers optimize "${GIF_FILE}"
+}
+alias to-gif="toGIF"
+
 uget(){
   echo "$1" | sed 's/%3A/\:/g' | sed 's/%2F/\//g' | sed 's/%3F/?/g' | sed 's/%3D/\=/g' | sed 's/%26/\&/g' | xargs wget -c
 }
