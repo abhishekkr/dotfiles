@@ -4,6 +4,7 @@ alias py2='/usr/bin/env python2'
 alias py3='/usr/bin/env python3'
 alias py='py3'
 alias server.py="python3 -m http.server"
+alias pipi="pip install --require-virtualenv"
 
 server-py(){
   [[ $(python --version | grep -c 'Python ') -eq 0 ]] && \
