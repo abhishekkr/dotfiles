@@ -58,6 +58,8 @@ export POETRY_CACHE_DIR="/tmp/cache-pypoetry"
 [[ -d "${HOME}/ruby/3.0.0/bin" ]] && PATH="${PATH}:${HOME}/ruby/3.0.0/bin"
 export PATH="$PATH"
 
+[[ -f "/etc/profile.d/a.cli.sh" ]] && export MY_DOTFILE_DIR=$(readlink /etc/profile.d/a.cli.sh | xargs dirname)
+
 for a in `ls /etc/profile.d/*.sh`; do
   source_if_present_else_echo $a "[error] loading profile '${a}' failed."
 done

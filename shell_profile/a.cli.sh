@@ -258,74 +258,31 @@ xrandr-auto(){
 [ -d $HOME/.cabal/bin ] && export PATH=$PATH:$HOME/.cabal/bin
 
 
-ascii_pacman(){
-    if [[ "$1" != "" ]]; then
-      _msg="$1"
-    else
-      _msg=`date`
+ascii_art_from_data(){
+    local _dat="$1"
+    local _msg="${@:2}"
+    if [[ -z "${_msg}" ]]; then
+      local _msg=`date`
     fi
-    _asciiart_pacman="__________________|      |____________________________________________";
-    _asciiart_pacman=$_asciiart_pacman"\n     ,--.    ,--.          ,--.   ,--.";
-    _asciiart_pacman=$_asciiart_pacman"\n    |oo  | _  \  \`.       | oo | |  oo|";
-    _asciiart_pacman=$_asciiart_pacman"\no  o|~~  |(_) /   ;       | ~~ | |  ~~|o  o  o  ${_msg} o  o";
-    _asciiart_pacman=$_asciiart_pacman"\n    |/\/\|   '._,'        |/\/\| |/\/\|";
-    _asciiart_pacman=$_asciiart_pacman"\n__________________        ____________________________________________";
-    _asciiart_pacman=$_asciiart_pacman"\n__________________|      |____________________________________________";
-    echo "$_asciiart_pacman"
+    if [[ ! -z "${MY_DOTFILE_DIR}" ]]; then
+      local ASCII_ART_DATA=$(dirname ${MY_DOTFILE_DIR})"/tasks/shell/data/${_dat}"
+      [[ -f "${ASCII_ART_DATA}" ]] && cat "${ASCII_ART_DATA}"
+      echo ''
+    fi
+    echo "${_msg}"
+    echo ''
 }
 
-ascii_goku(){
-    if [[ "$1" != "" ]]; then
-      _msg="$1"
-    else
-      _msg=`date`
-    fi
-    #cat ${MY_DOTFILE_DIR}/tasks/shell/data/goku.ascii-art
-    echo ''
-    echo "${msg}"
-    echo ''
+ascii_pacman(){
+    ascii_art_from_data "pacman.ascii-art" " o  o $@"
+}
+
+ascii_kawaii(){
+    ascii_art_from_data "kawaii.ascii-art" "$@"
 }
 
 ascii_maxpayne(){
-    if [[ "$1" != "" ]]; then
-      _msg="$1"
-    else
-      _msg=`date`
-    fi
-_asciiart_maxpayne=""
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                         ..sSsSSSSSSb.                                       "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                       .SSSSSSSSSSSSSSS.                                     "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                    .SSSSSSSSSSSSSSSSSSSSSb.                                 "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                  .SSSSSSSSSSSSSSSSSSSSSSSSS                                 "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                 SSSSSSSSSSSSSSSSSS\'  \`SSSS                                 "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                 SSSSSSSSSSSSSSS\'        SSS                                 "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                 SSSSSSSSSSSSS\'         \`SS.                                "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                \`SSSSSSSSSSSSS          \`SSS.                              "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                  \`SSSSSSSSS\'       .sSSS SS S                              "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                     SSSSSSSSS.sSs .sSSs\"   s s                              "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                      SSSSSSSSSSSS           SP                              "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                     \`SSSSSSSSSSSs          S                               "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                        SSSSSSSSSSS.    \",                                   "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n                       \`SSSSSSSSSSsSS                                       "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n        sSSS.           \`SSSSSSSSSSSS.s\"\'   .S.                             "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n        SSSSS.             \`SSSSSSSSSS.    .SSSSs.sSs.                      "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n         SSSSS.             \`SSSSSSSSSP   .SSSSSSSSSSSS.                    "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n         SSSSSS.              \`SSSSSSS\' .SSSSSSSSSSSSSSSS.                  "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n         \`SSSSSS.                 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSs.          "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n           SSSSSS.               \`SSSSSSSSS SSSSSSSSSSSSSSSSSSSSSSSSs.      "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n         .sSSSSSSS.                \`SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS.    "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n         s  SSSSSSS.                .SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS.   "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n         \`SSSSSSSSSS.             .SSS\' SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS.  "
-_asciiart_maxpayne=$_asciiart_maxpayne"\n          \`SSSSSSSSSS.           sS\'   SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS."
-_asciiart_maxpayne=$_asciiart_maxpayne"\n          SSSSSSSSSSSSe         SSS     \`SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
-_asciiart_maxpayne=$_asciiart_maxpayne"\n        .\' SSSSSSSSSS7         SSSS       \`SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
-_asciiart_maxpayne=$_asciiart_maxpayne"\n       \"   \`SSSSSSSS7         SSSSS       .SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
-_asciiart_maxpayne=$_asciiart_maxpayne"\n      SSSs..SSSSSSS7        SSSSSSS    .sSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
-_asciiart_maxpayne=$_asciiart_maxpayne"\n       SSSSSSSSSSSS        SSSSSSSS .sSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
-_asciiart_maxpayne=$_asciiart_maxpayne"\n        SSSSSSSSSSS     .SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
-_asciiart_maxpayne=$_asciiart_maxpayne"\n      .SSSSSSSSSSSSS   .SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
-_asciiart_maxpayne=$_asciiart_maxpayne"\n      SSSSSSSSSSSSSS  .SSSSSSSSSSS SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"
-echo $_asciiart_maxpayne
+    ascii_art_from_data "maxpayne.ascii-art" "$@"
 }
 
 arch-font-install(){
