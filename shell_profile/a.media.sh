@@ -121,6 +121,28 @@ toGIF(){
 }
 alias to-gif="toGIF"
 
+toMKVH265(){
+  local MEDIA_FILE="$@"
+  local MKV_FILE="${MEDIA_FILE}-h265.mkv"
+  ffmpeg -i "${MEDIA_FILE}" -vcodec libx265 -crf 28 "${MKV_FILE}"
+}
+alias to-mkv-h265="toMKVH265"
+
+toYTVdo(){
+  local MEDIA_FILE="$@"
+  local YT_FILE="${MEDIA_FILE}-yt.webm"
+  ffmpeg -i ${MEDIA_FILE} -c:v libvpx-vp9 -b:v 0.33M -c:a libopus -b:a 96k \
+    -filter:v scale=960x540 ${YT_FILE}
+}
+alias to-yt-vdo="toYTVdo"
+
+toFhdVdo(){
+  local MEDIA_FILE="$@"
+  local FHD_FILE="hd-${MEDIA_FILE}"
+  ffmpeg -i ${MEDIA_FILE} -vf scale=1280:720 ${FHD_FILE}
+}
+alias to-fhd-vdo="toFhdVdo"
+
 uget(){
   echo "$1" | sed 's/%3A/\:/g' | sed 's/%2F/\//g' | sed 's/%3F/?/g' | sed 's/%3D/\=/g' | sed 's/%26/\&/g' | xargs wget -c
 }
