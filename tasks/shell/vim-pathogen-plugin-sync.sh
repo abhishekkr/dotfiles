@@ -20,11 +20,6 @@ error_msg(){
 
 special_plugins(){
   case "$1" in
-    deoplete.nvim)
-      echo "**************************** Installation of Plugin: Deoplete"
-      pip3 install --upgrade neovim
-      pip3 install --upgrade flake8
-      ;;
     YouCompleteMe)
       echo "**************************** Installation of Plugin: YouCompleteMe"
       ./install.sh
@@ -55,6 +50,30 @@ special_plugins(){
     vim-racer)
       echo "**************************** Installation of Plugin: rust's vim-racer"
       cargo install racer
+      ;;
+    lsp)
+      echo "**************************** Installation of Plugin: lsp"
+      declare -A lsp_servers
+      lsp_servers["${HOME}/.go/site/bin/gopls"]="go install golang.org/x/tools/gopls@latest"
+      lsp_servers["/usr/bin/pylsp"]="sudo dnf install python-lsp-server"
+      lsp_servers["/usr/bin/bash-language-server"]="sudo dnf install nodejs-bash-language-server"
+      lsp_servers["/usr/bin/clangd"]="sudo dnf install clang-tools-extra"
+      lsp_servers["${HOME}/.npm-packages/bin/vscode-css-language-server"]="npm i -g vscode-langservers-extracted"
+      lsp_servers["${HOME}/.npm-packages/bin/vscode-eslint-language-server"]="npm i -g vscode-langservers-extracted"
+      lsp_servers["${HOME}/.npm-packages/bin/vscode-html-language-server"]="npm i -g vscode-langservers-extracted"
+      lsp_servers["${HOME}/.npm-packages/bin/vscode-json-language-server"]="npm i -g vscode-langservers-extracted"
+      lsp_servers["${HOME}/.npm-packages/bin/vscode-markdown-language-server"]="npm i -g vscode-langservers-extracted"
+      lsp_servers["${HOME}/.npm-packages/bin/typescript-language-server"]="npm install -g typescript-language-server typescript"
+      lsp_servers["${HOME}/bin/rust-analyzer"]="curl -L https://github.com/rust-lang/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz | gunzip -c - > ~/bin/rust-analyzer ; chmod +x ~/bin/rust-analyzer"
+      for key in "${!lsp_servers[@]}"
+      do
+        if [[ ! -f "${key}" ]]; then
+          echo "**************************************************************"
+          echo "[WARNING] LSP Servers: Missing ${key}"
+          echo "Solution: ${lsp_servers[${key}]}"
+          echo "**************************************************************"
+        fi
+      done
       ;;
     *)
       echo "No Special Tasks for ${1}"

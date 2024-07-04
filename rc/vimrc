@@ -249,28 +249,6 @@ call pathogen#infect()
 """""""</pathogen>
 
 """""""<deoplete>>
-" Use deoplete.
-"set completeopt+=noselect
-let g:deoplete#enable_at_startup = 1
-"call deoplete#custom#option('auto_complete_delay', 50)
-call deoplete#custom#option('smart_case', v:true)
-call deoplete#custom#option('yarp', v:false)
-call deoplete#custom#option('min_keyword_legth', 3)
-call deoplete#custom#option('omni_patterns', {
-    \ 'go': '[^. *\t]\.\w*',
-		\ 'ruby': ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::'],
-		\ 'java': '[^. *\t]\.\w*',
-		\ 'html': ['<', '</', '<[^>]*\s[[:alnum:]-]*'],
-		\ 'xhtml': ['<', '</', '<[^>]*\s[[:alnum:]-]*'],
-		\ 'xml': ['<', '</', '<[^>]*\s[[:alnum:]-]*'],
-  \})
-call deoplete#custom#option('sources', {
-		\ '_': ['buffer', 'member', 'tag', 'file', 'dictionary'],
-		\ 'cpp': ['buffer', 'tag'],
-		\})
-"\ 'go': ['omni'],
-
-let g:marching_enable_deoplete = 1
 
 "" vim-marching for Clang
 let g:marching_clang_command = "/usr/bin/env clang"
@@ -281,10 +259,6 @@ autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
 " reactJS
 let g:syntastic_javascript_checkers = ['eslint']
-
-" disable sorting
-call deoplete#custom#source('_', 'sorters', [])
-"""""""</deoplete>>
 
 colorscheme PaperColor " could type ':color <_TAB_>' to weigh options
 "let g:airline_theme='PaperColor'
@@ -501,6 +475,93 @@ command! FZFILES Files .
 "" gitgutter
 set updatetime=15000  "" gitgutter refresh 1000=1sec
 let g:gitgutter_max_signs = 500  " default value
+
+
+"" lsp
+""" :LspDiagShow
+""" :LspDiagCurrent
+""" :LspServer debug on
+""" :LspServer debug messages
+""""
+let g:lspServers = [
+    \ {
+    \     'name': 'bashls',
+    \     'filetype': ['sh', 'bash'],
+    \     'path': '/usr/bin/bash-language-server',
+    \     'args': ['start']
+    \ },
+    \ {
+    \     'name': 'clangd',
+    \     'filetype': ['c', 'cpp'],
+    \     'path': '/usr/bin/clangd',
+    \     'args': ['--background-index', '--clang-tidy']
+    \ },
+    \ {
+    \     'name': 'vscode-css-server',
+    \     'filetype': ['css'],
+    \     'path': '/home/abhishekkr/.npm-packages/bin/vscode-css-language-server',
+    \     'args': ['--stdio']
+    \ },
+    \ {
+    \     'name': 'golang',
+    \     'filetype': ['go', 'gomod'],
+    \     'path': '/home/abhishekkr/.go/site/bin/gopls',
+    \     'args': ['serve'],
+    \     'debug': v:true,
+    \     'syncInit': v:true
+    \ },
+    \ {
+    \     'name': 'vscode-html-server',
+    \     'filetype': ['html'],
+    \     'path': '/home/abhishekkr/.npm-packages/bin/vscode-html-language-server',
+    \     'args': ['--stdio'],
+    \ },
+    \ {
+    \     'name': 'vscode-eslint-server',
+    \     'filetype': ['javascript'],
+    \     'path': '/home/abhishekkr/.npm-packages/bin/vscode-eslint-language-server',
+    \     'args': ['--stdio'],
+    \ },
+    \ {
+    \      'name': 'vscode-json-server',
+    \      'filetype': ['json'],
+    \      'path': '/home/abhishekkr/.npm-packages/bin/vscode-json-language-server',
+    \      'args': ['--stdio'],
+    \ },
+    \ {
+    \       'name': 'vscode-markdown-server',
+    \       'filetype': ['markdown'],
+    \       'path': '/home/abhishekkr/.npm-packages/bin/vscode-markdown-language-server',
+    \       'args': ['--stdio'],
+    \ },
+    \ {
+    \     'name': 'pylsp',
+    \     'filetype': 'python',
+    \     'path': '/usr/bin/pylsp',
+    \     'args': [],
+    \     'debug': v:true
+    \ },
+    \ {
+    \      'name': 'rustanalyzer',
+    \      'filetype': ['rust'],
+    \      'path': '/home/abhishekkr/bin/rust-analyzer',
+    \      'args': [],
+    \      'syncInit': v:true
+    \ },
+    \ {
+    \     'name': 'tsserver',
+    \     'filetype': ['typescript'],
+    \     'path': '/home/abhishekkr/.npm-packages/bin/typescript-language-server',
+    \     'args': ['stdio']
+    \ }
+  \ ]
+"autocmd! BufReadPre * g:LspAddServer(g:lspServers)
+call lsp#lsp#AddServer(lspServers)
+call lsp#options#OptionsSet({
+      \ 'autoPopulateDiags': v:true,
+      \ 'noNewlineInCompletion': v:true,
+      \ 'ultisnipsSupport': v:true
+  \ })
 
 
 "" http://stackoverflow.com/questions/1218390/what-is-your-most-productive-shortcut-with-vim

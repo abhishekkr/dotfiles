@@ -17,9 +17,6 @@ https://github.com/scrooloose/syntastic.git
 https://github.com/sjl/gundo.vim.git
 https://github.com/NLKNguyen/papercolor-theme.git
 https://github.com/bling/vim-airline.git
-https://github.com/Shougo/deoplete.nvim.git
-https://github.com/roxma/nvim-yarp.git
-https://github.com/roxma/vim-hug-neovim-rpc.git
 https://github.com/Shougo/neosnippet-snippets.git
 https://github.com/Shougo/neosnippet.vim.git
 https://github.com/osyo-manga/vim-marching.git
@@ -49,3 +46,6 @@ https://github.com/JuliaEditorSupport/julia-vim.git
 https://github.com/wlangstroth/vim-racket.git
 https://github.com/kien/rainbow_parentheses.vim.git
 https://github.com/ziglang/zig.vim.git
+https://github.com/yegappan/lsp.git
+https://github.com/honza/vim-snippets.git
+https://github.com/sirver/ultisnips.git
