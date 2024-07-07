@@ -15,7 +15,7 @@ fi
 case $_action in
   "all")
     echo "***********************************************[ Setup Everything ]***"
-    for task in "profile" "rc" "vim" "bin"; do
+    for task in "rc" "profile" "vim" "bin" "extra"; do
       $0 $task
     done
     echo "**********************************************************************"
@@ -40,13 +40,19 @@ case $_action in
     bash tasks/bin.sh
     echo "**********************************************************************"
   ;;
+  "extra")
+    echo "***********************************************[ Setup Binaries ]*****"
+    bash tasks/extra.sh
+    echo "**********************************************************************"
+  ;;
   *)
     echo "***********************************************[ HELP ]***************"
     echo " To set-up everything following, run       ' ./setup.sh '"
     echo " To set-up /etc/profile.d/<profiles>, run  ' ./setup.sh profile '"
     echo " To set-up RC Scripts, run                 ' ./setup.sh rc '"
-    echo " To set-up \$HOME/.vim, run                 ' ./setup.sh vim '"
-    echo " To set-up binaries at \$HOME/bin, run      ' ./setup.sh bin '"
+    echo " To set-up \$HOME/.vim, run                ' ./setup.sh vim '"
+    echo " To set-up binaries at \$HOME/bin, run     ' ./setup.sh bin '"
+    echo " To set-up extras (zsh-plugin)             ' ./setup.sh extra '"
     echo "**********************************************************************"
   ;;
 esac

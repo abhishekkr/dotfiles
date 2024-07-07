@@ -124,12 +124,24 @@ setopt CDABLE_VARS
 setopt AUTO_PUSHD
 
 # History
+setopt HIST_FIND_NO_DUPS
 setopt HIST_SAVE_NO_DUPS
 setopt HIST_VERIFY
 setopt HIST_IGNORE_ALL_DUPS
 setopt EXTENDED_HISTORY
+setopt APPENDHISTORY
+setopt SHAREHISTORY
+setopt HIST_IGNORE_SPACE
 
 setopt EXTENDED_GLOB
+
+# Completion Styling X FZF-TAB
+# set list-colors to enable filename colorizing
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+zstyle ':completion:*' menu no
+# preview directory's content with eza when completing cd
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
 
 # This loads RVM into a shell session.
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
@@ -153,4 +165,5 @@ fi
 autoload -U bashcompinit
 bashcompinit
 eval "$(register-python-argcomplete pipx)"
+eval "$(fzf --zsh)"
 source $HOME/.profile

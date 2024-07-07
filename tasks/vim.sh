@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -z $REPO_ROOT ]; then
+if [[ -z "$REPO_ROOT" ]]; then
   REPO_ROOT=$(dirname $(dirname $0))
   cd $REPO_ROOT
   REPO_ROOT=${PWD}
