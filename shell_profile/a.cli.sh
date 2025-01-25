@@ -671,3 +671,7 @@ toPDF(){
   pandoc --pdf-engine=pdflatex -V CJKmainfont="KaiTi" "${SRC_FILE}" -o "${SRC_FILE}.pdf"
 }
 alias to-pdf="toPDF"
+
+pdf-for-ebook(){
+  ps2pdf -dPDFSETTINGS=/ebook "${1}" "${1}-ps2.pdf"
+}

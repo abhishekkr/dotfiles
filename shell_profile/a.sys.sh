@@ -1,4 +1,8 @@
 
+check-secure-boot(){
+  mokutil --sb-state
+}
+
 how-many-cores(){
   grep -c "^processor" /proc/cpuinfo
 }
