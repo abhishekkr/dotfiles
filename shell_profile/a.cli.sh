@@ -675,3 +675,8 @@ alias to-pdf="toPDF"
 pdf-for-ebook(){
   ps2pdf -dPDFSETTINGS=/ebook "${1}" "${1}-ps2.pdf"
 }
+
+djvu-to-pdf(){
+  # required package: djvulibre
+  ddjvu -format=pdf "${1}" "${1}.pdf"
+}
