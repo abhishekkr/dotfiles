@@ -188,6 +188,8 @@ temp/*
 *.cfg
 *.lock
 *.sock
+registry.terraform.io/**
+node_modules/**
 GITIGNORE
   else
     for _TO_IGNORE in $@; do

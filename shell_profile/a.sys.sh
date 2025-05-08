@@ -41,3 +41,37 @@ mem-rss(){
   local PROCNAME="${1:-bash}"
   ps -ylC ${PROCNAME} --sort:rss
 }
+
+purge-caches-cmds(){
+  echo "pip cache purge"
+  echo "pnpm store prune"
+  echo "tracker3 reset -s -r"
+}
+
+chmod-fix-dir(){
+  local _this_dir="${1:-.}"
+  find "${_this_dir}" -type f | xargs -I{} chmod 0755 "{}"
+}
+
+chmod-fix(){
+  local _this_dir="${1:-.}"
+  find "${_this_dir}" -perm 777 -type d | xargs -I{} chmod 0775 "{}"
+  find "${_this_dir}" -perm 777 -type f | xargs -I{} chmod 0755 "{}"
+}
+
+chown-fix(){
+  local _this_dir="${1:-.}"
+  local PERM_STR="${USER}"
+  if [[ -z "${USER}" ]]; then
+    echo "[ERROR:MISSING] user: ${USER}"
+    return 123
+  fi
+  if [[ -z "${GROUP}" ]]; then
+    echo "[WARNING:MISSING] group: ${GROUP}"
+    PERM_STR="${USER}:${GROUP}"
+  fi
+  find "${_this_dir}" -nouser -type d | xargs -I{} sudo chown ${PERM_STR} "{}"
+  find "${_this_dir}" -nouser -type f | xargs -I{} sudo chown ${PERM_STR} "{}"
+  find "${_this_dir}" -user 0 -type d | xargs -I{} sudo chown ${PERM_STR} "{}"
+  find "${_this_dir}" -user 0 -type f | xargs -I{} sudo chown ${PERM_STR} "{}"
+}
