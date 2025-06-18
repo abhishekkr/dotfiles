@@ -216,8 +216,14 @@ nmap <Leader><down> <C-w>j
 nmap <Leader><left> <C-w>h
 nmap <Leader><right> <C-w>l
 
-nmap <Leader>] :tabnext
-nmap <Leader>[ :tabprevious
+" tab
+nmap <C-]> :tabnext<CR>
+nmap <C-[> :tabprevious<CR>
+nnoremap <Leader>t :tab split<CR>
+
+" buffer
+nmap <C-b>p :bprev<CR>
+nmap <C-b>n :bnext<CR>
 
 " select all "credits: http://vimbits.com/bits/82
 map <Leader>a ggVG
@@ -236,8 +242,6 @@ endif
 nnoremap <Leader>hl *<C-O>
 " Highlight word at cursor and then Ack it.
 nnoremap <Leader>ack *<C-O>:AckFromSearch!<CR>
-
-nnoremap <Leader>t :tab <C-O>
 
 " Disable stupid backup and swap files - they trigger too many events for file system watchers
 set nobackup
@@ -285,10 +289,10 @@ au FileType go nmap <Leader>gs <Plug>(go-def-split)
 au FileType go nmap <Leader>gv <Plug>(go-def-vertical)
 au FileType go nmap <Leader>gi <Plug>(go-info)
 au FileType go nmap <Leader>gl <Plug>(go-metalinter)
-au FileType go nmap <leader>gr  <Plug>(go-run)
-au FileType go nmap <leader>gb  <Plug>(go-build)
-au FileType go nmap <leader>gt  <Plug>(go-test)
-au FileType go nmap <leader>gdt  <Plug>(go-test-compile)
+au FileType go nmap <Leader>gr  <Plug>(go-run)
+au FileType go nmap <Leader>gb  <Plug>(go-build)
+au FileType go nmap <Leader>gt  <Plug>(go-test)
+au FileType go nmap <Leader>gdt  <Plug>(go-test-compile)
 au FileType go nmap <Leader>gd <Plug>(go-doc)
 
 
@@ -361,11 +365,11 @@ nnoremap <Leader><F9> :Tlist<CR><C-W>h<C-W>s:e .<CR><C-W>l:let g:netrw_chgwin=wi
 """""""<github.com:fatih>
 
 " Fast saving
-nnoremap <leader>w :w!<cr>
-nnoremap <silent> <leader>q :q!<CR>
+nnoremap <Leader>w :w!<CR>
+nnoremap <silent> <Leader>q :q!<CR>
 
 " Remove search highlight
-nnoremap <leader><space> :nohlsearch<CR>
+nnoremap <Leader><space> :nohlsearch<CR>
 
 " Time out on key codes but not mappings.
 " Basically this makes terminal Vim work sanely.
@@ -476,10 +480,17 @@ command! FZFILES Files .
 set updatetime=15000  "" gitgutter refresh 1000=1sec
 let g:gitgutter_max_signs = 500  " default value
 
+"" quick-edit
+:nnoremap <Leader>n :%s/\. /.\r/g<CR>gg
+
 
 "" lsp
+""" :LspDocumentSymbol
+:nnoremap <Leader>c :LspDocumentSymbol<CR>
 """ :LspDiagShow
+:nnoremap <Leader>d :LspDiag show<CR>
 """ :LspDiagCurrent
+:nnoremap <Leader>b :LspDiagCurrent<CR>
 """ :LspServer debug on
 """ :LspServer debug messages
 """"
@@ -702,7 +713,7 @@ call lsp#options#OptionsSet({
 "" :help netrw-browse-maps
 """ :edit <dirname> ~ open explorer there
 """ Super(command) + v ~ vertical split open
-""" Super(command) + t ~ tab split open
+"" Super(command) + t ~ tab split open
 ""
 ""
 "" 'set showcmd' to show commands while being typed... so people watching know

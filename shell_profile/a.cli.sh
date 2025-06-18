@@ -680,3 +680,13 @@ djvu-to-pdf(){
   # required package: djvulibre
   ddjvu -format=pdf "${1}" "${1}.pdf"
 }
+
+epub-to-pdf(){
+  ebook-convert "${1}" "${1}-pandoc.pdf" --enable-heuristics
+}
+
+if [[ -f "/etc/redhat-release" ]]; then
+  run-security-updates(){
+    sudo dnf update --security
+  }
+fi

@@ -168,5 +168,4 @@ fi
 autoload -U bashcompinit
 bashcompinit
 eval "$(register-python-argcomplete pipx)"
-eval "$(fzf --zsh)"
 source $HOME/.profile
