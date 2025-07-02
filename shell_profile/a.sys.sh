@@ -75,3 +75,17 @@ chown-fix(){
   find "${_this_dir}" -user 0 -type d | xargs -I{} sudo chown ${PERM_STR} "{}"
   find "${_this_dir}" -user 0 -type f | xargs -I{} sudo chown ${PERM_STR} "{}"
 }
+
+check-kernel(){
+  local PKGS=$(rpm -qa | grep -i '^kernel-[0-9]' | sed 's/kernel-//')
+  echo $PKGS | while IFS= read -r kver; do
+    [[ -z "${kver}" ]] && next
+    if [[ -f "/boot/initramfs-${kver}.img" ]]; then
+      echo "[INFO] initramfs for kernel-$kver exists."
+    else
+      echo "[ERROR] initramfs for kernel-$kver is missing."
+      echo "Solution: Run 'sudo dracut -f --kver ${kver}'"
+      exit 123
+    fi
+  done
+}
