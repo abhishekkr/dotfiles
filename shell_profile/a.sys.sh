@@ -85,7 +85,7 @@ check-kernel(){
     else
       echo "[ERROR] initramfs for kernel-$kver is missing."
       echo "Solution: Run 'sudo dracut -f --kver ${kver}'"
-      exit 123
+      return 123
     fi
   done
 }
