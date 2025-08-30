@@ -193,3 +193,21 @@ pdf-to-pngs-to-pdf(){
   convert *.png "${DEST_PDFPATH}"
   popd
 }
+
+png-to-gif(){
+  local PNG_FOR_PALETTE="$1"
+  local SOURCE_PNG_PATTERN="$2"
+  local OUTGIF="$3"
+  local FRAMERATE="${4:-10}"
+
+  [[ $# -lt 3 ]] && \
+    echo "Wrong Usage. Syntax: png-to-gif <png-for-palette/any-src.png> <source/pattern-%1d.png> <output.gif> [<framerate default 10>]" && \
+    return 123
+
+  local TSNOW=$(date +%s)
+  local PALETTEPNG="/tmp/palette-${TSNOW}.png"
+  set -ex
+  ffmpeg -i "$PNG_FOR_PALETTE" -vf "palettegen" "$PALETTEPNG"
+  ffmpeg -framerate $FRAMERATE -i $SOURCE_PNG_PATTERN -i "$PALETTEPNG" -filter_complex "paletteuse" "${OUTGIF}"
+  set +ex
+}
