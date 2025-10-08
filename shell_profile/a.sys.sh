@@ -78,7 +78,9 @@ chown-fix(){
 
 check-kernel(){
   local PKGS=$(rpm -qa | grep -i '^kernel-[0-9]' | sed 's/kernel-//')
-  echo $PKGS | while IFS= read -r kver; do
+  export OLD_IFS="${IFS}"
+  export IFS=
+  echo $PKGS | while read -r kver; do
     [[ -z "${kver}" ]] && next
     if [[ -f "/boot/initramfs-${kver}.img" ]]; then
       echo "[INFO] initramfs for kernel-$kver exists."
@@ -88,4 +90,5 @@ check-kernel(){
       return 123
     fi
   done
+  export IFS="${OLD_IFS}"
 }
