@@ -464,6 +464,10 @@ autocmd Filetype racket nnoremap ,d :-1read $HOME/.vim/snippets/racket-trace.skt
 
 """ under trial
 
+"" dart-vim-plugin
+let g:dart_format_on_save = v:true
+
+
 "" fzf
 let g:fzf_action = {
   \ 'ctrl-t': 'tab split',
@@ -564,6 +568,12 @@ let g:lspServers = [
     \     'filetype': ['typescript'],
     \     'path': '/home/abhishekkr/.npm-packages/bin/typescript-language-server',
     \     'args': ['stdio']
+    \ },
+    \ {
+    \     'name': 'dart-ls-server',
+    \     'filetype': ['dart'],
+    \     'path': '/home/abhishekkr/bin/dart-lsp-server',
+    \     'args': ['run-lsp']
     \ }
   \ ]
 "autocmd! BufReadPre * g:LspAddServer(g:lspServers)

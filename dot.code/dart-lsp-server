@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+
+if [[ "$1" == "run-lsp" ]]; then
+  dart language-server --client-id my-editor.my-plugin --client-version 1.2
+else
+  echo "this runs dart lsp server for VIM; when passed run-lsp"
+fi

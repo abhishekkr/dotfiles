@@ -1,11 +1,17 @@
 #!/bin/bash
 
+HOME_BINDIR="${HOME}/bin"
+
 if [[ -z "$REPO_ROOT" ]]; then
   REPO_ROOT=$(dirname $(dirname $0))
   cd $REPO_ROOT
   REPO_ROOT=${PWD}
   cd -
 fi
+
+copy-required-bin(){
+  cp "${REPO_ROOT}/dot.code/dart-lsp-server" "${HOME_BINDIR}/dart-lsp-server"
+}
 
 setup_gvimrc(){
   if [[ ! -L "${HOME}/.gvimrc" ]]; then
@@ -44,3 +50,4 @@ setup_vim_profile(){
 
 setup_gvimrc
 setup_vim_profile
+copy-required-bin
