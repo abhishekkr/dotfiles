@@ -672,6 +672,11 @@ toPDF(){
 }
 alias to-pdf="toPDF"
 
+md2pdf(){
+  local SRC_FILE="$1"
+  pandoc --pdf-engine=pdfroff --toc-depth=1 "${SRC_FILE}" -o "${SRC_FILE}.pdf"
+}
+
 pdf-for-ebook(){
   ps2pdf -dPDFSETTINGS=/ebook "${1}" "${1}-ps2.pdf"
 }

@@ -82,3 +82,16 @@ adb-fetch-n-delete-record(){
   adb-fetch-record "${FILENAME}"
   adb-delete-record "${FILENAME}"
 }
+
+android-emulator-fetch(){
+  avdmanager create avd -n Pixel35 -k "system-images;android-35;google_apis;x86_64" --device "pixel"
+}
+android-emulator(){
+  emulator -avd Pixel35
+}
+android-emulator-wiped(){
+  emulator -avd Pixel35 -wipe-data
+}
+flutter-run-on-pixel(){
+  flutter run --build --hot -d 'Pixel35'
+}

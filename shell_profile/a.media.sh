@@ -143,6 +143,11 @@ toFhdVdo(){
 }
 alias to-fhd-vdo="toFhdVdo"
 
+adoMonoToStereo(){
+  ffmpeg -i "${1}"  -ac 2  "stereo-${1}"
+}
+alias ado-mono-to-stereo="monoAudioToStereo"
+
 uget(){
   echo "$1" | sed 's/%3A/\:/g' | sed 's/%2F/\//g' | sed 's/%3F/?/g' | sed 's/%3D/\=/g' | sed 's/%26/\&/g' | xargs wget -c
 }
