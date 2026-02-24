@@ -1,6 +1,9 @@
 ## .bashrc
 ## executed by bash(1) for non-login shells.
 
+alias l="ls -lh"
+alias y140="youtube-dl -f 140"
+
 # not-interactive, exit
 case $- in
     *i*) ;;
@@ -66,6 +69,8 @@ shopt -s nocaseglob
 
 # tab completion only for directories when using 'cd'
 complete -d cd
+
+export FZF_DEFAULT_COMMAND="/usr/bin/fzf"
 
 # Add tab completion for SSH hostnames based on ~/.ssh/config
 # ignoring wildcards

@@ -6,6 +6,7 @@ alias ruboto='jruby -S ruboto'
 
 export ANDROID_LOCATION=/opt
 export ANDROID_HOME=$ANDROID_LOCATION/android-sdk
+export ANDROID_AVD_HOME=$HOME/.android/avd
 
 [ -d "${ANDROID_HOME}/tools" ] && export PATH=$PATH:$ANDROID_HOME/tools
 

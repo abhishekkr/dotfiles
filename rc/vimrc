@@ -15,8 +15,8 @@ set formatoptions-=cro            " Turn AutoComment on next line
 set modeline
 
 syntax enable                     " Turn on syntax highlighting.
-filetype off                      " required!
-filetype plugin indent off        " required! Turn off file type detection.
+"filetype off                      " required!
+"filetype plugin indent off        " required! Turn off file type detection.
 
 set showcmd                       " Display incomplete commands.
 set showmode                      " Display the mode you're in.
@@ -217,8 +217,8 @@ nmap <Leader><left> <C-w>h
 nmap <Leader><right> <C-w>l
 
 " tab
-nmap <C-]> :tabnext<CR>
-nmap <C-[> :tabprevious<CR>
+nmap <C-Left> :tabprevious<CR>
+nmap <C-Right> :tabnext<CR>
 nnoremap <Leader>t :tab split<CR>
 
 " buffer
