@@ -84,9 +84,27 @@ adb-fetch-n-delete-record(){
   adb-delete-record "${FILENAME}"
 }
 
-android-emulator-fetch(){
-  avdmanager create avd -n Pixel35 -k "system-images;android-35;google_apis;x86_64" --device "pixel"
+android-list-all(){
+  avdmanager list
+  sdkmanager --list
 }
+android-list(){
+  avdmanager list avd
+  sdkmanager --list_installed
+}
+android-emulator-fetch(){
+  local DEVICE_NAME="$1"
+  local AVD_PARAMS="$2"
+  [[ -z "${DEVICE_NAME}" ]] && DEVICE_NAME="Pixel35"
+  [[ -z "${AVD_PARAMS}" ]] && AVD_PARAMS="system-images;android-35;google_apis;x86_64"
+  avdmanager create avd -n "${DEVICE_NAME}" -k "${AVD_PARAMS}" --device "pixel"
+}
+android-emulator-delete(){
+  local DEVICE_NAME="$1"
+  [[ -z "${DEVICE_NAME}" ]] && DEVICE_NAME="Pixel35"
+  avdmanager delete avd -n "${DEVICE_NAME}"
+}
+
 android-emulator(){
   emulator -avd Pixel35
 }
